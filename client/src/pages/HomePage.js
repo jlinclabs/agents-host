@@ -14,18 +14,7 @@ export default function HomePage() {
   const { currentUser } = useCurrentUser()
   return <Layout>
     <Container maxWidth="md">
-      {currentUser
-        ? <>
-          <Typography variant="h4">
-            Welcome back user {currentUser.email}
-          </Typography>
-        </>
-        : <Stack>
-          <SignupForm elevation={3} sx={{m: 2, p: 2}}/>
-          <LoginForm elevation={3} sx={{m: 2, p: 2}}/>
-        </Stack>
-      }
-
+      THIS IS THE HOME PAGE
     </Container>
   </Layout>
 }

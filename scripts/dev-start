@@ -7,6 +7,6 @@ API_SERVER="http://localhost:${SERVER_PORT}"
 exec dotenv -e .env -- concurrently \
   --kill-others \
   --names "SERVER,CLIENT" \
-  "PORT=${SERVER_PORT} nodemon --exec ./scripts/start.cjs" \
+  "PORT=${SERVER_PORT} nodemon -w ./server --exec ./scripts/start.cjs" \
   "cd client && SERVER=true HTTPS=false BROWSER=none DANGEROUSLY_DISABLE_HOST_CHECK=true WDS_SOCKET_HOST=localhost API_SERVER=\"${API_SERVER}\" DISABLE_ESLINT_PLUGIN=true npm run start"
 

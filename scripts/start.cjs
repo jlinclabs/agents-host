@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-import('../server.js').then(module => {
+import('../server/index.js').then(module => {
   module.default.start()
 })

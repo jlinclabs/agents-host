@@ -1,4 +1,4 @@
-import env from './environment.js'
+import env from '../environment.js'
 import Path from 'path'
 import express from 'express'
 import bodyParser from 'body-parser'

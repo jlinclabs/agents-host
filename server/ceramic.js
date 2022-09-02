@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import env from './environment.js'
+import env from '../environment.js'
 import { CeramicClient } from '@ceramicnetwork/http-client'
 import { TileDocument } from '@ceramicnetwork/stream-tile'
 import { DID } from 'dids'
