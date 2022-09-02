@@ -41,13 +41,13 @@ router.get('/api/status', (req, res) => {
 if (env.NODE_ENV === 'production') {
   // env.BUILD_PATH
   router.use(express.static('client/build'))
-  router.get('/*', function (req, res) {
+  router.get('*', function (req, res) {
     res.sendFile(Path.join(env.BUILD_PATH, 'index.html'));
   })
 }else{
   // proxy to the dev server
   const clientProxy = httpProxy.createProxyServer()
-  router.get("/*", function(req, res){
+  router.get("*", function(req, res){
     console.log('PROXY TO CLIENT', `http://localhost:${env.CLIENT_PORT}`, req.url)
     clientProxy.web(req, res, { target: `http://localhost:${env.CLIENT_PORT}` })
   })
