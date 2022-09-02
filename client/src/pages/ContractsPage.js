@@ -25,7 +25,6 @@ import {
 } from '../resources/contracts'
 
 import { useMyIdentifiers } from '../resources/identifiers'
-import Layout from '../Layout'
 import Link from '../components/Link'
 import LinkToCeramicApi from '../components/LinkToCeramicApi'
 import Timestamp from '../components/Timestamp'
@@ -37,16 +36,14 @@ import CeramicStreamEvents from '../components/CeramicStreamEvents'
 import InspectObject from '../components/InspectObject'
 
 export default function Contracts() {
-  return <Layout title="Contracts" requireLoggedIn>
-    <Container maxwidth="lg">
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/offer" element={<Offer />} />
-        <Route path="/sign" element={<Sign />} />
-        <Route path="/:id" element={<Show />} />
-      </Routes>
-    </Container>
-  </Layout>
+  return <Container maxwidth="lg">
+    <Routes>
+      <Route path="/" element={<Index />} />
+      <Route path="/offer" element={<Offer />} />
+      <Route path="/sign" element={<Sign />} />
+      <Route path="/:id" element={<Show />} />
+    </Routes>
+  </Container>
 }
 
 function Index(props) {

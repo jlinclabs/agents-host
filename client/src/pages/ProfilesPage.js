@@ -26,7 +26,6 @@ import {
   useUpdateProfile,
 } from '../resources/profiles'
 import { useMyIdentifiers } from '../resources/identifiers'
-import Layout from '../Layout'
 import Link from '../components/Link'
 import ErrorMessage from '../components/ErrorMessage'
 import Timestamp from '../components/Timestamp'
@@ -38,16 +37,14 @@ import CeramicStreamEvents from '../components/CeramicStreamEvents'
 import IdentifierSelectInput from '../components/IdentifierSelectInput'
 
 export default function ProfilesPage() {
-  return <Layout title="Profiles" requireLoggedIn>
-    <Container maxwidth="lg">
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/new" element={<New />} />
-        <Route path="/:id" element={<Show />} />
-        <Route path="/:id/edit" element={<Edit />} />
-      </Routes>
-    </Container>
-  </Layout>
+  return <Container maxwidth="lg">
+    <Routes>
+      <Route path="/" element={<Index />} />
+      <Route path="/new" element={<New />} />
+      <Route path="/:id" element={<Show />} />
+      <Route path="/:id/edit" element={<Edit />} />
+    </Routes>
+  </Container>
 }
 
 function Index(){

@@ -6,18 +6,15 @@ import Typography from '@mui/material/Typography'
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { useIdentifier } from '../resources/identifiers'
-import Layout from '../Layout'
 import ErrorMessage from '../components/ErrorMessage'
 import Timestamp from '../components/Timestamp'
 
 export default function IdenitifiersShowPage() {
   const { did } = useParams()
   // TODO redirect on invalid did
-  return <Layout title="Identifier" requireLoggedIn>
-    <Container maxwidth="md">
-      <Identifier {...{ did }}/>
-    </Container>
-  </Layout>
+  return <Container maxwidth="md">
+    <Identifier {...{ did }}/>
+  </Container>
 }
 
 function Identifier({ did }){

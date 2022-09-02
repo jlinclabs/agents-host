@@ -1,4 +1,4 @@
-import db from '../prisma/client.js'
+import db from '../../prisma/client.js'
 import { JlinxClient } from '../jlinx.js'
 
 const profiles = {

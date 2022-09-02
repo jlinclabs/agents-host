@@ -36,17 +36,15 @@ import Profile from '../components/Profile'
 import InspectObject from '../components/InspectObject'
 
 export default function IdenitifiersPage() {
-  return <Layout title="Identifiers" requireLoggedIn>
-    <Container p={4}>
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/new" element={<New />} />
-        <Route path="/:id" element={<Show />} />
-        <Route path="/:id/did-document" element={<ShowDidDocument />} />
-        <Route path="/:id/edit" element={<Edit />} />
-      </Routes>
-    </Container>
-  </Layout>
+  return <Container p={4}>
+    <Routes>
+      <Route path="/" element={<Index />} />
+      <Route path="/new" element={<New />} />
+      <Route path="/:id" element={<Show />} />
+      <Route path="/:id/did-document" element={<ShowDidDocument />} />
+      <Route path="/:id/edit" element={<Edit />} />
+    </Routes>
+  </Container>
 }
 
 

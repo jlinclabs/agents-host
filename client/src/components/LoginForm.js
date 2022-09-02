@@ -48,9 +48,9 @@ export default function LoginForm(props){
         onChange={e => { setEmail(e.target.value) }}
         onKeyDown={submitOnEnter}
       />
-
-      <Stack spacing={2} direction="row" justifyContent="center" mt={2}>
+      <Stack spacing={2} direction="row-reverse" alignItems="center" mt={2}>
         <Button type="submit" variant="contained" >Login</Button>
+        <Link variant="text" to="/">back</Link>
       </Stack>
     </Box>
   </Paper>

@@ -1,4 +1,4 @@
-import db from '../prisma/client.js'
+import db from '../../prisma/client.js'
 import { createDid } from '../ceramic.js'
 import { JlinxClient } from '../jlinx.js'
 import profiles from './profilesResource.js'

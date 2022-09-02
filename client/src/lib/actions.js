@@ -37,7 +37,7 @@ export function useAction(actionId, callbacks = {}){
 }
 
 async function takeAction(actionId, options){
-  console.log('TAKE ACTION', actionId, options)
+  console.log('ACTION ->', actionId, options)
   const response = await fetch(
     `/api/actions/${actionId}`,
     {
@@ -49,13 +49,15 @@ async function takeAction(actionId, options){
     }
   )
   const { error, result } = await response.json()
-  console.log('useAction RESULT', { actionId, options, result })
+
   if (error){
+    console.log('ACTION :(', { actionId, options, error })
     const _error = new Error(error.message)
     if (error.stack) {
       _error.stack = error.stack + '\n' + error.stack
     }
     throw _error
   }
+  console.log('ACTION :)', { actionId, options, result })
   return result
 }

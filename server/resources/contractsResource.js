@@ -1,5 +1,5 @@
 import { postJSON } from '../lib/http.js'
-import db from '../prisma/client.js'
+import db from '../../prisma/client.js'
 import { JlinxClient } from '../jlinx.js'
 
 const contracts = {

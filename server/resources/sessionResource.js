@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt'
-import prisma from '../prisma/client.js'
+import prisma from '../../prisma/client.js'
 import { createDid } from '../ceramic.js'
 import { JlinxClient } from '../jlinx.js'
 import users from './usersResource.js'
@@ -64,7 +64,7 @@ const sessionResource = {
       }
       const user = await users.commands.create({ email })
       const userId = user.id
-      await identifiers.commands.create({ userId })
+      // await identifiers.commands.create({ userId })
       await session.setUserId(userId)
       // await session.save();
     },

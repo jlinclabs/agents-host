@@ -11,6 +11,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import AutorenewIcon from '@mui/icons-material/Autorenew'
 
+import Link from './Link'
 import ErrorMessage from './ErrorMessage'
 import { useSignup } from '../resources/session'
 
@@ -47,12 +48,13 @@ export default function SignupForm(props){
         onChange={e => { setEmail(e.target.value) }}
       />
 
-      <Stack spacing={2} direction="row" justifyContent="center" mt={2}>
+      <Stack spacing={2} direction="row-reverse" alignItems="center" mt={2}>
         <Button
           disabled={disabled || !submittable}
           type="submit"
           variant="contained"
         >Signup</Button>
+        <Link variant="text" to="/">back</Link>
       </Stack>
     </Box>
 
