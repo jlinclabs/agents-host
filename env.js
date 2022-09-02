@@ -35,6 +35,7 @@ const env = {
   HOST: process.env.HOST,
   APP_ROOT: __dirname,
   BUILD_PATH: Path.join(__dirname, 'client', 'build'),
+
   // NODE_ENV: process.env.NODE_ENV,
   // APP_NAME: process.env.REACT_APP_NAME,
   // APP_COLOR: process.env.REACT_APP_COLOR,
@@ -43,6 +44,10 @@ const env = {
   // DATABASE_URL: process.env.DATABASE_URL,
   // CERAMIC_API_URL: process.env.CERAMIC_API_URL,
   // CERAMIC_NODE_SECRET: process.env.CERAMIC_NODE_SECRET,
+}
+
+if (process.env.NODE_ENV === 'development') {
+  env.CLIENT_PORT = process.env.CLIENT_PORT
 }
 
 console.log(env)

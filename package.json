@@ -32,6 +32,7 @@
     "concurrently": "^7.3.0",
     "dotenv": "^16.0.1",
     "dotenv-cli": "^6.0.0",
-    "find-open-port": "^2.0.3"
+    "find-open-port": "^2.0.3",
+    "nodemon": "^2.0.19"
   }
 }
