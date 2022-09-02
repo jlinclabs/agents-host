@@ -16,9 +16,9 @@ export default function HomePage() {
     <Container maxWidth="md">
       {currentUser
         ? <>
-          <Typography variant="h4">
+          <POOP variant="h4">
             Welcome back user {currentUser.email}
-          </Typography>
+          </POOP>
         </>
         : <Stack>
           <SignupForm elevation={3} sx={{m: 2, p: 2}}/>

@@ -43,15 +43,16 @@ export default async function defineRoutes(app){
       res.sendFile(Path.join(env.BUILD_PATH, 'index.html'));
     })
   }else if (env.isDev) {
-    // // proxy to the dev server
-    // const clientProxy = httpProxy.createProxyServer()
-    // router.get("*", function(req, res){
-    //   console.log('PROXY TO CLIENT', `http://localhost:${env.CLIENT_PORT}`, req.url)
-    //   clientProxy.web(req, res, { target: `http://localhost:${env.CLIENT_PORT}` })
-    // })
-    const { default: createViteServer } =
-      await import('./vite-server.js')
-    await createViteServer(app)
+    // proxy to the dev server
+    const clientProxy = httpProxy.createProxyServer()
+    router.get("*", function(req, res){
+      console.log('PROXY TO CLIENT', `http://localhost:${env.CLIENT_PORT}`, req.url)
+      clientProxy.web(req, res, { target: `http://localhost:${env.CLIENT_PORT}` })
+    })
+
+    // const { default: createViteServer } =
+    //   await import('./vite-server.js')
+    // await createViteServer(app)
 
   }
 }

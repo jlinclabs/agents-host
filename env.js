@@ -52,9 +52,10 @@ const env = {
 // if (process.env.NODE_ENV === 'production') {
 
 // }
-// if (process.env.NODE_ENV === 'development') {
-//   env.CLIENT_PORT = process.env.CLIENT_PORT
-// }
+
+if (process.env.NODE_ENV === 'development') {
+  env.CLIENT_PORT = process.env.CLIENT_PORT
+}
 
 console.log(env)
 
