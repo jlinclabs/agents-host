@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
-import('../server/index.js').then(module => {
-  module.default.start()
+import('../server/create.js').then(async module => {
+  console.log({ module })
+  const server = await module.default()
+  await server.start()
 })

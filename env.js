@@ -31,6 +31,9 @@ if (!process.env.NODE_ENV) process.env.NODE_ENV = 'development'
 
 
 const env = {
+  // NODE_ENV: process.env.NODE_ENV,
+  isProd: process.env.NODE_ENV === 'production',
+  isDev: process.env.NODE_ENV === 'development',
   PORT: process.env.PORT,
   HOST: process.env.HOST,
   APP_ROOT: __dirname,
@@ -46,9 +49,12 @@ const env = {
   // CERAMIC_NODE_SECRET: process.env.CERAMIC_NODE_SECRET,
 }
 
-if (process.env.NODE_ENV === 'development') {
-  env.CLIENT_PORT = process.env.CLIENT_PORT
-}
+// if (process.env.NODE_ENV === 'production') {
+
+// }
+// if (process.env.NODE_ENV === 'development') {
+//   env.CLIENT_PORT = process.env.CLIENT_PORT
+// }
 
 console.log(env)
 
