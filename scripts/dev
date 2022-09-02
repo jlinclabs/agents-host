@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+export NODE_ENV=development
+CLIENT_PORT=$(node ./scripts/find-open-port.js)
+# export NODE_TLS_REJECT_UNAUTHORIZED='0'
+
+exec concurrently \
+  --names "server,client" \
+  "CLIENT_PORT=${CLIENT_PORT} nodemon -w server ./scripts/start.cjs" \
+  "cd client && npm run dev -- --port 5658 --strictPort --mode development"

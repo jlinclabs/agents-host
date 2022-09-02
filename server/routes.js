@@ -1,7 +1,11 @@
 import bodyParser from 'body-parser'
 import express from 'express'
 import Router from 'express-promise-router'
-import env from '../environment.js'
+import httpProxy from 'http-proxy'
+
+
+
+import env from '../env.js'
 
 const router = Router()
 
@@ -11,10 +15,10 @@ router.use(bodyParser.json({
   limit: 102400 * 10,
 }))
 
-router.use(async (req, res, next) => {
-  req.session = await Session.open(req, res)
-  next()
-})
+// router.use(async (req, res, next) => {
+//   req.session = await Session.open(req, res)
+//   next()
+// })
 
 router.get('/api/status', (req, res) => {
   res.send({ ok: true })
@@ -35,10 +39,16 @@ router.get('/api/status', (req, res) => {
 
 
 if (env.NODE_ENV === 'production') {
+  // env.BUILD_PATH
   router.use(express.static('client/build'))
   router.get('/*', function (req, res) {
     res.sendFile(Path.join(env.BUILD_PATH, 'index.html'));
   })
 }else{
   // proxy to the dev server
+  const clientProxy = httpProxy.createProxyServer()
+  router.get("/*", function(req, res){
+    console.log('PROXY TO CLIENT', `http://localhost:${env.CLIENT_PORT}`, req.url)
+    clientProxy.web(req, res, { target: `http://localhost:${env.CLIENT_PORT}` })
+  })
 }
