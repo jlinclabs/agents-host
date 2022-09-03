@@ -1,7 +1,13 @@
 import Debug from 'debug'
 import crypto from 'crypto'
 import { randomBytes } from '@stablelib/random'
-import ceramic, { TileDocument, createDid, getDid, resolveDidDocument } from './ceramic.js'
+import {
+  createDocument,
+  loadDocument,
+  createDid,
+  getDid,
+  resolveDidDocument
+} from './ceramic.js'
 
 import identifiersResource from './resources/identifiersResource.js'
 
@@ -33,8 +39,7 @@ export class JlinxClient {
   }
 
   async get(id, opts = {}){
-    const doc = await TileDocument.load(
-      ceramic,
+    const doc = await loadDocument(
       id,
       {...opts}
     )
@@ -44,8 +49,7 @@ export class JlinxClient {
 
   async create(content, { metadata, ...opts } = {}){
     if (!opts.asDID) opts.asDID = await this.getDid()
-    const doc = await TileDocument.create(
-      ceramic,
+    const doc = await createDocument(
       content,
       metadata,
       opts

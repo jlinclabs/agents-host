@@ -1,8 +1,9 @@
 import Debug from 'debug'
 import Router from 'express-promise-router'
 
-import ceramic, {
-  TileDocument,
+import {
+  loadStream,
+  loadDocument,
   resolveDidDocument
 } from './ceramic.js'
 
@@ -17,13 +18,13 @@ router.get('/api/ceramic/did::did*', async (req, res) => {
 
 router.get('/api/ceramic/:streamId', async (req, res) => {
   const { streamId } = req.params
-  const doc = await TileDocument.load(ceramic, streamId)
+  const doc = await loadDocument(streamId)
   res.json(doc.content)
 })
 
 router.get('/api/ceramic/:streamId/meta', async (req, res) => {
   const { streamId } = req.params
-  const doc = await TileDocument.load(ceramic, streamId)
+  const doc = await loadDocument(streamId)
   res.json({
     id: doc.id.toString(),
     // api: doc.api, // circular JSON
@@ -46,7 +47,7 @@ router.get('/api/ceramic/:streamId/meta', async (req, res) => {
 
 router.get('/api/ceramic/:streamId/events', async (req, res) => {
   const { streamId } = req.params
-  const doc = await TileDocument.load(ceramic, streamId)
+  const doc = await loadDocument(streamId)
 
   let closed = false
   let subscription
@@ -88,7 +89,7 @@ router.get('/api/ceramic/:streamId/events', async (req, res) => {
     cursor = allCommitIds.length
     while (newCommits.length > 0){
       const commitId = newCommits.shift()
-      const stream = await ceramic.loadStream(commitId)
+      const stream = await loadStream(commitId)
       let json
       try {
         json = JSON.stringify(stream.content, null, 2)

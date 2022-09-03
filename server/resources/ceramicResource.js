@@ -1,15 +1,15 @@
 import db from '../../prisma/client.js'
-import ceramic from '../ceramic.js'
+import { loadStream } from '../ceramic.js'
 
 const ceramicResource = {
   queries: {
     async getEventsById({ id }){
-      const stream = await ceramic.loadStream(id)
+      const stream = await loadStream(id)
       const { allCommitIds } = stream
       console.log({ allCommitIds })
       const events = []
       for (const commitId of allCommitIds){
-        const stream = await ceramic.loadStream(commitId)
+        const stream = await loadStream(commitId)
         events.push({
           id: commitId.toString(),
           content: stream.content,

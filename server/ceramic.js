@@ -102,8 +102,19 @@ export async function resolveDidDocument(didString){
   return didDocument
 }
 
-export default ceramic
-export { TileDocument }
+export async function createDocument(content, metadata, opts){
+  await ready()
+  return await TileDocument.create(ceramic, content, metadata, opts)
+}
+export async function loadStream(streamId){
+  await ready()
+  return await ceramic.loadStream(streamId)
+}
+
+export async function loadDocument(streamId){
+  await ready()
+  return await TileDocument.load(ceramic, streamId)
+}
 
 
 
