@@ -8,10 +8,8 @@ export default function LogoutPage() {
   const { currentUser } = useCurrentUser({ redirectToIfNotFound: '/' })
   const logout = useLogout()
   useEffect(() => { logout() }, [])
-  return <Layout>
-    <Container maxWidth="sm" sx={{p: 2}}>
-      <span>Logging out…</span>
-      <ErrorMessage error={logout.error}/>
-    </Container>
-  </Layout>
+  return <Container maxWidth="sm" sx={{p: 2}}>
+    <span>Logging out…</span>
+    <ErrorMessage error={logout.error}/>
+  </Container>
 }

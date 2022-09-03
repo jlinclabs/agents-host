@@ -8,15 +8,28 @@ const users = {
         select: {
           id: true,
           createdAt: true,
+          email: true,
+          secretKey: false,
+        }
+      })
+    },
+    async findBySecreyKey(secretKey){
+      return await prisma.user.findUnique({
+        where: { secretKey },
+        select: {
+          id: true,
+          createdAt: true,
+          email: true,
+          secretKey: false,
         }
       })
     }
   },
 
   commands: {
-    async create({ email }){
+    async create({ email, secretKey }){
       return await prisma.user.create({
-        data: { email }
+        data: { email, secretKey }
       })
     }
   },

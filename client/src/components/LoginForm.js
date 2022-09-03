@@ -7,24 +7,25 @@ import TextField from '@mui/material/TextField'
 
 import Link from './Link'
 import ErrorMessage from './ErrorMessage'
+import PassphraseInput from './PassphraseInput'
 import { useLogin } from '../resources/session'
 
 export default function LoginForm(props){
-  const [email, setEmail] = useState('')
+  const [secretKey, setSecretKey] = useState('')
 
   const login = useLogin()
 
   const onSubmit = event => {
     event.preventDefault()
-    login({ email })
+    login({ secretKey })
   }
 
   const submitOnEnter = event => {
-    if (event.key === 'Enter') {
-      event.preventDefault()
-      login({ email })
-    }
+    if (event.key === 'Enter') onSubmit(event)
   }
+  const secretKeyIsValid = PassphraseInput.isValid(secretKey)
+  const submittable = secretKeyIsValid
+
   const disabled = !!login.pending
   return <Box {...props}>
     <Typography variant="h4">Login</Typography>
@@ -33,19 +34,18 @@ export default function LoginForm(props){
       onSubmit,
     }}>
       <ErrorMessage error={login.error}/>
-      <TextField
-        label="passphrase"
-        autoComplete="password"
+      <PassphraseInput
         disabled={disabled}
-        margin="normal"
-        fullWidth
-        name="password"
-        type="password"
-        value={email}
-        onChange={e => { setEmail(e.target.value) }}
+        value={secretKey}
+        onChange={e => { setSecretKey(e.target.value) }}
+        autoFocus
       />
       <Stack spacing={2} direction="row-reverse" alignItems="center" mt={2}>
-        <Button type="submit" variant="contained" >Login</Button>
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={disabled || !submittable}
+        >Login</Button>
         <Button
           variant="outlined"
           to="/forgot-password"

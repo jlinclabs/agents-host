@@ -94,8 +94,9 @@ function SideNav({ loading, currentUser }) {
       <ListItem disablePadding>
         <ListItemButton component={Link} to="/profile">
           <ListItemText {...{
-
-            primary: currentUser.email,
+            primary: (
+              currentUser.email || '[anonymous user]'
+            ),
             primaryTypographyProps: {
               sx: {
                 overflow: 'hidden',

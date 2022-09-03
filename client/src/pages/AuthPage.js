@@ -9,10 +9,10 @@ import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import Box from '@mui/material/Box'
 
-import { useCurrentUser } from '../resources/session'
+import { useSignup } from '../resources/session'
 import Link from '../components/Link'
 import LoginForm from '../components/LoginForm'
-import SignupForm from '../components/SignupForm'
+import SignupForm, { generateSecretKey } from '../components/SignupForm'
 
 export default function AuthPage() {
   return <Container
@@ -95,13 +95,35 @@ function Signup(){
   </Box>
 }
 
-
 function SignupJustTryIt(){
-  return <Box>SignupJustTryIt</Box>
+  const navigate = useNavigate()
+
+  const signup = useSignup({
+    onSuccess(){
+      navigate('/')
+    },
+  })
+
+  useLayoutEffect(
+    () => {
+      signup({
+        secretKey: generateSecretKey()
+      })
+    },
+    []
+  )
+  if (signup.error) return <ErrorMessage error={signup.error}/>
+  return <Box>Signing up…</Box>
 }
 
 function SignupWithPassword(){
-  return <SignupForm sx={{p:2}}/>
+  const navigate = useNavigate()
+  return <SignupForm
+    sx={{p:2}}
+    onSuccess={() => {
+      navigate('/')
+    }}
+  />
 }
 
 function SignupWithWallet(){
@@ -112,11 +134,9 @@ function SignupWithWallet(){
   </Box>
 }
 
-
 function ForgotPassword(){
   return <div>forgot password form TBD</div>
 }
-
 
 function Logout(){
   const navigate = useNavigate()

@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt'
 import prisma from '../../prisma/client.js'
+import { InvalidArgumentError } from '../errors.js'
 import { createDid } from '../ceramic.js'
 import { JlinxClient } from '../jlinx.js'
 import users from './usersResource.js'
@@ -57,22 +58,29 @@ const sessionResource = {
 
   actions: {
 
-    async signup({ session, email }){
-      console.log('signup', { session, email })
+    async signup({ session, email, secretKey }){
+      if (
+        !secretKey ||
+        typeof secretKey !== 'string' ||
+        secretKey.length < 128
+      ) throw new InvalidArgumentError('secretKey', secretKey)
+
+      console.log('signup', { session, email, secretKey })
       if (session.userId){
         throw new Error(`please logout first`)
       }
-      const user = await users.commands.create({ email })
+      const user = await users.commands.create({ email, secretKey })
       const userId = user.id
       // await identifiers.commands.create({ userId })
       await session.setUserId(userId)
       // await session.save();
+      return { userId, email }
     },
 
-    async login({ session, email }){
-      const user = await users.queries.findByEmail(email)
+    async login({ session, secretKey }){
+      const user = await users.queries.findBySecreyKey(secretKey)
       // const match = await bcrypt.compare(password, user.passwordHash)
-      if (!user){ throw new Error(`invalid email or password`)}
+      if (!user){ throw new Error(`invalid secretKey`)}
       await session.setUserId(user.id)
     },
 

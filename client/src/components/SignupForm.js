@@ -14,31 +14,39 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 
 import Link from './Link'
 import ErrorMessage from './ErrorMessage'
+import PassphraseInput from './PassphraseInput'
+import randomString from '../lib/randomString'
 import { useSignup } from '../resources/session'
 
 export default function SignupForm(props){
-  const [password, setPassword] = useState('')
+  const [secretKey, setSecretKey] = useState('')
   const [email, setEmail] = useState('')
 
-  const signup = useSignup()
+  const signup = useSignup({
+    onSuccess: props.onSuccess,
+    onFailure: props.onFailure,
+  })
 
-  const copyPassword = () => {
-    navigator.clipboard.writeText(password)
+  const copySecretKey = () => {
+    navigator.clipboard.writeText(secretKey)
   }
 
-  const generatePassword = () => {
-    setPassword(randomString(128))
+  const onGenerateSecretKey = () => {
+    setSecretKey(generateSecretKey())
   }
 
   const onSubmit = event => {
     event.preventDefault()
-    signup({ email })
+    signup({
+      email: email || undefined,
+      secretKey: secretKey || undefined,
+    })
   }
 
   const disabled = !!signup.pending
   // const emailIsValid = email.length >= 3 && email.includes('@')
-  const passwordIsValid = password.length >= 128
-  const submittable = passwordIsValid
+  const secretKeyIsValid = PassphraseInput.isValid(secretKey)
+  const submittable = secretKeyIsValid
   return <Paper {...{
     ...props,
     sx: {
@@ -46,40 +54,28 @@ export default function SignupForm(props){
       minWidth: `min(100vw, 500px)`,
     }
   }}>
-    <Typography variant="h4" mb={3}>Signup</Typography>
+    <Typography variant="h4" mb={2}>Signup with passphrase</Typography>
+    <Typography variant="body2" mb={2}>
+      {`
+        Signing up with a passphrase
+      `}
+    </Typography>
     <Box {...{
       component: 'form',
       onSubmit,
     }}>
       <ErrorMessage error={signup.error}/>
-      <TextField
-        InputProps={{
-          sx: {
-            whiteSpace: 'pre-wrap',
-            fontSize: 'smaller',
-            fontFamily: 'monospace',
-          }
-        }}
-        label="passphrase"
-        autoComplete="password"
-        helperText="Must be at least 128 characters"
-        minLength="128"
+      <PassphraseInput
         disabled={disabled}
-        margin="normal"
-        fullWidth
-        name="password"
-        type="password"
-        value={password}
-        multiline
-        rows={3}
-        onChange={e => { setPassword(e.target.value) }}
+        value={secretKey}
+        onChange={e => { setSecretKey(e.target.value) }}
+        helperText="must be at least 128 characters"
       />
-
       <Stack spacing={2} direction="row-reverse" alignItems="center" mt={2}>
-        <Button size="small" variant="outlined" onClick={copyPassword}>
+        <Button size="small" variant="outlined" onClick={copySecretKey}>
           <ContentCopyIcon/>&nbsp;COPY
         </Button>
-        <Button size="small" variant="outlined" onClick={generatePassword}>
+        <Button size="small" variant="outlined" onClick={onGenerateSecretKey}>
           <AutorenewIcon/>&nbsp;REGENERATE
         </Button>
       </Stack>
@@ -110,19 +106,6 @@ export default function SignupForm(props){
   </Paper>
 }
 
-
-
-function randomString(length){
-  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*'
-  const charLength = chars.length
-
-  let ints = new Uint32Array(length)
-  crypto.getRandomValues(ints)
-  ints = [...ints]
-
-  let result = ''
-  while(ints.length > 0){
-    result += chars.charAt(ints.shift() % charLength)
-  }
-  return result
+export function generateSecretKey(){
+  return randomString(128)
 }
