@@ -121,6 +121,7 @@ function New(){
   const navigate = useNavigate()
 
   const [value, onChange] = useStateObject({
+    did: '',
     name: '',
     avatar: null,
   })
@@ -137,7 +138,11 @@ function New(){
 
   const onSubmit = () => {
     createProfile({
-      profile: value,
+      profile: {
+        did: value.did,
+        name: value.name || undefined,
+        avatar: value.avatar || undefined,
+      },
     })
   }
 
@@ -151,7 +156,7 @@ function New(){
       value,
       onChange,
       submitText: (
-        createProfile.pending ? 'Create' : 'Creating'
+        createProfile.pending ? 'Creating' : 'Create'
       ),
       onSubmit,
       disabled: createProfile.pending,
@@ -301,6 +306,7 @@ function ProfileForm(props){
 
   const editing = !!props.value.id
   const disabled = props.disabled || uploadAvatar.pending
+  const submittable = !!(props.value.did)
   return <Box {...{
     disabled,
     component: 'form',
@@ -321,29 +327,6 @@ function ProfileForm(props){
       value={props.value.did}
       onChange={e => { props.onChange({ did: e.target.value }) }}
     />
-    {/* <FormControl fullWidth>
-      <ErrorMessage error={myIdentifiersReq.error}/>
-      <InputLabel id="profileIdentifierLabel">Identifier</InputLabel>
-      <Select
-        name="did"
-        labelId="profileIdentifierLabel"
-        disabled={disabled || myIdentifiersReq.loading || editing}
-        autoFocus
-        value={props.value.did}
-        onChange={e => { props.onChange({ did: e.target.value }) }}
-      >
-        {myIdentifiers.map(identifier =>
-          <MenuItem
-            key={identifier.id}
-            value={identifier.id}
-          >
-            <Stack spacing={2} direction="row" alignItems="center">
-              <Typography component="span" variant="body1">{identifier.id}</Typography>
-            </Stack>
-          </MenuItem>
-        )}
-      </Select>
-    </FormControl> */}
     <Stack spacing={2} direction="row" alignItems="center" mt={2}>
       <Box sx={{ width: 56, height: 56 }}>
         {uploadAvatar.pending
@@ -393,7 +376,7 @@ function ProfileForm(props){
       <Button
         type="submit"
         variant="contained"
-        disabled={disabled}
+        disabled={disabled || !submittable}
       >{props.submitText}</Button>
     </Box>
   </Box>
