@@ -1,11 +1,9 @@
 import { useState } from 'react'
 import Box from '@mui/material/Box'
-import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
-import Divider from '@mui/material/Divider'
 
 import Link from './Link'
 import ErrorMessage from './ErrorMessage'
@@ -28,7 +26,7 @@ export default function LoginForm(props){
     }
   }
   const disabled = !!login.pending
-  return <Paper {...props}>
+  return <Box {...props}>
     <Typography variant="h4">Login</Typography>
     <Box {...{
       component: 'form',
@@ -36,22 +34,25 @@ export default function LoginForm(props){
     }}>
       <ErrorMessage error={login.error}/>
       <TextField
-        label="Email"
-        autoComplete="email"
+        label="passphrase"
+        autoComplete="password"
         disabled={disabled}
         margin="normal"
-        required
         fullWidth
-        name="email"
-        type="email"
+        name="password"
+        type="password"
         value={email}
         onChange={e => { setEmail(e.target.value) }}
-        onKeyDown={submitOnEnter}
       />
       <Stack spacing={2} direction="row-reverse" alignItems="center" mt={2}>
         <Button type="submit" variant="contained" >Login</Button>
+        <Button
+          variant="outlined"
+          to="/forgot-password"
+          component={Link}
+        >Forgot Password</Button>
         <Link variant="text" to="/">back</Link>
       </Stack>
     </Box>
-  </Paper>
+  </Box>
 }

@@ -10,37 +10,85 @@ import Divider from '@mui/material/Divider'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import AutorenewIcon from '@mui/icons-material/Autorenew'
+import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 
 import Link from './Link'
 import ErrorMessage from './ErrorMessage'
 import { useSignup } from '../resources/session'
 
 export default function SignupForm(props){
+  const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
 
   const signup = useSignup()
+
+  const copyPassword = () => {
+    navigator.clipboard.writeText(password)
+  }
+
+  const generatePassword = () => {
+    setPassword(randomString(128))
+  }
 
   const onSubmit = event => {
     event.preventDefault()
     signup({ email })
   }
-  const disabled = !!signup.pending
-  const emailIsValid = email.length >= 3 && email.includes('@')
-  const submittable = emailIsValid
-  return <Paper {...props}>
-    <Typography variant="h4">Signup</Typography>
 
+  const disabled = !!signup.pending
+  // const emailIsValid = email.length >= 3 && email.includes('@')
+  const passwordIsValid = password.length >= 128
+  const submittable = passwordIsValid
+  return <Paper {...{
+    ...props,
+    sx: {
+      ...props.sx,
+      minWidth: `min(100vw, 500px)`,
+    }
+  }}>
+    <Typography variant="h4" mb={3}>Signup</Typography>
     <Box {...{
       component: 'form',
       onSubmit,
     }}>
       <ErrorMessage error={signup.error}/>
       <TextField
-        label="email"
+        InputProps={{
+          sx: {
+            whiteSpace: 'pre-wrap',
+            fontSize: 'smaller',
+            fontFamily: 'monospace',
+          }
+        }}
+        label="passphrase"
+        autoComplete="password"
+        helperText="Must be at least 128 characters"
+        minLength="128"
+        disabled={disabled}
+        margin="normal"
+        fullWidth
+        name="password"
+        type="password"
+        value={password}
+        multiline
+        rows={3}
+        onChange={e => { setPassword(e.target.value) }}
+      />
+
+      <Stack spacing={2} direction="row-reverse" alignItems="center" mt={2}>
+        <Button size="small" variant="outlined" onClick={copyPassword}>
+          <ContentCopyIcon/>&nbsp;COPY
+        </Button>
+        <Button size="small" variant="outlined" onClick={generatePassword}>
+          <AutorenewIcon/>&nbsp;REGENERATE
+        </Button>
+      </Stack>
+
+      <TextField
+        label="email (for recovery)"
         autoComplete="email"
         disabled={disabled}
         margin="normal"
-        required
         fullWidth
         name="email"
         type="email"
@@ -53,8 +101,9 @@ export default function SignupForm(props){
           disabled={disabled || !submittable}
           type="submit"
           variant="contained"
+          size="large"
         >Signup</Button>
-        <Link variant="text" to="/">back</Link>
+        <Link variant="text" to="/signup">back</Link>
       </Stack>
     </Box>
 
@@ -64,7 +113,7 @@ export default function SignupForm(props){
 
 
 function randomString(length){
-  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()'
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*'
   const charLength = chars.length
 
   let ints = new Uint32Array(length)

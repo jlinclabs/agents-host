@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
+import Box from '@mui/material/Box'
 
 import { useCurrentUser } from '../resources/session'
 import Link from '../components/Link'
@@ -32,7 +33,11 @@ export default function AuthPage() {
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/signup/tryit" element={<SignupJustTryIt />} />
+        <Route path="/signup/password" element={<SignupWithPassword />} />
+        <Route path="/signup/wallet" element={<SignupWithWallet />} />
         <Route path="/logout" element={<Logout />} />
       </Routes>
     </Container>
@@ -56,12 +61,62 @@ function Index(){
 }
 
 function Login(){
-  return <LoginForm sx={{p:2}}/>
+  return <Paper>
+    <LoginForm sx={{p:2}}/>
+  </Paper>
 }
 
 function Signup(){
+  return <Box>
+    <Typography variant="h4" mb={3}>Signup</Typography>
+    <Stack spacing={2}>
+      <Button
+        variant="contained"
+        to="/signup/tryit"
+        component={Link}
+      >Just Try It!</Button>
+      <Button
+        variant="contained"
+        to="/signup/password"
+        component={Link}
+      >Email & Password</Button>
+      <Button
+        variant="contained"
+        to="/signup/wallet"
+        component={Link}
+      >Crypto Wallet</Button>
+      <Button
+        variant="text"
+        to="/"
+        component={Link}
+        size="small"
+      >back</Button>
+    </Stack>
+  </Box>
+}
+
+
+function SignupJustTryIt(){
+  return <Box>SignupJustTryIt</Box>
+}
+
+function SignupWithPassword(){
   return <SignupForm sx={{p:2}}/>
 }
+
+function SignupWithWallet(){
+  return <Box>
+    <Typography variant="h4" mb={3}>Signup with crypto wallet</Typography>
+    <Typography variant="body1" mb={3}>coming soon…</Typography>
+    <Link variant="text" to="/signup">back</Link>
+  </Box>
+}
+
+
+function ForgotPassword(){
+  return <div>forgot password form TBD</div>
+}
+
 
 function Logout(){
   const navigate = useNavigate()
