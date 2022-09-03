@@ -27,7 +27,6 @@ yarn-debug.log*
 yarn-error.log*
 
 # development
-/dev/*/jlinx.vault
-/dev/*/uploads
-dev/apps
-/dev/*/prod.env
+/.env
+/tmp
+/uploads
