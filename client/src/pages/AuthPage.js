@@ -10,6 +10,7 @@ import Divider from '@mui/material/Divider'
 import Box from '@mui/material/Box'
 
 import { useSignup } from '../resources/session'
+import ErrorMessage from '../components/ErrorMessage'
 import Link from '../components/Link'
 import LoginForm from '../components/LoginForm'
 import SignupForm, { generateSecretKey } from '../components/SignupForm'

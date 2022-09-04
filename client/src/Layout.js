@@ -22,9 +22,9 @@ import Link from './components/Link'
 export default function Layout(props) {
   const {
     children,
-    title = 'JLINX Demo',
-    description = 'JLINX Demo',
-    favicon = '/favicon.ico',
+    // title = 'JLINX Demo',
+    // description = 'JLINX Demo',
+    // favicon = '/favicon.ico',
     requireNotLoggedIn = false,
     requireLoggedIn = false,
   } = props

@@ -30,6 +30,7 @@ import Layout from '../Layout'
 import Link from '../components/Link'
 import ErrorMessage from '../components/ErrorMessage'
 import Timestamp from '../components/Timestamp'
+import LinkToDid from '../components/LinkToDid'
 import LinkToCeramicApi from '../components/LinkToCeramicApi'
 import Profile from '../components/Profile'
 
@@ -196,6 +197,7 @@ function Identifier({ id, ...props }){
     </Stack>
     <Box>
       <Typography variant="h7">
+        <LinkToDid did={did}/>
         <Link to={`/identifiers/${id}`}>{`DID: ${did}`}</Link>
       </Typography>
     </Box>

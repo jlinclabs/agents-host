@@ -8,3 +8,4 @@ export default function LinkToCeramicApi({ endpoint, children, ...props }){
     {children ?? <FindInPageIcon/>}
   </Link>
 }
+
