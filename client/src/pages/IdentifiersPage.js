@@ -69,9 +69,9 @@ function New() {
   // const [myProfiles = [], {loading: loadingMyProfiles, error: errorLoadingMyProfiles}] = useMyProfiles()
 
   const createIdentifier = useCreateIdentifier({
-    onSuccess(did){
-      console.log('CREATED', { did })
-      navigate(`/identifiers/${did}`)
+    onSuccess({ id }){
+      console.log('CREATED', { id })
+      navigate(`/identifiers/${id}`)
     },
     onFailure(error){
       console.error(error)

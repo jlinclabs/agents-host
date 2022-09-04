@@ -87,7 +87,7 @@ class LevelDbWrapper {
     }
   }
   close(...args){ return this._db.close(...args) }
-  getMany(...args){ return this._db.getMany(...args) }
+  // getMany(...args){ return this._db.getMany(...args) }
   put(...args){ return this._db.put(...args) }
   del(...args){ return this._db.del(...args) }
 }
@@ -106,50 +106,86 @@ class VaultNamespace {
 
   get(key){ return this._db.get(this._key(key)) }
 
-  async getMany(keys, options){
-    return await this._db.getMany(
-      keys.map(key => this._key(key)),
-      options
-    )
-  }
+  // async getMany(keys){
+  //   return await this._db.getMany(
+  //     keys.map(key => this._key(key)),
+  //   )
+  // }
 
   async put(key, value){
-    return await this._db.put(this._key(key), value, options)
+    return await this._db.put(this._key(key), value)
   }
 
   async del(key){
-    return await this._db.del(this._key(key), options)
+    return await this._db.del(this._key(key))
   }
   // async batch(key)
 }
 
+
+
 class VaultRecords {
   constructor(db){
     this._db = db
+    this.ids = new VaultRecordIds(db)
   }
 
-  async ids(){
-    return await this._db.get(`ids`) || []
-  }
+  // async ids(){
+  //   return await this._db.get(`ids`) || []
+  // }
 
   _recordKey(id){ return `record:${id}` }
 
   async get(id){
-    this._db.get(this._recordKey(id))
+    return await this._db.get(this._recordKey(id))
   }
 
-  async getMany(ids){
-    return await this._db.getMany(
-      ids.map(id => this._recordKey(id))
-    )
-  }
+  // async getMany(ids){
+  //   return await this._db.getMany(
+  //     ids.map(id => this._recordKey(id))
+  //   )
+  // }
 
   async all(){
-    const ids = await this.ids()
-    return await this.getMany(ids)
+    const ids = await this.ids.all()
+    console.log('vault records all', { ids })
+    // return await this.getMany(ids)
+    const records = await Promise.all(
+      ids.map(id => this.get(id))
+    )
+    console.log('vault records all', { records })
+    return records
   }
 
   async put(id, value){
-    this._db.put(this._recordKey(id), value)
+    console.log('RECORD PUT', { id, value })
+    await this.ids.add(id)
+    console.log('RECORD PUT', { ids: await this.ids.all() })
+    await this._db.put(this._recordKey(id), value)
+    console.log('RECORD PUT', { value: await this.get(id) })
+  }
+}
+
+class VaultRecordIds {
+  constructor(db){
+    this._db = db
+  }
+
+  async all(){
+    return await this._db.get(`ids`) || []
+  }
+
+  async add(id){
+    let ids = await this.all()
+    ids = new Set(ids)
+    ids.add(id)
+    await this._db.put(`ids`, [...ids])
+  }
+
+  async del(id){
+    let ids = await this.all()
+    ids = new Set(ids)
+    ids.delete(id)
+    await this._db.put(`ids`, [...ids])
   }
 }

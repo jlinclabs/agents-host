@@ -57,32 +57,40 @@ const identifiers = {
   },
 
   commands: {
-    async create({ userId }){
-      console.log('identifiers.commands.create', { userId })
+    async create(){
+      console.log('identifiers.commands.create')
       const jlinx = new JlinxClient()
-      const did = await jlinx.dids.create()
-      console.log('identifiers.commands.create', { did })
-      await db.identifier.create({
-        data: {
-          id: did.id,
-          userId,
-          secretSeed: did.secretSeed.toString('hex'),
-        }
-      })
-      return did.id
+      const didDocument = await jlinx.dids.create()
+      console.log('identifiers.commands.create', { didDocument })
+      // await db.identifier.create({
+      //   data: {
+      //     id: did.id,
+      //     userId,
+      //     secretSeed: did.secretSeed.toString('hex'),
+      //   }
+      // })
+      return {
+        id: didDocument.id,
+        secretSeed: didDocument.secretSeed.toString('hex'),
+        didDocument,
+      }
       // console.log({ record })
       // return identifierToJSON({ identifier, record })
     },
   },
 
   actions: {
-    async create({ currentUser, profileId }){
-      const id = await identifiers.commands.create({
-        userId: currentUser.id,
-        profileId
+    async create({ session }){
+      await session.ensureLoggedIn()
+      const { id, secretSeed } = await identifiers.commands.create()
+      await session.useVault(async vault => {
+        await vault.records('identifiers').put(id, {
+          id,
+          secretSeed,
+          createdAt: new Date,
+        })
       })
-      console.log('identifiers.create', id)
-      return id
+      return { id }
     },
   },
 
@@ -90,36 +98,36 @@ const identifiers = {
     'mine': async ({ session }) => {
       return await session.useVault(async vault => {
         return await vault.records('identifiers').all()
+        // return await jlinx.dids.get(id, secretSeed)
       })
     },
-    ':id': async ({ currentUser, id }) => {
-      return await identifiers.queries.byId({ id, userId: currentUser.id })
+    ':id': async ({ session, id }) => {
+      // return await identifiers.queries.byId({ id, userId: currentUser.id })
+      console.log({ id })
+      return await session.useVault(async vault => {
+        const record = await vault.records('identifiers').get(id)
+        const did = await getDidFromCeramic(id, record?.secretSeed)
+        console.log({ record, did })
+        if (did) return identifierToJSON(id, did, record)
+      })
     }
   }
 }
 
 export default identifiers
 
-async function getDidFromCeramic({ userId, id, record }){
-  let secretSeed
-  if (record && record.userId === userId) {
-    secretSeed = Buffer.from(record.secretSeed, 'hex')
-  }
+async function getDidFromCeramic(id, secretSeed){
   const jlinx = new JlinxClient()
-  return await jlinx.dids.get(id, secretSeed)
+  return await jlinx.dids.get(id, Buffer.from(secretSeed, 'hex'))
 }
 
-function identifierToJSON({ userId, record, did }){
-  let data
+function identifierToJSON(id, did, record){
+  let data = { id }
   if (record){
-    data = data || {}
-    data.id = record.id
     data.createdAt = record.createdAt
-    data.ours = record.userId === userId
+    data.ours = true
   }
   if (did){
-    data = data || {}
-    data.id = did.id
     data.didDocument = did.didDocument
   }
   return data

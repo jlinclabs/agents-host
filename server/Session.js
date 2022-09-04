@@ -75,12 +75,13 @@ export default class Session {
       indent + ')'
   }
 
-  // // usage: await session.vault.get(key)
-  // get vault () {
-  //   if (this._vault) return this._vault
-  //   throw new Error(`not logged in (no vault)`)
-  // }
+  async ensureLoggedIn(){
+    if (this.userId) return
+    throw new Error(`not logged in`)
+  }
+
   async useVault(handler){
+    await this.ensureLoggedIn()
     const vault = await Vault.open(
       `user-${this.userId}`,
       this._vaultKey

@@ -101,16 +101,7 @@ const sessionResource = {
         createdAt: session.userCreatedAt,
       }
       return null
-      // if (!session.userId) return null
-      // return await prisma.user.findUnique({
-      //   where: { id: session.userId },
-      //   select: {
-      //     id: true,
-      //     email: true,
-      //     name: true,
-      //     createdAt: true,
-      //   }
-      // })
+
     },
   }
 }
