@@ -15,6 +15,7 @@ const API_URL = env.CERAMIC_API_URL
 
 let ceramic
 export async function ready(){
+  if (ceramic) return
   console.log('connecting to ceramic', env.CERAMIC_API_URL)
   ceramic = new CeramicClient(API_URL)
 
@@ -26,6 +27,10 @@ export async function ready(){
   //   async getPermission(request){ return request.payload.paths },
   // })
 }
+
+ready().catch(error => {
+  console.error(error)
+})
 
 export async function createDid(){
   await ready()

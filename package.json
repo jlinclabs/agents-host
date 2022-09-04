@@ -22,6 +22,7 @@
   "homepage": "https://github.com/jlinclabs/agents.jlinx.io#readme",
   "dependencies": {
     "@3id/did-provider": "^0.4.1",
+    "@adorsys/encrypt-down": "github:adorsys/encrypt-down",
     "@ceramicnetwork/http-client": "^2.3.1",
     "@ceramicnetwork/stream-tile": "^2.4.0",
     "@glazed/did-datastore": "^0.3.2",
