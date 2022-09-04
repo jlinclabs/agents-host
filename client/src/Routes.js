@@ -8,6 +8,7 @@ import Layout from './Layout'
 // import SignupPage from './pages/SignupPage'
 // import LoginPage from './pages/LoginPage'
 import LogoutPage from './pages/LogoutPage'
+import SettingsPage from './pages/SettingsPage'
 import ProfilesPage from './pages/ProfilesPage'
 import IdentifiersPage from './pages/IdentifiersPage'
 import ContractsPage from './pages/ContractsPage'
@@ -22,6 +23,7 @@ export default function Routes() {
       {/* <Route path="/signup" element={<SignupPage />} /> */}
       {/* <Route path="/login" element={<LoginPage />} /> */}
       <Route path="/logout" element={<LogoutPage />} />
+      <Route path="/settings" element={<SettingsPage />} />
       <Route path="/profiles/*" element={<ProfilesPage />} />
       <Route path="/identifiers/*" element={<IdentifiersPage />} />
       <Route path="/contracts/*" element={<ContractsPage />} />

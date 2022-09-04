@@ -92,7 +92,7 @@ function SideNav({ loading, currentUser }) {
       <Box sx={{ flex: '1 1'}}/>
       <Divider />
       <ListItem disablePadding>
-        <ListItemButton component={Link} to="/profile">
+        <ListItemButton component={Link} to="/settings">
           <ListItemText {...{
             primary: (
               currentUser.email || '[anonymous user]'

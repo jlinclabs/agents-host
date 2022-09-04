@@ -20,7 +20,7 @@ export function useReloadView(viewId){
 async function fetchView(url, tries = 0){
   const res = await fetch(url)
   if (res.status === 504 && tries < 5) {
-    await wait(100)
+    await wait(500)
     return fetchView(url, tries + 1)
   }
   let data, parseError
@@ -37,6 +37,7 @@ async function fetchView(url, tries = 0){
     error.status = res.status
     throw error
   }
+  console.log('VIEW', url, data.value)
   return data.value
 }
 

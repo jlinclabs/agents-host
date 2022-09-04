@@ -1,5 +1,6 @@
 import Cookies from 'cookies'
 import sessionResource from './resources/sessionResource.js'
+import { Vault } from './vaults.js'
 const COOKIE_NAME = 'session-id'
 
 export default class Session {
@@ -24,15 +25,26 @@ export default class Session {
   }
 
   get id(){ return this._id }
-  get createdAt(){ return this._value?.createdAt }
-  get lastSeenAt(){ return this._value?.lastSeenAt }
-  get user(){ return this._value?.user }
-  get userId(){ return this._value?.userId }
 
   async reload(){
     console.log('Session reload', this.id)
-    this._value = await sessionResource.queries.get(this.id)
+    const sessionRecord = await sessionResource.queries.get(this.id)
+    if (!sessionRecord){
+      throw new Error(`invalid session`)
+    }
+    this._createdAt = sessionRecord.createdAt
+    this._lastSeenAt = sessionRecord.lastSeenAt
+    this._userId = sessionRecord.userId
+    if (sessionRecord.user){
+      this._userCreatedAt = sessionRecord.user.createdAt
+      this._vaultKey = sessionRecord.user.vaultKey
+    }
   }
+
+  get createdAt(){ return this._createdAt }
+  get lastSeenAt(){ return this._lastSeenAt }
+  get userId(){ return this._userId }
+  get userCreatedAt(){ return this._userCreatedAt }
 
   async touch(){
     console.log('Session touch', this.id)
@@ -63,4 +75,23 @@ export default class Session {
       indent + ')'
   }
 
+  // // usage: await session.vault.get(key)
+  // get vault () {
+  //   if (this._vault) return this._vault
+  //   throw new Error(`not logged in (no vault)`)
+  // }
+  async useVault(handler){
+    const vault = await Vault.open(
+      `user-${this.userId}`,
+      this._vaultKey
+    )
+    try{
+      return await handler(vault)
+    }catch(error){
+      throw error
+    }finally{
+      await vault.close()
+    }
+  }
 }
+

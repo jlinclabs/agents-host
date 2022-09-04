@@ -1,28 +1,27 @@
-import db from '../../prisma/client.js'
 import { createDid } from '../ceramic.js'
 import { JlinxClient } from '../jlinx.js'
 import profiles from './profilesResource.js'
 
 const identifiers = {
   queries: {
-    async getSecretSeed({ userId, did }){
-      console.log('GET SECRET SEED', { userId, did })
-      if (!userId) throw new Error(`userId is required`)
-      if (!did) throw new Error(`did is required`)
-      const record = await db.identifier.findUnique({
-        where: {
-          // userId,
-          id: did,
-        },
-        select: {
-          userId: true,
-          secretSeed: true,
-        }
-      })
-      if (record && record.userId === userId) {
-        return Buffer.from(record.secretSeed, 'hex')
-      }
-    },
+    // async getSecretSeed({ userId, did }){
+    //   console.log('GET SECRET SEED', { userId, did })
+    //   if (!userId) throw new Error(`userId is required`)
+    //   if (!did) throw new Error(`did is required`)
+    //   const record = await db.identifier.findUnique({
+    //     where: {
+    //       // userId,
+    //       id: did,
+    //     },
+    //     select: {
+    //       userId: true,
+    //       secretSeed: true,
+    //     }
+    //   })
+    //   if (record && record.userId === userId) {
+    //     return Buffer.from(record.secretSeed, 'hex')
+    //   }
+    // },
 
     async byId({ id, userId }){
       const record = await db.identifier.findUnique({
@@ -88,10 +87,10 @@ const identifiers = {
   },
 
   views: {
-    'mine': async ({ currentUser }) => {
-      return currentUser
-        ? await identifiers.queries.forUser(currentUser.id)
-        : []
+    'mine': async ({ session }) => {
+      return await session.useVault(async vault => {
+        return await vault.records('identifiers').all()
+      })
     },
     ':id': async ({ currentUser, id }) => {
       return await identifiers.queries.byId({ id, userId: currentUser.id })

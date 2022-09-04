@@ -96,9 +96,9 @@ const sessionResource = {
     },
 
     'currentUser': async ({ session }) => {
-      if (session.user) return {
-        id: session.user.id,
-        createdAt: session.user.createdAt,
+      if (session.userId) return {
+        id: session.userId,
+        createdAt: session.userCreatedAt,
       }
       return null
       // if (!session.userId) return null

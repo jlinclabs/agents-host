@@ -44,9 +44,7 @@ export async function getView({ viewId, session }) {
   if (!view) throw new NotFoundError('view', viewId)
 
   return await resource.views[view.pattern]({
-    ...view.params,
-    session: session,
-    currentUser: session.user,
+    ...view.params, session
   })
 }
 
@@ -58,9 +56,7 @@ export async function takeAction({ actionId, options, session }) {
     throw new NotFoundError('action', actionId)
   try{
     const result = await resource.actions[actionName]({
-      ...options,
-      session,
-      currentUser: session.user,
+      ...options, session,
     })
     console.log('ACTION COMPLETE', { actionId, options, session, result })
     return result
