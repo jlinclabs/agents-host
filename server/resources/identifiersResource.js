@@ -4,56 +4,7 @@ import profiles from './profilesResource.js'
 
 const identifiers = {
   queries: {
-    // async getSecretSeed({ userId, did }){
-    //   console.log('GET SECRET SEED', { userId, did })
-    //   if (!userId) throw new Error(`userId is required`)
-    //   if (!did) throw new Error(`did is required`)
-    //   const record = await db.identifier.findUnique({
-    //     where: {
-    //       // userId,
-    //       id: did,
-    //     },
-    //     select: {
-    //       userId: true,
-    //       secretSeed: true,
-    //     }
-    //   })
-    //   if (record && record.userId === userId) {
-    //     return Buffer.from(record.secretSeed, 'hex')
-    //   }
-    // },
 
-    async byId({ id, userId }){
-      const record = await db.identifier.findUnique({
-        where: { id },
-        select: {
-          id: true,
-          userId: true,
-          createdAt: true,
-          secretSeed: true,
-        }
-      })
-      const did = await getDidFromCeramic({ userId, id, record })
-      return identifierToJSON({ userId, record, did })
-    },
-
-    async forUser(userId){
-      const records = await db.identifier.findMany({
-        where: { userId },
-        select: {
-          id: true,
-          userId: true,
-          createdAt: true,
-          secretSeed: true,
-        }
-      })
-      return await Promise.all(
-        records.map(async record => {
-          const did = await getDidFromCeramic({ userId, id: record.id, record })
-          return identifierToJSON({ userId, record, did })
-        })
-      )
-    }
   },
 
   commands: {
@@ -61,21 +12,11 @@ const identifiers = {
       console.log('identifiers.commands.create')
       const jlinx = new JlinxClient()
       const didDocument = await jlinx.dids.create()
-      console.log('identifiers.commands.create', { didDocument })
-      // await db.identifier.create({
-      //   data: {
-      //     id: did.id,
-      //     userId,
-      //     secretSeed: did.secretSeed.toString('hex'),
-      //   }
-      // })
       return {
         id: didDocument.id,
         secretSeed: didDocument.secretSeed.toString('hex'),
         didDocument,
       }
-      // console.log({ record })
-      // return identifierToJSON({ identifier, record })
     },
   },
 

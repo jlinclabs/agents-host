@@ -106,7 +106,7 @@ class LevelDbWrapper {
   constructor(db){
     this._db = db
   }
-
+  close(...args){ return this._db.close(...args) }
   async get(...args){
     try{
       return await this._db.get(...args)
@@ -115,8 +115,6 @@ class LevelDbWrapper {
       throw error
     }
   }
-  close(...args){ return this._db.close(...args) }
-  // getMany(...args){ return this._db.getMany(...args) }
   put(...args){ return this._db.put(...args) }
   del(...args){ return this._db.del(...args) }
 }
@@ -126,32 +124,12 @@ class VaultNamespace {
     this._db = db
     this._namespace = namespace
   }
-
   _key(key){ return `${this._namespace}→${key}`}
-
-  async namespace(namespace){
-    return new VaultNamespace(this, namespace)
-  }
-
+  namespace(namespace){ return new VaultNamespace(this, namespace) }
   get(key){ return this._db.get(this._key(key)) }
-
-  // async getMany(keys){
-  //   return await this._db.getMany(
-  //     keys.map(key => this._key(key)),
-  //   )
-  // }
-
-  async put(key, value){
-    return await this._db.put(this._key(key), value)
-  }
-
-  async del(key){
-    return await this._db.del(this._key(key))
-  }
-  // async batch(key)
+  put(key, value){ return this._db.put(this._key(key), value) }
+  del(key){ return this._db.del(this._key(key)) }
 }
-
-
 
 class VaultRecords {
   constructor(db){
@@ -159,31 +137,18 @@ class VaultRecords {
     this.ids = new VaultRecordIds(db)
   }
 
-  // async ids(){
-  //   return await this._db.get(`ids`) || []
-  // }
-
   _recordKey(id){ return `record:${id}` }
 
   async get(id){
     return await this._db.get(this._recordKey(id))
   }
 
-  // async getMany(ids){
-  //   return await this._db.getMany(
-  //     ids.map(id => this._recordKey(id))
-  //   )
-  // }
-
   async all(){
     const ids = await this.ids.all()
-    console.log('vault records all', { ids })
-    // return await this.getMany(ids)
-    const records = await Promise.all(
+    if (ids.length === 0) return ids
+    return await Promise.all(
       ids.map(id => this.get(id))
     )
-    console.log('vault records all', { records })
-    return records
   }
 
   async allById(){
@@ -194,11 +159,13 @@ class VaultRecords {
   }
 
   async put(id, value){
-    console.log('RECORD PUT', { id, value })
     await this.ids.add(id)
-    console.log('RECORD PUT', { ids: await this.ids.all() })
     await this._db.put(this._recordKey(id), value)
-    console.log('RECORD PUT', { value: await this.get(id) })
+  }
+
+  async del(id){
+    await this.ids.del(id)
+    await this._db.del(this._recordKey(id))
   }
 }
 
