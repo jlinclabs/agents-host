@@ -19,6 +19,9 @@
     - json rpc endpoint
   - one-click-auth to participating sites
 
+- uploading files to IPFS
+  - replace uploading files locally with IPFS
+
 - data sharing agreements
   - rename SISAs to "data sharing agreements"
   - create a new agreement "type"

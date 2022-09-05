@@ -4,6 +4,7 @@ import levelup from 'levelup'
 import leveldown from 'leveldown'
 import encryptdown from '@adorsys/encrypt-down'
 import encodingdown from 'encoding-down'
+import sublevel frim 'sublevel'
 import lockFile from 'lockfile'
 import jose from 'node-jose'
 import env from '../environment.js'
@@ -61,7 +62,7 @@ async function openDb(name, vaultKey){
     throw error
   }
   await encrypted.keystorePromise // catch bad key errors
-  return db
+  return sublevel(db)
 }
 
 const OPEN_VAULTS = new Map
