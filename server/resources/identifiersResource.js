@@ -25,7 +25,7 @@ const identifiers = {
       await session.ensureLoggedIn()
       const { id, secretSeed } = await identifiers.commands.create()
       await session.useVault(async vault => {
-        await vault.records('identifiers').put(id, {
+        await vault.records('identifiers').set(id, {
           id,
           secretSeed,
           createdAt: new Date,

@@ -1,6 +1,6 @@
 import Cookies from 'cookies'
 import sessionResource from './resources/sessionResource.js'
-import { Vault } from './vaults.js'
+import { openVault } from './vaults.js'
 const COOKIE_NAME = 'session-id'
 
 export default class Session {
@@ -82,7 +82,7 @@ export default class Session {
 
   async useVault(handler){
     await this.ensureLoggedIn()
-    const vault = await Vault.open(
+    const vault = await openVault(
       `user-${this.userId}`,
       this._vaultKey
     )
@@ -90,8 +90,8 @@ export default class Session {
       return await handler(vault)
     }catch(error){
       throw error
-    }finally{
-      await vault.close()
+    // }finally{
+    //   await vault.close()
     }
   }
 }

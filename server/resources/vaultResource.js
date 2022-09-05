@@ -23,7 +23,12 @@ const sessionResource = {
   views: {
     'dump': async ({ session }) => {
       return await session.useVault(async vault => {
-        return await vault.dangerously_dump()
+        const dump = {}
+        dump.identifiers = {
+          ids: await vault.records('identifiers').ids.all(),
+          all: await vault.records('identifiers').allById(),
+        }
+        return dump
       })
     },
 
@@ -40,3 +45,7 @@ const sessionResource = {
 
 
 export default sessionResource
+
+async function vaultToJson(vault){
+
+}
