@@ -3,6 +3,8 @@ import useSWR, { useSWRConfig } from 'swr'
 
 const viewIdToSwrKey = viewId => viewId ? `/api/views/${viewId}` : undefined
 
+global.getView = viewId => fetchView(viewIdToSwrKey(viewId))
+
 export function useView(viewId){
   const swrKey = viewIdToSwrKey(viewId)
   const { data: view, error, mutate } = useSWR(swrKey, fetchView)

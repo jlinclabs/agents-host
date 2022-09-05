@@ -16,6 +16,14 @@ export async function generateVaultKey(){
   return jwk.kid
 }
 
+async function waitForLock(path, timeout = 30000){
+  await new Promise((resolve, reject) => {
+    lockFile.check(path, {wait: timeout}, (error) => {
+      if (error) reject(error); else resolve();
+    })
+  })
+}
+
 export async function openVault(name, vaultKey){
   console.log('OPENING VAULT', { name })
   const path = Path.resolve(env.VAULTS_PATH, `${name}.vault`)
@@ -28,7 +36,27 @@ export async function openVault(name, vaultKey){
   }
   const encrypted = encryptdown(base, { jwk })
   const encoded = encodingdown(encrypted, { valueEncoding: 'json' })
-  const db = levelup(encoded)
+  let db
+  const openPromise = new Promise((resolve, reject) => {
+    db = levelup(encoded, {}, error => {
+      if (error) reject(error); else resolve();
+    })
+  })
+
+  try{
+    await openPromise
+  }catch(error){
+    console.error(`ERROR OPENING VAULT`, error)
+    if (error instanceof levelErrors.OpenError){
+      const matches = error.message.match(/lock (.+): already held by process/)
+      if (!matches) throw error
+      console.log({ matches })
+      const path = matches[1]
+      await waitForLock(path)
+      return openVault(name, vaultKey)
+    }
+    throw error
+  }
   // OPEN_VAULTS.set(name, new WeakRef(db))
   console.log('DONE OPENING VAULT!', { name })
   await encrypted.keystorePromise // catch bad key errors
@@ -46,16 +74,16 @@ export async function openVault(name, vaultKey){
   return db
 }
 
-const OPEN_VAULTS = new Map
+// const OPEN_VAULTS = new Map
 
 export class Vault {
 
   static async open(vaultName, vaultKey){
-    if (OPEN_VAULTS.has(vaultName)){
-      console.log(`VAULT ALREADY OPEN "${vaultName}"`)
-    }else{
-      OPEN_VAULTS.set(vaultName)
-    }
+    // if (OPEN_VAULTS.has(vaultName)){
+    //   console.log(`VAULT ALREADY OPEN "${vaultName}"`)
+    // }else{
+    //   OPEN_VAULTS.set(vaultName)
+    // }
     const leveldb = await openVault(vaultName, vaultKey)
     return new Vault(new LevelDbWrapper(leveldb))
   }
