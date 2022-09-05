@@ -49,10 +49,12 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "brittle": "^3.1.0",
     "concurrently": "^7.3.0",
     "dotenv": "^16.0.1",
     "dotenv-cli": "^6.0.0",
     "find-open-port": "^2.0.3",
-    "prisma": "^4.2.1"
+    "prisma": "^4.2.1",
+    "standard": "^17.0.0"
   }
 }
