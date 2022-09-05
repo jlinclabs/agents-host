@@ -98,12 +98,9 @@ const identifiers = {
     'mine': async ({ session }) => {
       return await session.useVault(async vault => {
         return await vault.records('identifiers').all()
-        // return await jlinx.dids.get(id, secretSeed)
       })
     },
     ':id': async ({ session, id }) => {
-      // return await identifiers.queries.byId({ id, userId: currentUser.id })
-      console.log({ id })
       return await session.useVault(async vault => {
         const record = await vault.records('identifiers').get(id)
         const did = await getDidFromCeramic(id, record?.secretSeed)

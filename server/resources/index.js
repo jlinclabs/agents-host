@@ -2,6 +2,7 @@ import pathToRegexp from 'path-to-regexp'
 import ceramic from './ceramicResource.js'
 import users from './usersResource.js'
 import session from './sessionResource.js'
+import vault from './vaultResource.js'
 import profiles from './profilesResource.js'
 import identifiers from './identifiersResource.js'
 import contracts from './contractsResource.js'
@@ -12,6 +13,7 @@ const resources = {
   ceramic,
   users,
   session,
+  vault,
   profiles,
   identifiers,
   contracts,

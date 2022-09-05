@@ -77,12 +77,27 @@ export class Vault {
     await this._db.close()
   }
 
+  get(key){ return this._db.get(key) }
+  put(key, value){ return this._db.get(key, value) }
+  del(key){ return this._db.get(key) }
+
   namespace(namespace){
     return new VaultNamespace(this._db, namespace)
   }
 
   records(namespace){
     return new VaultRecords(this.namespace(namespace))
+  }
+
+  async dangerously_dump(){
+    const dump = {
+      createdAt: await this.get('createdAt'),
+    }
+    dump.identifies = {
+      ids: await this.records('identifiers').ids.all(),
+      all: await this.records('identifiers').all(),
+    }
+    return dump
   }
 
   // TODO locks and transactions?

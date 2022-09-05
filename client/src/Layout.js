@@ -91,6 +91,11 @@ function SideNav({ loading, currentUser }) {
       }}/>
       <Box sx={{ flex: '1 1'}}/>
       <Divider />
+      <NavButton {...{
+        icon: <DescriptionIcon/>,
+        text: 'Vault',
+        to: '/vault',
+      }}/>
       <ListItem disablePadding>
         <ListItemButton component={Link} to="/settings">
           <ListItemText {...{

@@ -101,8 +101,8 @@ const sessionResource = {
         createdAt: session.userCreatedAt,
       }
       return null
-
     },
+
   }
 }
 
