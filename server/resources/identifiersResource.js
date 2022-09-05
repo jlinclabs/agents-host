@@ -107,7 +107,6 @@ const identifiers = {
       return await session.useVault(async vault => {
         const record = await vault.records('identifiers').get(id)
         const did = await getDidFromCeramic(id, record?.secretSeed)
-        console.log({ record, did })
         if (did) return identifierToJSON(id, did, record)
       })
     }

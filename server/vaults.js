@@ -46,9 +46,16 @@ export async function openVault(name, vaultKey){
   return db
 }
 
+const OPEN_VAULTS = new Map
+
 export class Vault {
 
   static async open(vaultName, vaultKey){
+    if (OPEN_VAULTS.has(vaultName)){
+      console.log(`VAULT ALREADY OPEN "${vaultName}"`)
+    }else{
+      OPEN_VAULTS.set(vaultName)
+    }
     const leveldb = await openVault(vaultName, vaultKey)
     return new Vault(new LevelDbWrapper(leveldb))
   }
