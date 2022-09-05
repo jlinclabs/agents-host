@@ -71,13 +71,13 @@ export class Vault {
   static async open(vaultName, vaultKey){
     let promiseForDb = OPEN_VAULTS.get(vaultName)
     if (!promiseForDb) {
-      console.log('opening vault [fresh]', vaultName)
+      console.log('[VAULT] opening vault [fresh]', vaultName)
       promiseForDb = (async () => {
         const leveldb = await openDb(vaultName, vaultKey)
         const db = new LevelDbWrapper(
           leveldb,
           () => {
-            console.log('uncaching vault', vaultName)
+            console.log('[VAULT] closing vault', vaultName)
             OPEN_VAULTS.delete(vaultName)
           }
         )
@@ -86,7 +86,7 @@ export class Vault {
       OPEN_VAULTS.set(vaultName, promiseForDb)
 
     }else{
-      console.log('opening vault [cache]', vaultName)
+      console.log('[VAULT] opening vault [cache]', vaultName)
     }
     const db = await promiseForDb
     return new Vault(db)
@@ -148,7 +148,6 @@ class LevelDbWrapper {
   }
 
   async _close(){
-    console.log('CLOSING VAULT')
     this.closed = true
     if (this._onClose) this._onClose()
     await this._db.close()
