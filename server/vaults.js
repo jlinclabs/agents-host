@@ -93,14 +93,12 @@ export class Vault {
     const dump = {
       createdAt: await this.get('createdAt'),
     }
-    dump.identifies = {
+    dump.identifiers = {
       ids: await this.records('identifiers').ids.all(),
-      all: await this.records('identifiers').all(),
+      all: await this.records('identifiers').allById(),
     }
     return dump
   }
-
-  // TODO locks and transactions?
 }
 
 
@@ -186,6 +184,13 @@ class VaultRecords {
     )
     console.log('vault records all', { records })
     return records
+  }
+
+  async allById(){
+    const all = await this.all()
+    const byId = {}
+    all.forEach(record => { byId[record.id] = record })
+    return byId
   }
 
   async put(id, value){

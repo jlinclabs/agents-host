@@ -3,10 +3,14 @@
 ## Features
 
 - download and move your account to another instance
-  - encrypted leveldb for account data
-  - make login secret a valid keypair seed
+  - [x] encrypted leveldb for account data
+  - [x] store vault secret in postgres
+  - [x] Vault viewer
+  - ¿¿ can you scan through the keys of a leveldb ??
+  - LATER: make it exportable and importable to a new account
 
 - auth
+  - NOTE: implementing idx id3 "ceramic logic" will change how identifirs and profiles work
   - login with wallet
     - id3
     - idx
@@ -15,12 +19,11 @@
     - json rpc endpoint
   - one-click-auth to participating sites
 
-- issue UCAN JWTs
-  - cocoa
-  - ucan.xyz
-
 - data sharing agreements
-  - create a data shring agreements
+  - rename SISAs to "data sharing agreements"
+  - create a new agreement "type"
+    - user can pick from a list of paragraphs
+    - contract is stored on ceramic with schema
   - sign an instance of that agreement with another did
   - share data over that agreement
 
@@ -28,11 +31,15 @@
   - not worker process (thread?)
   - ¿can this be a "subscribe to changes" http "server sent events" endpoint?
   - watching ceramic streams
-  
 
 - data explorer
   - explore your personal leveldb database
   - explore ceramic tiles we're tracking
+  - smart display that can hide secrets and link to places
+
+- issue UCAN JWTs
+  - cocoa
+  - ucan.xyz
 
 
 ## Development
