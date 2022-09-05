@@ -5,9 +5,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "./scripts/dev-start-all",
     "build": "./scripts/build",
-    "start": "./scripts/start"
+    "dev": "./scripts/dev-start-all",
+    "start": "./scripts/start",
+    "test": "./scripts/test"
   },
   "keywords": [],
   "author": "Jared Grippe",
@@ -40,12 +41,14 @@
     "ipfs-core": "^0.15.4",
     "key-did-provider-ed25519": "^2.0.1",
     "key-did-resolver": "^2.0.6",
+    "level-sublevel": "^6.6.5",
     "leveldown": "^6.1.1",
     "levelup": "^5.1.1",
     "lockfile": "^1.0.4",
     "multer": "^1.4.5-lts.1",
     "node-fetch": "^3.2.10",
     "node-jose": "^2.1.1",
+    "tmp-promise": "^3.0.3",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
