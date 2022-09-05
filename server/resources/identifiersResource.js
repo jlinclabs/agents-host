@@ -55,7 +55,9 @@ export default identifiers
 
 async function getDidFromCeramic(id, secretSeed){
   const jlinx = new JlinxClient()
-  return await jlinx.dids.get(id, Buffer.from(secretSeed, 'hex'))
+  if (typeof secretSeed === 'string')
+    secretSeed = Buffer.from(secretSeed, 'hex')
+  return await jlinx.dids.get(id, secretSeed)
 }
 
 function identifierToJSON(id, did, record){
