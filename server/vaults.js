@@ -4,6 +4,7 @@ import levelup from 'levelup'
 import leveldown from 'leveldown'
 import encryptdown from '@adorsys/encrypt-down'
 import encodingdown from 'encoding-down'
+import lockFile from 'lockfile'
 import jose from 'node-jose'
 import env from '../environment.js'
 
@@ -17,8 +18,10 @@ export async function generateVaultKey(){
 }
 
 async function waitForLock(path, timeout = 30000){
+  console.log('LOCK WAIT', path)
   await new Promise((resolve, reject) => {
     lockFile.check(path, {wait: timeout}, (error) => {
+      console.log('LOCK RELEASE', path, error)
       if (error) reject(error); else resolve();
     })
   })
@@ -46,44 +49,22 @@ export async function openVault(name, vaultKey){
   try{
     await openPromise
   }catch(error){
-    console.error(`ERROR OPENING VAULT`, error)
     if (error instanceof levelErrors.OpenError){
       const matches = error.message.match(/lock (.+): already held by process/)
       if (!matches) throw error
-      console.log({ matches })
       const path = matches[1]
       await waitForLock(path)
       return openVault(name, vaultKey)
     }
     throw error
   }
-  // OPEN_VAULTS.set(name, new WeakRef(db))
-  console.log('DONE OPENING VAULT!', { name })
   await encrypted.keystorePromise // catch bad key errors
-
-  const closedPromise = new Promise(resolve => {
-    db.on('closed', () => {
-      console.log('VAULT CLOSED!', { name })
-      resolve()
-    })
-  })
-
-  // TODO handle these errors
-  // [SERVER] Error [OpenError]: IO error: lock /Volumes/Work/jlinc/agents.jlinx.io/vaults/user-4.vault/LOCK: Resource temporarily unavailable
-
   return db
 }
-
-// const OPEN_VAULTS = new Map
 
 export class Vault {
 
   static async open(vaultName, vaultKey){
-    // if (OPEN_VAULTS.has(vaultName)){
-    //   console.log(`VAULT ALREADY OPEN "${vaultName}"`)
-    // }else{
-    //   OPEN_VAULTS.set(vaultName)
-    // }
     const leveldb = await openVault(vaultName, vaultKey)
     return new Vault(new LevelDbWrapper(leveldb))
   }
