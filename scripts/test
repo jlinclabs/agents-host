@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+export NODE_ENV=test
+exec npx brittle $(find test | grep \\.test\\.js$)
