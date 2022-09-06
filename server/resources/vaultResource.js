@@ -1,3 +1,4 @@
+import b4a from 'b4a'
 import prisma from '../../prisma/client.js'
 import { InvalidArgumentError } from '../errors.js'
 import { createDid } from '../ceramic.js'
@@ -5,6 +6,10 @@ import { JlinxClient } from '../jlinx.js'
 import { isEmail, isPassword } from '../lib/validators.js'
 import users from './usersResource.js'
 import identifiers from './identifiersResource.js'
+
+const SKIPPED_KEYS = new Set([
+  'KEY_CHECK'
+])
 
 const sessionResource = {
 
@@ -24,9 +29,11 @@ const sessionResource = {
     'dump': async ({ session }) => {
       return await session.useVault(async vault => {
         const dump = {}
-        dump.identifiers = {
-          ids: await vault.records('identifiers').ids.all(),
-          all: await vault.records('identifiers').allById(),
+        for (const key of await vault.keys()) {
+          if (SKIPPED_KEYS.has(key)) continue
+          let value = await vault.get(key)
+          if (b4a.isBuffer(value)) value = value.toString('hex')
+          dump[key] = value
         }
         return dump
       })
