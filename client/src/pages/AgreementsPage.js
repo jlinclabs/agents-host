@@ -23,6 +23,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 
+import { useStateObject } from '../lib/reactStateHelpers'
 import {
   useAgreement,
   useMyAgreements,
@@ -91,64 +92,101 @@ function Show() {
 }
 
 function Offer({ router }) {
+  const [agreement, setAgreement] = useStateObject({
+    agreementType: 'jlinx-data-sharing-v1',
+    offererDid: '',
+    requestedData: [
+      { description: 'Name', type: 'text' },
+      { description: 'Email', type: 'email' },
+      { description: 'Mobile', type: 'phone number' },
+    ]
+  })
+
+  console.log(`AGREEMENT: ${JSON.stringify(agreement, null, 2)}`)
+
   return <Container maxwidth="lg">
-    <OfferAgreementForm {...{ router }}/>
-    <PreviewAgreementForm {...{ router }}/>
+    <OfferAgreementForm {...{
+      router,
+      agreement,
+      setAgreement,
+    }}/>
+    <PreviewAgreementForm {...{
+      router,
+      agreement
+    }}/>
   </Container>
 }
 
-function OfferAgreementForm(){
+function OfferAgreementForm({ agreement, setAgreement }){
   const navigate = useNavigate()
-  const [sisaUrl, setAgreementUrl] = useState('https://sisas.io/sisa-suyF9tPmVrtuuLn3R4XdzGXMZN6aFfCIXuXwGpAHtCw.md')
-  const [identifierId, setIdentifierId] = useState('')
-  const [requestedDataFields, setRequestedDataFields] = useState([
-    { description: 'Name', type: 'text' },
-    { description: 'Email', type: 'email' },
-    { description: 'Mobile', type: 'phone number' },
-  ])
-
-  const offerAgreement = useOfferAgreement({
-    onSuccess(sisa){
-      navigate(`/sisas/${sisa.id}`)
-    },
-  })
+  // const [sisaUrl, setAgreementUrl] = useState('https://sisas.io/sisa-suyF9tPmVrtuuLn3R4XdzGXMZN6aFfCIXuXwGpAHtCw.md')
+  // const [identifierId, setIdentifierId] = useState('')
+  const identifierId = agreement.offererDid
+  const setIdentifierId = did =>
+    setAgreement(agreement => {
+      agreement.offererDid = did
+      return agreement
+    })
+  // const [requestedDataFields, setRequestedDataFields] = useState([
+  //   { description: 'Name', type: 'text' },
+  //   { description: 'Email', type: 'email' },
+  //   { description: 'Mobile', type: 'phone number' },
+  // ])
 
   const addRequestedDataField = () => {
-    setRequestedDataFields([
-      ...requestedDataFields,
-      {
-        description: `field #${requestedDataFields.length}`,
-        type: 'text',
-      }
-    ])
+    setAgreement(agreement => {
+      agreement.requestedData = [
+        ...agreement.requestedData,
+        {
+          description: `field #${agreement.requestedData.length}`,
+          type: 'text',
+        }
+      ]
+      return agreement
+    })
+    // TODO focus new field
   }
 
   const removeRequestedDataField = (index) => {
-    console.log('REMOVE', {index})
-    const newFields = [...requestedDataFields]
-    newFields.splice(index, 1)
-    setRequestedDataFields(newFields)
+    setAgreement(agreement => {
+      agreement.requestedData = [...agreement.requestedData]
+      agreement.requestedData.splice(index, 1)
+      return agreement
+    })
   }
 
   const updateRequestedDataField = (index, changes) => {
-    const newFields = [...requestedDataFields]
-    newFields[index] = {...newFields[index], ...changes}
-    setRequestedDataFields(newFields)
+    setAgreement(agreement => {
+      agreement.requestedData = [...agreement.requestedData]
+      const rd = agreement.requestedData[index]
+      agreement.requestedData[index] = {...rd, ...changes}
+      return agreement
+    })
   }
 
-  console.log({ requestedDataFields })
+  const offerAgreement = useOfferAgreement({
+    onSuccess(agreement){
+      setAgreement(undefined, true)
+      navigate(`/agreements/${agreement.id}`)
+    },
+  })
 
   const disabled = offerAgreement.pending
+
+  const addNewFieldButton = (
+    <Button
+      variant="contained"
+      onClick={addRequestedDataField}
+    >ADD NEW FIELD</Button>
+  )
+
   return <Paper {...{
     elevation: 3,
     component: 'form',
     sx: { p: 2, m: 1 },
     onSubmit(event){
       event.preventDefault()
-      offerAgreement({
-        identifierId,
-        requestedDataFields,
-      })
+      offerAgreement(agreement)
     }
   }}>
     <Typography component="h1" variant="h3" sx={{mb: 3}}>
@@ -190,8 +228,8 @@ function OfferAgreementForm(){
     </Typography>
 
     <Stack spacing={2} direction="column" alignItems="flex-start">
-      {AGREEMENT_CONDITONS.map(con =>
-        <Box>
+      {AGREEMENT_CONDITONS.map((con, index) =>
+        <Box key={index}>
           <Stack direction="row" alignItems="center">
             <Switch />
             <Box>
@@ -206,28 +244,38 @@ function OfferAgreementForm(){
     <Typography variant="body1" sx={{mt: 2}}>
       Requested data
     </Typography>
-    <Stack>
-      {requestedDataFields.map((requestedDataField, index) =>
-        <Stack flexDirection="row" my={1} justifyContent="space-between">
-          <TextField
-            sx={{flex: '3 3', mr: 1}}
-            value={requestedDataField.description}
-            onChange={event => { updateRequestedDataField(index, {description: event.target.value}) }}
-          />
-          <RequestedDataFieldTypeSelect
-            sx={{flex: '1 1'}}
-            value={requestedDataField.type}
-            onChange={event => { updateRequestedDataField(index, {type: event.target.value}) }}
-          />
-          <Button onClick={() => { removeRequestedDataField(index) }}><HighlightOffIcon/></Button>
-        </Stack>
-      )}
-    </Stack>
-    <Stack flexDirection="row">
-      <Button
-        variant="contained"
-        onClick={addRequestedDataField}
-      >add field</Button>
+
+    {agreement.requestedData.length === 0 &&
+      <Stack alignItems="center" sx={{my: 2}}>
+        <Typography variant="h6">
+          Click {addNewFieldButton} to define the data you request
+        </Typography>
+      </Stack>
+    }
+
+    {agreement.requestedData.map((requestedDataField, index) =>
+      <Stack flexDirection="row" my={1} alignItems="center">
+        <TextField
+          sx={{flex: '3 3', mr: 1}}
+          value={requestedDataField.description}
+          onChange={event => { updateRequestedDataField(index, {description: event.target.value}) }}
+        />
+        <RequestedDataFieldTypeSelect
+          sx={{flex: '1 1'}}
+          value={requestedDataField.type}
+          onChange={event => { updateRequestedDataField(index, {type: event.target.value}) }}
+        />
+        <Button
+          tabIndex={-1}
+          onClick={() => { removeRequestedDataField(index) }}
+        >
+          <HighlightOffIcon/>
+        </Button>
+      </Stack>
+    )}
+
+    <Stack flexDirection="row-reverse" sx={{mb: 2}}>
+      {addNewFieldButton}
     </Stack>
 
     {offerAgreement.error && <ErrorMessage error={offerAgreement.error} />}
@@ -254,30 +302,29 @@ const AGREEMENT_CONDITONS = [
     description: (
       `The offerer of this agreement has the right ` +
       `to sell your data to whomever they want whenever. ` +
-      `Quis tempor aliquip nostrud consequat cupidatat cupidatat eiusmod ` +
+      `Tempor aliquip cupidatat cupidatat eiusmod ` +
+      `velit elit nisi magna duis voluptate. Consectetur aliqua cupidatat ` +
+      `exercitation culpa veniam deserunt enim ` +
+      `exercitation veniam aliquip.`
+    )
+  },
+  {
+    title: 'Can share anonymously',
+    description: (
+      `The offerer of this agreement has the right ` +
+      `to sell your data to whomever they want whenever. ` +
+      `Lupidatat cupidatat eiusmod ` +
       `velit elit nisi magna duis voluptate. Consectetur aliqua cupidatat ` +
       `exercitation culpa incididunt proident aliquip veniam deserunt enim ` +
       `exercitation veniam aliquip.`
     )
   },
   {
-    title: 'Data will be sold to highest bidder',
+    title: 'Can share agregate',
     description: (
       `The offerer of this agreement has the right ` +
       `to sell your data to whomever they want whenever. ` +
-      `Quis tempor aliquip nostrud consequat cupidatat cupidatat eiusmod ` +
-      `velit elit nisi magna duis voluptate. Consectetur aliqua cupidatat ` +
-      `exercitation culpa incididunt proident aliquip veniam deserunt enim ` +
-      `exercitation veniam aliquip.`
-    )
-  },
-  {
-    title: 'Data will be sold to highest bidder',
-    description: (
-      `The offerer of this agreement has the right ` +
-      `to sell your data to whomever they want whenever. ` +
-      `Quis tempor aliquip nostrud consequat cupidatat cupidatat eiusmod ` +
-      `velit elit nisi magna duis voluptate. Consectetur aliqua cupidatat ` +
+      `Consectetur aliqua cupidatat ` +
       `exercitation culpa incididunt proident aliquip veniam deserunt enim ` +
       `exercitation veniam aliquip.`
     )
@@ -402,7 +449,7 @@ function SignAgreementOfferingForm({ sisaId }){
     </Typography>
 
     <ul>
-      {sisa.requestedDataFields.map(({ type, description }) =>
+      {agreement.requestedData.map(({ type, description }) =>
         <Box component="li">
           <Typography component="span" variant="body1">{description}</Typography>
           <Typography component="span" variant="body1"> ({type})</Typography>
@@ -467,7 +514,7 @@ function Agreement({ sisa }){
       <Typography variant="h6">Requested Data</Typography>
 
       <ul>
-        {sisa.requestedDataFields.map(({ type, description }) =>
+        {agreement.requestedData.map(({ type, description }) =>
           <Box component="li">
             <Typography component="span" variant="body1">{description}</Typography>
             <Typography component="span" variant="body1"> ({type})</Typography>
