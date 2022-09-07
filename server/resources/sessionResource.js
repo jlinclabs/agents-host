@@ -8,17 +8,28 @@ import identifiers from './identifiersResource.js'
 
 const sessionResource = {
 
-  queries: {
-    async get(sessionId){
-      const record = await prisma.session.findUnique({
-        where: { id: sessionId },
+  commands: {
+    async create(){
+      return await prisma.session.create({
+        data: {},
         select: {
           id: true,
           createdAt: true,
           lastSeenAt: true,
-          agentId: true,
+        }
+      })
+    },
+    async touch(id){
+      const record = await prisma.session.update({
+        where: { id },
+        data: { lastSeenAt: new Date },
+        select: {
+          id: true,
+          createdAt: true,
+          lastSeenAt: true,
           agent: {
             select: {
+              id: true,
               did: true,
               didSecret: true,
               createdAt: true,
@@ -31,18 +42,6 @@ const sessionResource = {
         record.agent.didSecret = Buffer.from(record.agent.didSecret, 'hex')
       }
       return record
-    }
-  },
-
-  commands: {
-    async create(){
-      return await prisma.session.create({ data: {} })
-    },
-    async touch(id){
-      return await prisma.session.update({
-        where: { id },
-        data: { lastSeenAt: new Date }
-      })
     },
     async setAgentId(id, agentId){
       console.log('setAgentId', {id, agentId})

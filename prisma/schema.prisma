@@ -14,8 +14,8 @@ model Agent {
   passwordSalt String?
   passwordHash String?
   vaultKey     String
-  did          String
-  didSecret    String
+  did          String    @unique
+  didSecret    String    @unique
   sessions     Session[]
 }
 

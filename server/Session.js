@@ -1,22 +1,20 @@
+import Debug from 'debug'
 import Cookies from 'cookies'
 import sessionResource from './resources/sessionResource.js'
 import Agent from './Agent.js'
 import { openVault } from './vaults.js'
 const COOKIE_NAME = 'session-id'
 
+const debug = (...msg) => console.log('Session', ...msg)
+
 export default class Session {
 
   static async open(req, res){
+    debug('OPEN', req.method, req.url)
     const session = new Session(req, res)
-    if (session.id) await session.reload()
-    if (!session.createdAt) {
-      console.log('Session create', this.id)
-      session._value = await sessionResource.commands.create()
-      session._id = session._value.id
-      session._cookies.set(COOKIE_NAME, session.id, { httpOnly: true })
-    }else{
-      await session.touch()
-    }
+    debug('OPEN', 'session.id', session.id)
+    if (session.id) await session.load()
+    else await session.create()
     return session
   }
 
@@ -27,26 +25,35 @@ export default class Session {
 
   get id(){ return this._id }
 
-  close () {
-    if (this._vault) this._vault.close()
+  async create(){
+    debug('create')
+    const record = await sessionResource.commands.create()
+    debug('created', record.id)
+    this._cookies.set(COOKIE_NAME, record.id, { httpOnly: true })
+    this._id = record.id
+    this._createdAt = record.createdAt
+    this._lastSeenAt = record.lastSeenAt
   }
-
-  async reload(){
-    console.log('Session reload', this.id)
-    const sessionRecord = await sessionResource.queries.get(this.id)
-    if (!sessionRecord){
-      throw new Error(`invalid session id=${this.id}`)
-    }
-    this._createdAt = sessionRecord.createdAt
-    this._lastSeenAt = sessionRecord.lastSeenAt
-    this._agentId = sessionRecord.agentId
-    if (sessionRecord.agent){
-      const { did, didSecret, createdAt, vaultKey } = sessionRecord.agent
+  async load(){
+    debug('load', this.id)
+    const record = await sessionResource.commands.touch(this.id)
+    debug('loaded', record)
+    this._createdAt = record.createdAt
+    this._lastSeenAt = record.lastSeenAt
+    if (record.agent){
+      const { did, didSecret, createdAt, vaultKey } = record.agent
       this._agent = await Agent.open({
         did, didSecret, createdAt, vaultKey
       })
     }
   }
+
+  async delete(){
+    debug('delete', this.id)
+    await sessionResource.commands.delete(this.id)
+    this._cookies.set(COOKIE_NAME, undefined)
+  }
+
 
   get createdAt(){ return this._createdAt }
   get lastSeenAt(){ return this._lastSeenAt }
@@ -56,21 +63,10 @@ export default class Session {
   // get vault () { return this._vault }
   // get jlinx () { return this._jlinx }
 
-  async touch(){
-    console.log('Session touch', this.id)
-    await sessionResource.commands.touch(this.id)
-  }
-
-  async delete(){
-    console.log('Session delete', this.id)
-    await sessionResource.commands.delete(this.id)
-    this._cookies.set(COOKIE_NAME, undefined)
-  }
-
   async setAgentId(agentId){
     if (this.agentId){ throw new Error(`please logout first`) }
     await sessionResource.commands.setAgentId(this.id, agentId)
-    await this.reload()
+    await this.load()
   }
 
   [Symbol.for('nodejs.util.inspect.custom')] (depth, opts) {
