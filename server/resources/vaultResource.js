@@ -6,6 +6,7 @@ import { JlinxClient } from '../jlinx.js'
 import { isEmail, isPassword } from '../lib/validators.js'
 
 const SKIPPED_KEYS = new Set([
+  'VERSION',
   'KEY_CHECK'
 ])
 
@@ -24,8 +25,8 @@ const sessionResource = {
   },
 
   views: {
-    'dump': async ({ session }) => {
-      const { vault } = session
+    'dump': async ({ agent }) => {
+      const { vault } = agent
       const dump = {}
       for (const key of await vault.keys()) {
         if (SKIPPED_KEYS.has(key)) continue
@@ -36,9 +37,9 @@ const sessionResource = {
       return dump
     },
 
-    'currentAgent': async ({ session }) => {
-      if (session.userId) return {
-        id: session.userId,
+    'currentAgent': async ({ agent }) => {
+      if (agent) return {
+        did: agent.did,
         createdAt: session.userCreatedAt,
       }
       return null

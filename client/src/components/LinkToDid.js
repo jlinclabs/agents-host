@@ -8,7 +8,7 @@ import Link from './Link'
 export default function LinkToDid({ did, children = did, ...props }){
   return <Box>
     <Link to={`/dids/${did}`}>{did}</Link>&nbsp;
-    <LinkToCeramicApi endpoint={did}/>
+    {/* <LinkToCeramicApi endpoint={did}/> */}
     <CeramicStreamLink streamId={did.split(':')[2]}/>
   </Box>
 }

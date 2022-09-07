@@ -16,6 +16,7 @@ const debug = Debug('jlinx')
 export class JlinxClient {
 
   static async open(didString, secretSeed){
+    debug('OPEN', { didString, secretSeed })
     const did = await getDid(didString, secretSeed)
     return new JlinxClient(did)
   }

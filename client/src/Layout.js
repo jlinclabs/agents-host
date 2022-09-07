@@ -87,14 +87,14 @@ function SideNav({ loading, currentAgent }) {
         to: '/contracts',
       }}/> */}
       <NavButton {...{
-        icon: <ContactPageIcon/>,
-        text: 'Contacts',
-        to: '/contacts',
-      }}/>
-      <NavButton {...{
         icon: <FingerprintIcon/>,
         text: 'DIDs',
         to: '/dids',
+      }}/>
+      <NavButton {...{
+        icon: <ContactPageIcon/>,
+        text: 'Contacts',
+        to: '/contacts',
       }}/>
       <NavButton {...{
         icon: <AssignmentTurnedInIcon/>,
@@ -174,7 +174,7 @@ function SideNav({ loading, currentAgent }) {
         // color: 'black',
       }}
     >
-      {`${process.env.REACT_APP_NAME}`}
+      JLINX Agent
     </Link>
 
     <List sx={{

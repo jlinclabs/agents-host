@@ -34,7 +34,6 @@ import { useView } from '../lib/views'
 //   useAckAgreementSignature
 // } from '../resources/agreements'
 
-import { useMyIdentifiers } from '../resources/identifiers'
 import Link from '../components/Link'
 import LinkToCeramicApi from '../components/LinkToCeramicApi'
 import Timestamp from '../components/Timestamp'
@@ -96,7 +95,6 @@ function Show() {
 function Offer({ router }) {
   const [agreement, setAgreement] = useStateObject({
     agreementType: 'jlinx-data-sharing-v1',
-    offererDid: '',
     requestedData: [
       { description: 'Name', type: 'text' },
       { description: 'Email', type: 'email' },
@@ -195,18 +193,6 @@ function OfferAgreementForm({ agreement, setAgreement }){
     <Typography component="h1" variant="h3" sx={{mb: 3}}>
       Offer an Agreement
     </Typography>
-
-    <Typography variant="h7" sx={{mt: 2, mb: 1}}>
-      Offer agreement as:
-    </Typography>
-    <IdentifierSelectInput {...{
-      label: '',
-      autoFocus: true,
-      value: identifierId,
-      onChange: setIdentifierId,
-      defaultToFirst: true,
-      helperText: "Which identifier do you want to offer this SISA as?"
-    }}/>
 
     <FormControl fullWidth>
       <Typography variant="h7" sx={{mt: 2, mb: 1}}>

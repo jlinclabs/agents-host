@@ -2,6 +2,7 @@ import { generateVaultKey } from '../vaults.js'
 import env from '../../environment.js'
 import prisma from '../../prisma/client.js'
 import { createDid } from '../ceramic.js'
+import Agent from '../Agent.js'
 
 const users = {
   queries: {
@@ -32,11 +33,11 @@ const users = {
   commands: {
     async create({ password }){
       const vaultKey = await generateVaultKey()
-      const { did, secretSeed } = await createDid()
+      const { did, secretSeed: didSecret } = await createDid()
       const data = {
         vaultKey,
         did: did.id,
-        didSecret: secretSeed.toString('hex'),
+        didSecret: didSecret.toString('hex'),
       }
       if (password){
         data.passwordHash = await bcrypt.hash(
@@ -44,9 +45,18 @@ const users = {
         )
       }
       console.log('CREATING USER', {data})
-      const { id } = await prisma.agent.create({
-        data, select: { id: true }
+      const { id, createdAt } = await prisma.agent.create({
+        data, select: { id: true, createdAt: true }
       })
+
+      const agent = await Agent.open({
+        did: did.id,
+        didSecret,
+        createdAt,
+        vaultKey,
+      })
+      agent.vault.set('did', did.id, 'string')
+      agent.vault.set('didSecret', didSecret, 'raw')
       return { id }
     }
   },
