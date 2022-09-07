@@ -9,8 +9,8 @@
   - ¿¿ can you scan through the keys of a leveldb ??
   - LATER: make it exportable and importable to a new account
 
-- switch to one DID for your agent
-  - users can just have more than one
+- [x] switch to one DID for your agent
+  - [x] users can just have more than one
 
 - auth
   - NOTE: implementing idx id3 "ceramic logic" will change how identifirs and profiles work
@@ -18,8 +18,10 @@
     - id3
     - idx
   - grant agent DID access to act as your wallet DID
-  - did document service for signing
+  - did document service
     - json rpc endpoint
+    - for signing
+    - authentication
   - one-click-auth to participating sites
 
 - uploading files to IPFS
@@ -34,7 +36,7 @@
   - share data over that agreement
 
 - notifications & real-time changes
-  - not worker process (thread?)
+  - worker process (thread?)
   - ¿can this be a "subscribe to changes" http "server sent events" endpoint?
   - watching ceramic streams
 

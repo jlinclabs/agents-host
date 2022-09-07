@@ -32,7 +32,6 @@ export default function AuthPage() {
       }}
     >
       <Routes>
-        <Route path="/" element={<Index />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/signup" element={<Signup />} />
@@ -40,12 +39,13 @@ export default function AuthPage() {
         <Route path="/signup/password" element={<SignupWithPassword />} />
         <Route path="/signup/wallet" element={<SignupWithWallet />} />
         <Route path="/logout" element={<Logout />} />
+        <Route path="*" element={<Main />} />
       </Routes>
     </Container>
   </Container>
 }
 
-function Index(){
+function Main(){
   return <Stack>
     <Button
       variant="contained"

@@ -20,6 +20,7 @@ import DataSharingPage from './pages/DataSharingPage'
 // import ContractsPage from './pages/ContractsPage'
 
 export default function Routes() {
+  // useErrorBoundry
   const { currentAgent } = useCurrentAgent()
   if (!currentAgent) return <AuthPage />
   return <Layout>

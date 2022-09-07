@@ -38,7 +38,6 @@ const agreements = {
 
   views: {
     'mine': async ({ agent }) => {
-
       return await agent.agreements.all()
     },
     ':id': async ({ agent, id }) => {

@@ -56,7 +56,12 @@ class Agreements extends Plugin {
   async create(agreement){
     console.log('creating agreement', { agreement })
     const doc = await this.agent.jlinx.create(
-      agreement,
+      {
+        offererDid: this.agent.did,
+        terms: agreement.terms,
+        createdAt: Date.now(),
+        state: 'offered',
+      },
       {
         // schema: //TODO
       }
@@ -67,7 +72,9 @@ class Agreements extends Plugin {
   }
 
   async get(id){
+    // const { createdAt } = await this.agent.vault.records('agreements').get(id)
     const doc = await this.agent.jlinx.get(id)
+    console.log({ doc })
     // TODO check schema matches
     return {
       ...doc.content,
@@ -79,10 +86,9 @@ class Agreements extends Plugin {
     const agreements = await this.agent.vault.records('agreements').all()
     console.log({ agreements })
     return Promise.all(
-      agreements.map(async agreement => {
-        // const doc = await this.agent.jlinx.get(agreement.id)
-        // return doc
-      })
+      agreements.map(async agreement =>
+        this.get(agreement.id)
+      )
     )
   }
 }

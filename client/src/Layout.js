@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useMemo } from 'react'
 import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -117,7 +118,7 @@ function SideNav({ loading, currentAgent }) {
         <ListItemButton component={Link} to="/settings">
           <ListItemText {...{
             primary: (
-              currentAgent.email || '[anonymous user]'
+              <ShortDid did={currentAgent.did}/>
             ),
             primaryTypographyProps: {
               sx: {
@@ -200,4 +201,17 @@ function NavButton({ text, to, icon }){
       <ListItemText primary={text} />
     </ListItemButton>
   </ListItem>
+}
+
+function ShortDid({ did }){
+  const shortDid = useMemo(
+    () => `${did.slice(0, 10)}…${did.slice(-6)}`,
+    [did]
+  )
+  console.log({ did, shortDid })
+  return <Box sx={{
+    maxWidth: '140px',
+    textOverflow: 'ellipsis',
+    overflow: 'scroll',
+  }}>{shortDid}</Box>
 }

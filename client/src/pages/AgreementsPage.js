@@ -41,7 +41,7 @@ import ButtonRow from '../components/ButtonRow'
 import InspectObject from '../components/InspectObject'
 
 export default function Agreements() {
-  return <Container maxwidth="lg">
+  return <Container maxWidth="lg">
     <Routes>
       <Route path="/" element={<Index />} />
       <Route path="/new" element={<New />} />
@@ -55,7 +55,7 @@ function Index(props) {
     <Typography my={2} variant="h3">Agreements</Typography>
     <Typography my={2} variant="h6">Standard Information Sharing Agreemnts</Typography>
 
-    <Stack spacing={2} sx={{maxWidth: '400px'}}>
+    <Stack spacing={2}>
       <Button
         variant="contained"
         component={Link}
@@ -194,23 +194,25 @@ function LookupAgreementOfferingForm({ setId }){
     sx: { p: 2, mt: 2 },
     onSubmit(event){
       event.preventDefault()
-      // navigate(`/sisas/sign?id=${encodeURIComponent(sisaId)}`)
+      // navigate(`/agreement/sign?id=${encodeURIComponent(sisaId)}`)
       setId(sisaId)
     }
   }}>
     <Typography component="h1" variant="h3">
       Sign a Agreement
     </Typography>
-    <TextField
-      label="Agreement Id"
-      margin="normal"
-      required
-      fullWidth
-      name="sisaUrl"
-      placeholder="lGavv2LbRjEPqiLUX1af_DvOz5Qy03PbuWw1I1kcFGs"
-      value={sisaId}
-      onChange={e => { setAgreementId(e.target.value) }}
-    />
+    <FormControl fullWidth>
+      <TextField
+        label="Agreement Id"
+        margin="normal"
+        required
+        fullWidth
+        name="sisaUrl"
+        placeholder="lGavv2LbRjEPqiLUX1af_DvOz5Qy03PbuWw1I1kcFGs"
+        value={sisaId}
+        onChange={e => { setAgreementId(e.target.value) }}
+      />
+    </FormControl>
     <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
       <Button type="submit" variant="contained">{`Lookup Agreement Offering`}</Button>
     </Box>
@@ -226,7 +228,7 @@ function SignAgreementOfferingForm({ sisaId }){
   const signAgreement = useSignAgreement({
     onSuccess({ signatureId }){
       console.log('SIGNED', { signatureId })
-      navigate(`/sisas/${sisaId}`)
+      navigate(`/agreements/${sisaId}`)
       // setSignatureId(signatureId)
     }
   })
@@ -320,35 +322,26 @@ function Agreement({ agreement }){
       <CeramicStreamLink streamId={agreement.id}/>
     </Stack>
 
-    <InspectObject object={agreement}/>
-
-    {/* <Box my={2}>
-      <Typography variant="h6">Offered by</Typography>
-      <LinkToDid did={agreement.offerer}/>
-    </Box> */}
-
-    {/* <Box my={2}>
-      <Typography variant="h6">Offered at</Typography>
-      <Timestamp at={agreement.createdAt}/>
-    </Box> */}
-
-    {/*
     <Box my={2}>
-      <Typography variant="h6">Requested Data</Typography>
+      <Typography variant="h6">Created:</Typography>
+      <Timestamp at={agreement.createdAt}/>
+    </Box>
 
-      <ul>
-        {agreement.requestedData.map(({ type, description }) =>
-          <Box component="li">
-            <Typography component="span" variant="body1">{description}</Typography>
-            <Typography component="span" variant="body1"> ({type})</Typography>
-          </Box>
-        )}
-      </ul>
-    </Box> */}
+    <Typography variant="h6">Terms:</Typography>
+    <FormControl
+      fullWidth
+      sx={{}}
+    >
+      <TextField
+        multiline
+        readOnly
+        value={agreement.terms}
+        rows={4}
+      />
+    </FormControl>
 
-
-    {/* {agreement.state === 'offered'
-      ? <Box my={2}>
+    {agreement.state === 'offered' &&
+      <Box my={2}>
         <Typography variant="h6" sx={{mt: 2}}>
           Give this ID to the parties you want to sign this agreement:
         </Typography>
@@ -364,10 +357,9 @@ function Agreement({ agreement }){
           <input type="text" readOnly value={agreement.id} onClick={e => { e.target.select() }}/>
         </Box>
       </Box>
-      : null
-    } */}
+    }
 
-    {false && agreement.state === 'signed' &&
+    {agreement.state === 'signed' &&
       <>
         <Typography variant="h6">Signed by</Typography>
         <LinkToDid did={agreement.signer}/>
@@ -377,10 +369,6 @@ function Agreement({ agreement }){
         </Paper> */}
       </>
     }
-
-    {/* <InspectObject object={sisa}/> */}
-    {/* <Typography variant="h6">Events</Typography>
-    <CeramicStreamEvents id={sisa.id}/> */}
   </Paper>
 }
 
@@ -428,7 +416,7 @@ function AckAgreementSignatureForm({ sisa, reloadAgreement }){
 
 
 function MyAgreementsList(){
-  const {view: myAgreements, error} = useView('agreements.mine')
+  const {view: myAgreements, loading, error} = useView('agreements.mine')
 
   console.log({ myAgreements })
   return (
@@ -438,17 +426,16 @@ function MyAgreementsList(){
       // flexGrow: 1,
     }}>
       <ErrorMessage {...{error}}/>
-      {myAgreements ||
-        Array(3).fill().map((_, i) =>
+      {loading
+        ? Array(3).fill().map((_, i) =>
           <Skeleton key={i} animation="wave" height="100px" />
         )
-      }
-      {myAgreements && (
-        myAgreements.length === 0
-          ? <span>You dont have any agreements</span>
-          : [...myAgreements].sort(sorter).map(sisa =>
-            <MyAgreement key={sisa.id} sisa={sisa}/>
-          )
+        : (
+          myAgreements.length === 0
+            ? <span>You dont have any agreements</span>
+            : [...myAgreements].sort(sorter).map(agreement =>
+              <MyAgreement key={agreement.id} agreement={agreement}/>
+            )
         )
       }
     </List>
@@ -460,7 +447,7 @@ const sorter = (a, b) => {
   return a < b ? 1 : a > b ? -1 : 0
 }
 
-function MyAgreement({ sisa }){
+function MyAgreement({ agreement }){
   return <ListItem {...{
     sx: {px: 0},
     secondaryAction: (
@@ -474,7 +461,7 @@ function MyAgreement({ sisa }){
       role: undefined,
       dense: true,
       component: Link,
-      to: `/sisas/${sisa.id}`
+      to: `/agreements/${agreement.id}`
     }}>
       <ListItemIcon><ArticleOutlinedIcon/></ListItemIcon>
       <ListItemText {...{
@@ -484,9 +471,9 @@ function MyAgreement({ sisa }){
             whiteSpace: 'nowrap',
           },
         },
-        primary: `${sisa.id}`,
+        primary: `${agreement.id}`,
         secondary: <span>
-          created <Timestamp at={sisa.createdAt}/>
+          created <Timestamp at={agreement.createdAt}/>
         </span>
       }}/>
     </ListItemButton>
