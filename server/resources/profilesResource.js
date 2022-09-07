@@ -55,15 +55,15 @@ const profiles = {
   },
 
   actions: {
-    async create({ currentUser, profile }){
+    async create({ currentAgent, profile }){
       return await profiles.commands.create({
-        userId: currentUser.id,
+        userId: currentAgent.id,
         profile,
       })
     },
-    async update({ currentUser, did, profileId, changes }){
+    async update({ currentAgent, did, profileId, changes }){
       return await profiles.commands.update({
-        userId: currentUser.id,
+        userId: currentAgent.id,
         did,
         profileId,
         changes,
@@ -72,9 +72,9 @@ const profiles = {
   },
 
   views: {
-    'mine': async ({ currentUser }) => {
-      return currentUser
-        ? await profiles.queries.forUser(currentUser.id)
+    'mine': async ({ currentAgent }) => {
+      return currentAgent
+        ? await profiles.queries.forUser(currentAgent.id)
         : []
     },
     ':id': async ({ id }) => {

@@ -36,7 +36,7 @@ const sessionResource = {
       return dump
     },
 
-    'currentUser': async ({ session }) => {
+    'currentAgent': async ({ session }) => {
       if (session.userId) return {
         id: session.userId,
         createdAt: session.userCreatedAt,

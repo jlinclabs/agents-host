@@ -29,9 +29,9 @@ const ceramicResource = {
   },
 
   views: {
-    'events.:id': async ({ currentUser, id }) => {
+    'events.:id': async ({ currentAgent, id }) => {
       return await ceramicResource.queries.getEventsById({
-        userId: currentUser.id, id
+        userId: currentAgent.id, id
       })
     }
   }

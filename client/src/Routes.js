@@ -1,6 +1,6 @@
 import { Routes as _Routes, Route } from 'react-router-dom'
 
-import { useCurrentUser } from './resources/session'
+import { useCurrentAgent } from './resources/session'
 
 import AuthPage from './pages/AuthPage'
 import HomePage from './pages/HomePage'
@@ -16,8 +16,8 @@ import ContractsPage from './pages/ContractsPage'
 import AgreementsPage from './pages/AgreementsPage'
 
 export default function Routes() {
-  const { currentUser } = useCurrentUser()
-  if (!currentUser) return <AuthPage />
+  const { currentAgent } = useCurrentAgent()
+  if (!currentAgent) return <AuthPage />
   return <Layout>
     <_Routes>
       <Route path="/" element={<HomePage />} />

@@ -3,14 +3,14 @@ import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import Alert from '@mui/material/Alert'
 
-import { useCurrentUser } from '../resources/session'
+import { useCurrentAgent } from '../resources/session'
 import { useVaultDump } from '../resources/vault'
 import Layout from '../Layout'
 import ErrorMessage from '../components/ErrorMessage'
 import InspectObject from '../components/InspectObject'
 
 export default function VaultPage() {
-  const { currentUser } = useCurrentUser({ redirectToIfNotFound: '/' })
+  const { currentAgent } = useCurrentAgent({ redirectToIfNotFound: '/' })
   const [vaultDump, { loading, error }] = useVaultDump()
   return <Container sx={{p: 2}}>
     <Typography variant="h3">VaultPage</Typography>

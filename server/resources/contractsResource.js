@@ -134,24 +134,24 @@ const contracts = {
   },
 
   actions: {
-    async offer({ currentUser, ...options }){
+    async offer({ currentAgent, ...options }){
       return await contracts.commands.offer({
         identifierId: options.identifierId,
         contractUrl: options.contractUrl,
-        userId: currentUser.id,
+        userId: currentAgent.id,
       })
     },
-    async sign({ currentUser, contractId, identifierId }){
+    async sign({ currentAgent, contractId, identifierId }){
       // TODO ensure signAs identifier did is owned by us
       return await contracts.commands.sign({
-        userId: currentUser.id,
+        userId: currentAgent.id,
         contractId,
         identifierId,
       })
     },
     async ackSignature({ contractId, signatureId }){
       return await contracts.commands.ackSignature({
-        // userId: currentUser.id, // not current user for this one
+        // userId: currentAgent.id, // not current user for this one
         contractId,
         signatureId,
       })
@@ -159,9 +159,9 @@ const contracts = {
   },
 
   views: {
-    'mine': async ({ currentUser }) => {
-      return currentUser
-        ? await contracts.queries.forUser({ userId: currentUser.id })
+    'mine': async ({ currentAgent }) => {
+      return currentAgent
+        ? await contracts.queries.forUser({ userId: currentAgent.id })
         : []
     },
     ':id': async ({ id }) => {

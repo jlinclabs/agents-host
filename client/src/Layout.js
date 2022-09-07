@@ -17,7 +17,7 @@ import HomeIcon from '@mui/icons-material/Home'
 import LockIcon from '@mui/icons-material/Lock'
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
 
-import { useCurrentUser } from './resources/session'
+import { useCurrentAgent } from './resources/session'
 import Link from './components/Link'
 
 export default function Layout(props) {
@@ -29,11 +29,11 @@ export default function Layout(props) {
     requireNotLoggedIn = false,
     requireLoggedIn = false,
   } = props
-  const { currentUser, loading } = useCurrentUser({
+  const { currentAgent, loading } = useCurrentAgent({
     redirectToIfFound: requireNotLoggedIn ? '/' : undefined,
     redirectToIfNotFound: requireLoggedIn ? '/' : undefined,
   })
-  console.log(`currentUser => ${JSON.stringify(currentUser)}`)
+  console.log(`currentAgent => ${JSON.stringify(currentAgent)}`)
 
   return (
     <Container maxWidth={false} disableGutters>
@@ -48,7 +48,7 @@ export default function Layout(props) {
         minHeight: '100vh',
         minWidth: '100vw',
       }}>
-        <SideNav {...{ loading, currentUser }}/>
+        <SideNav {...{ loading, currentAgent }}/>
         <Box sx={{
           flex: '1 1'
         }}>{
@@ -62,14 +62,14 @@ export default function Layout(props) {
 }
 
 
-function SideNav({ loading, currentUser }) {
+function SideNav({ loading, currentAgent }) {
   const navButtons = (
     loading ? (
       Array(3).fill().map((_, i) =>
         <Skeleton key={i} animation="wave" height="100px" />
       )
     ) :
-    currentUser ? <>
+    currentAgent ? <>
       <NavButton {...{
         icon: <AccountBoxOutlinedIcon/>,
         text: 'Identifiers',
@@ -101,7 +101,7 @@ function SideNav({ loading, currentUser }) {
         <ListItemButton component={Link} to="/settings">
           <ListItemText {...{
             primary: (
-              currentUser.email || '[anonymous user]'
+              currentAgent.email || '[anonymous user]'
             ),
             primaryTypographyProps: {
               sx: {

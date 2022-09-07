@@ -133,24 +133,24 @@ const sisas = {
   },
 
   actions: {
-    async offer({ currentUser, ...options }){
+    async offer({ currentAgent, ...options }){
       return await sisas.commands.offer({
-        userId: currentUser.id,
+        userId: currentAgent.id,
         identifierId: options.identifierId,
         requestedDataFields: options.requestedDataFields,
       })
     },
-    async sign({ currentUser, sisaId, identifierId }){
+    async sign({ currentAgent, sisaId, identifierId }){
       // TODO ensure signAs identifier did is owned by us
       return await sisas.commands.sign({
-        userId: currentUser.id,
+        userId: currentAgent.id,
         sisaId,
         identifierId,
       })
     },
     async ackSignature({ sisaId, signatureId }){
       return await sisas.commands.ackSignature({
-        // userId: currentUser.id, // not current user for this one
+        // userId: currentAgent.id, // not current user for this one
         sisaId,
         signatureId,
       })
@@ -158,9 +158,9 @@ const sisas = {
   },
 
   views: {
-    'mine': async ({ currentUser }) => {
-      return currentUser
-        ? await sisas.queries.forUser({ userId: currentUser.id })
+    'mine': async ({ currentAgent }) => {
+      return currentAgent
+        ? await sisas.queries.forUser({ userId: currentAgent.id })
         : []
     },
     ':id': async ({ id }) => {

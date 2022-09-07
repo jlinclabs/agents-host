@@ -95,7 +95,7 @@ const sessionResource = {
       return {...session}
     },
 
-    'currentUser': async ({ session }) => {
+    'currentAgent': async ({ session }) => {
       if (session.agentId) return {
         id: session.agentId,
         createdAt: session.userCreatedAt,

@@ -25,7 +25,7 @@ const agreements = {
       )
 
     },
-    async sign({ currentUser, sisaId, identifierId }){
+    async sign({ currentAgent, sisaId, identifierId }){
 
     },
     async ackSignature({ sisaId, signatureId }){
