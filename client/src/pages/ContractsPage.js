@@ -119,7 +119,7 @@ function OfferContractForm(){
     <IdentifierSelectInput {...{
       autoFocus: true,
       value: identifierId,
-      onChange: e => { setIdentifierId(e.target.value) },
+      onChange: setIdentifierId,
     }}/>
     <Typography variant="body1" sx={{my: 2}}>
       Which contract do you want to offer?
@@ -263,7 +263,7 @@ function SignContractOfferingForm({ contractId }){
         <IdentifierSelectInput {...{
           autoFocus: true,
           value: identifierId,
-          onChange: e => { setIdentifierId(e.target.value) },
+          onChange: setIdentifierId,
         }}/>
         <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
           <Button type="submit" variant="contained">{`Sign Contract`}</Button>

@@ -6,13 +6,20 @@ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
+import FormHelperText from '@mui/material/FormHelperText'
 
 import { useMyProfiles } from '../resources/profiles'
 import { useMyIdentifiers } from '../resources/identifiers'
 import ErrorMessage from './ErrorMessage'
 
 export default function IdentifierSelectInput({
-  value, onChange, disabled = false, defaultToFirst = false, ...props
+  value,
+  onChange,
+  label = 'Identifier',
+  disabled = false,
+  defaultToFirst = false,
+  helperText,
+  ...props
 }){
   const selectRef = useRef()
   const [identifiers, identifiersReq] = useMyIdentifiers()
@@ -31,7 +38,7 @@ export default function IdentifierSelectInput({
   )
 
   return <FormControl fullWidth>
-    <InputLabel id="IdentifierSelectInputLabel">Identifier</InputLabel>
+    <InputLabel id="IdentifierSelectInputLabel">{label}</InputLabel>
     <ErrorMessage error={error}/>
     <Select {...{
       ref: selectRef,
@@ -54,5 +61,6 @@ export default function IdentifierSelectInput({
         </MenuItem>
       })}
     </Select>
+    {helperText && <FormHelperText>{helperText}</FormHelperText>}
   </FormControl>
 }

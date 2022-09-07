@@ -9,6 +9,8 @@
   - ¿¿ can you scan through the keys of a leveldb ??
   - LATER: make it exportable and importable to a new account
 
+- 
+
 - auth
   - NOTE: implementing idx id3 "ceramic logic" will change how identifirs and profiles work
   - login with wallet

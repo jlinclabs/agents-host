@@ -27,16 +27,15 @@ const sessionResource = {
 
   views: {
     'dump': async ({ session }) => {
-      return await session.useVault(async vault => {
-        const dump = {}
-        for (const key of await vault.keys()) {
-          if (SKIPPED_KEYS.has(key)) continue
-          let value = await vault.get(key)
-          if (b4a.isBuffer(value)) value = value.toString('hex')
-          dump[key] = value
-        }
-        return dump
-      })
+      const { vault } = session
+      const dump = {}
+      for (const key of await vault.keys()) {
+        if (SKIPPED_KEYS.has(key)) continue
+        let value = await vault.get(key)
+        if (b4a.isBuffer(value)) value = value.toString('hex')
+        dump[key] = value
+      }
+      return dump
     },
 
     'currentUser': async ({ session }) => {

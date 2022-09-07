@@ -17,15 +17,19 @@ import TextField from '@mui/material/TextField'
 import CircularProgress from '@mui/material/CircularProgress'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import FormGroup from '@mui/material/FormGroup'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Switch from '@mui/material/Switch'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 
 import {
-  useSisa,
-  useMySisas,
-  useOfferSisa,
-  useSignSisa,
-  useAckSisaSignature
-} from '../resources/sisas'
+  useAgreement,
+  useMyAgreements,
+  useOfferAgreement,
+  useSignAgreement,
+  useAckAgreementSignature
+} from '../resources/agreements'
 
 import { useMyIdentifiers } from '../resources/identifiers'
 import Link from '../components/Link'
@@ -38,7 +42,7 @@ import LinkToDid from '../components/LinkToDid'
 import CeramicStreamEvents from '../components/CeramicStreamEvents'
 import InspectObject from '../components/InspectObject'
 
-export default function Sisas() {
+export default function Agreements() {
   return <Container maxwidth="lg">
     <Routes>
       <Route path="/" element={<Index />} />
@@ -51,36 +55,36 @@ export default function Sisas() {
 
 function Index(props) {
   return <Container maxwidth="lg">
-    <Typography my={2} variant="h3">SISAs</Typography>
+    <Typography my={2} variant="h3">Agreements</Typography>
     <Typography my={2} variant="h6">Standard Information Sharing Agreemnts</Typography>
 
     <Stack spacing={2} sx={{maxWidth: '400px'}}>
       <Button
         variant="contained"
         component={Link}
-        to="/sisas/offer"
-      >{`Offer SISA`}</Button>
+        to="/agreements/offer"
+      >{`Offer An Agreement`}</Button>
       <Button
         variant="contained"
         component={Link}
-        to="/sisas/sign"
+        to="/agreements/sign"
         sx={{ml: 1}}
-      >{`Sign Offered SISA`}</Button>
+      >{`View An Agreement Offering`}</Button>
     </Stack>
 
-    <MySisasList />
+    <MyAgreementsList />
   </Container>
 }
 
 function Show() {
   const { id } = useParams()
-  const [sisa, { loading, error, reload: reloadSisa }] = useSisa(id)
+  const [sisa, { loading, error, reload: reloadAgreement }] = useAgreement(id)
 
   if (error) return <ErrorMessage {...{ error }}/>
   return <Container maxwidth="md">
     {
       error ? <ErrorMessage {...{ error }}/> :
-      sisa ? <Sisa {...{ sisa }}/> :
+      sisa ? <Agreement {...{ sisa }}/> :
       <CircularProgress/>
     }
   </Container>
@@ -88,13 +92,14 @@ function Show() {
 
 function Offer({ router }) {
   return <Container maxwidth="lg">
-    <OfferSISAForm {...{ router }}/>
+    <OfferAgreementForm {...{ router }}/>
+    <PreviewAgreementForm {...{ router }}/>
   </Container>
 }
 
-function OfferSISAForm(){
+function OfferAgreementForm(){
   const navigate = useNavigate()
-  const [sisaUrl, setSisaUrl] = useState('https://sisas.io/sisa-suyF9tPmVrtuuLn3R4XdzGXMZN6aFfCIXuXwGpAHtCw.md')
+  const [sisaUrl, setAgreementUrl] = useState('https://sisas.io/sisa-suyF9tPmVrtuuLn3R4XdzGXMZN6aFfCIXuXwGpAHtCw.md')
   const [identifierId, setIdentifierId] = useState('')
   const [requestedDataFields, setRequestedDataFields] = useState([
     { description: 'Name', type: 'text' },
@@ -102,7 +107,7 @@ function OfferSISAForm(){
     { description: 'Mobile', type: 'phone number' },
   ])
 
-  const offerSisa = useOfferSisa({
+  const offerAgreement = useOfferAgreement({
     onSuccess(sisa){
       navigate(`/sisas/${sisa.id}`)
     },
@@ -112,7 +117,7 @@ function OfferSISAForm(){
     setRequestedDataFields([
       ...requestedDataFields,
       {
-        description: `new field #${requestedDataFields.length}`,
+        description: `field #${requestedDataFields.length}`,
         type: 'text',
       }
     ])
@@ -124,6 +129,7 @@ function OfferSISAForm(){
     newFields.splice(index, 1)
     setRequestedDataFields(newFields)
   }
+
   const updateRequestedDataField = (index, changes) => {
     const newFields = [...requestedDataFields]
     newFields[index] = {...newFields[index], ...changes}
@@ -132,35 +138,74 @@ function OfferSISAForm(){
 
   console.log({ requestedDataFields })
 
-  const disabled = offerSisa.pending
+  const disabled = offerAgreement.pending
   return <Paper {...{
     elevation: 3,
     component: 'form',
     sx: { p: 2, m: 1 },
     onSubmit(event){
       event.preventDefault()
-      offerSisa({
+      offerAgreement({
         identifierId,
         requestedDataFields,
       })
     }
   }}>
-    <Typography component="h1" variant="h3">
-      Offer a Sisa
+    <Typography component="h1" variant="h3" sx={{mb: 3}}>
+      Offer an Agreement
     </Typography>
-    <Typography variant="body1" sx={{my: 2}}>
-      Which identifier do you want to offer this SISA as?
+
+    <Typography variant="h7" sx={{mt: 2, mb: 1}}>
+      Offer agreement as:
     </Typography>
     <IdentifierSelectInput {...{
+      label: '',
       autoFocus: true,
       value: identifierId,
       onChange: setIdentifierId,
+      defaultToFirst: true,
+      helperText: "Which identifier do you want to offer this SISA as?"
     }}/>
-    <Typography variant="body1" sx={{my: 2}}>
-      Describe the data you want shared under this agreement
+
+    <FormControl fullWidth>
+      <Typography variant="h7" sx={{mt: 2, mb: 1}}>
+        Type:
+      </Typography>
+      <Select {...{
+        name: 'agreementType',
+        labelId: 'AgreementTypeInputLabel',
+        disabled: true,
+        value: 'jlinx-data-sharing-v1'
+      }}>
+        <MenuItem value="jlinx-data-sharing-v1">
+          <Stack spacing={2} direction="row" alignItems="center">
+            <Typography component="span" variant="body2">Data Sharing</Typography>
+          </Stack>
+        </MenuItem>
+      </Select>
+    </FormControl>
+
+    <Typography variant="body1" sx={{mt: 2}}>
+      Conditions
     </Typography>
 
+    <Stack spacing={2} direction="column" alignItems="flex-start">
+      {AGREEMENT_CONDITONS.map(con =>
+        <Box>
+          <Stack direction="row" alignItems="center">
+            <Switch />
+            <Box>
+              <Typography variant="h6">{con.title}</Typography>
+              <Typography variant="body2">{con.description}</Typography>
+            </Box>
+          </Stack>
+        </Box>
+      )}
+    </Stack>
 
+    <Typography variant="body1" sx={{mt: 2}}>
+      Requested data
+    </Typography>
     <Stack>
       {requestedDataFields.map((requestedDataField, index) =>
         <Stack flexDirection="row" my={1} justifyContent="space-between">
@@ -185,12 +230,59 @@ function OfferSISAForm(){
       >add field</Button>
     </Stack>
 
-    {offerSisa.error && <ErrorMessage error={offerSisa.error} />}
+    {offerAgreement.error && <ErrorMessage error={offerAgreement.error} />}
     <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
       <Button type="submit" variant="contained">{`Create`}</Button>
     </Box>
   </Paper>
 }
+
+const AGREEMENT_CONDITONS = [
+  {
+    title: 'Will delete upon request',
+    description: (
+      `The offerer of this agreement agrees to ` +
+      `delete this data entierly upon request. ` +
+      `Quis tempor aliquip nostrud consequat cupidatat cupidatat eiusmod ` +
+      `velit elit nisi magna duis voluptate. Consectetur aliqua cupidatat ` +
+      `exercitation culpa incididunt proident aliquip veniam deserunt enim ` +
+      `exercitation veniam aliquip.`
+    )
+  },
+  {
+    title: 'Data will be sold to highest bidder',
+    description: (
+      `The offerer of this agreement has the right ` +
+      `to sell your data to whomever they want whenever. ` +
+      `Quis tempor aliquip nostrud consequat cupidatat cupidatat eiusmod ` +
+      `velit elit nisi magna duis voluptate. Consectetur aliqua cupidatat ` +
+      `exercitation culpa incididunt proident aliquip veniam deserunt enim ` +
+      `exercitation veniam aliquip.`
+    )
+  },
+  {
+    title: 'Data will be sold to highest bidder',
+    description: (
+      `The offerer of this agreement has the right ` +
+      `to sell your data to whomever they want whenever. ` +
+      `Quis tempor aliquip nostrud consequat cupidatat cupidatat eiusmod ` +
+      `velit elit nisi magna duis voluptate. Consectetur aliqua cupidatat ` +
+      `exercitation culpa incididunt proident aliquip veniam deserunt enim ` +
+      `exercitation veniam aliquip.`
+    )
+  },
+  {
+    title: 'Data will be sold to highest bidder',
+    description: (
+      `The offerer of this agreement has the right ` +
+      `to sell your data to whomever they want whenever. ` +
+      `Quis tempor aliquip nostrud consequat cupidatat cupidatat eiusmod ` +
+      `velit elit nisi magna duis voluptate. Consectetur aliqua cupidatat ` +
+      `exercitation culpa incididunt proident aliquip veniam deserunt enim ` +
+      `exercitation veniam aliquip.`
+    )
+  },
+]
 
 function RequestedDataFieldTypeSelect(props){
   const types = ['text', 'number', 'email', 'phone number']
@@ -205,6 +297,11 @@ function RequestedDataFieldTypeSelect(props){
   </Select>
 }
 
+
+function PreviewAgreementForm(){
+  return <Paper>PREVIEW</Paper>
+}
+
 function Sign() {
   const [search, setSearch] = useSearchParams()
   const setId = id => { setSearch({ id }) }
@@ -213,14 +310,14 @@ function Sign() {
   const navigate = useNavigate()
   return <Container maxWidth="lg">
     {sisaId
-      ? <SignSisaOfferingForm {...{ sisaId }}/>
-      : <LookupSisaOfferingForm {...{ setId }}/>
+      ? <SignAgreementOfferingForm {...{ sisaId }}/>
+      : <LookupAgreementOfferingForm {...{ setId }}/>
     }
   </Container>
 }
 
-function LookupSisaOfferingForm({ setId }){
-  const [ sisaId, setSisaId ] = useState('')
+function LookupAgreementOfferingForm({ setId }){
+  const [ sisaId, setAgreementId ] = useState('')
   return <Paper {...{
     elevation: 3,
     component: 'form',
@@ -232,31 +329,31 @@ function LookupSisaOfferingForm({ setId }){
     }
   }}>
     <Typography component="h1" variant="h3">
-      Sign a Sisa
+      Sign a Agreement
     </Typography>
     <TextField
-      label="Sisa Id"
+      label="Agreement Id"
       margin="normal"
       required
       fullWidth
       name="sisaUrl"
       placeholder="lGavv2LbRjEPqiLUX1af_DvOz5Qy03PbuWw1I1kcFGs"
       value={sisaId}
-      onChange={e => { setSisaId(e.target.value) }}
+      onChange={e => { setAgreementId(e.target.value) }}
     />
     <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
-      <Button type="submit" variant="contained">{`Lookup Sisa Offering`}</Button>
+      <Button type="submit" variant="contained">{`Lookup Agreement Offering`}</Button>
     </Box>
   </Paper>
 }
 
 
-function SignSisaOfferingForm({ sisaId }){
+function SignAgreementOfferingForm({ sisaId }){
   const navigate = useNavigate()
   const [identifierId, setIdentifierId] = useState('')
 
-  const [sisa, { loading, error }] = useSisa(sisaId)
-  const signSisa = useSignSisa({
+  const [sisa, { loading, error }] = useAgreement(sisaId)
+  const signAgreement = useSignAgreement({
     onSuccess({ signatureId }){
       console.log('SIGNED', { signatureId })
       navigate(`/sisas/${sisaId}`)
@@ -264,14 +361,14 @@ function SignSisaOfferingForm({ sisaId }){
     }
   })
   if (loading) return <span>Loading…</span>
-  const disabled = signSisa.pending
+  const disabled = signAgreement.pending
   if (sisa && sisa.state !== 'offered'){
     return <Paper {...{
       elevation: 3,
       sx: { p: 2, mt: 2 },
     }}>
       <Typography component="h1" variant="h3" mb={3}>
-        Sisa Already Signed!
+        Agreement Already Signed!
       </Typography>
 
       <InspectObject object={sisa}/>
@@ -284,7 +381,7 @@ function SignSisaOfferingForm({ sisaId }){
     sx: { p: 2, mt: 2 },
     onSubmit(event){
       event.preventDefault()
-      signSisa({
+      signAgreement({
         sisaId,
         identifierId,
       })
@@ -292,7 +389,7 @@ function SignSisaOfferingForm({ sisaId }){
   }}>
     <ErrorMessage error={error}/>
     <Typography component="h1" variant="h3" mb={3}>
-      Sign Sisa Offering
+      Sign Agreement Offering
     </Typography>
 
     <Box>
@@ -324,16 +421,16 @@ function SignSisaOfferingForm({ sisaId }){
     <IdentifierSelectInput {...{
       autoFocus: true,
       value: identifierId,
-      onChange: e => { setIdentifierId(e.target.value) },
+      onChange: setIdentifierId,
     }}/>
     <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
-      <Button type="submit" variant="contained">{`Sign Sisa`}</Button>
+      <Button type="submit" variant="contained">{`Sign Agreement`}</Button>
     </Box>
   </Paper>
 }
 
 
-function Sisa({ sisa }){
+function Agreement({ sisa }){
 
   return <Paper
     sx={{
@@ -344,7 +441,7 @@ function Sisa({ sisa }){
   >
     <Stack flexDirection="row" justifyContent="space-between">
       <Typography variant="h4">
-        {`Sisa`}
+        {`Agreement`}
       </Typography>
     </Stack>
 
@@ -418,32 +515,32 @@ function Sisa({ sisa }){
 
 
 
-function AckSisaSignatureForm({ sisa, reloadSisa }){
+function AckAgreementSignatureForm({ sisa, reloadAgreement }){
   const [signatureId, setSignatureId] = useState('')
 
-  const ackSisaSignature = useAckSisaSignature({
+  const ackAgreementSignature = useAckAgreementSignature({
     onSuccess(){
-      reloadSisa()
+      reloadAgreement()
     },
   })
-  const disabled = ackSisaSignature.pending
+  const disabled = ackAgreementSignature.pending
   return <Box {...{
     elevation: 3,
     component: 'form',
     sx: { mt: 2 },
     onSubmit(event){
       event.preventDefault()
-      ackSisaSignature({
+      ackAgreementSignature({
         sisaId: sisa.id,
         signatureId,
       })
     }
   }}>
     <Typography variant="h6" mb={3}>
-      Enter Their Sisa Signature ID here
+      Enter Their Agreement Signature ID here
     </Typography>
     <TextField
-      label="Sisa Signature ID"
+      label="Agreement Signature ID"
       disabled={disabled}
       margin="normal"
       required
@@ -458,8 +555,8 @@ function AckSisaSignatureForm({ sisa, reloadSisa }){
 }
 
 
-function MySisasList(){
-  const [mySisas, {error}] = useMySisas()
+function MyAgreementsList(){
+  const [myAgreements, {error}] = useMyAgreements()
 
   return (
     <List sx={{
@@ -469,9 +566,9 @@ function MySisasList(){
     }}>
       {
         error ? <ErrorMessage {...{error}}/> :
-        mySisas ? (
-          [...mySisas].sort(sorter).map(sisa =>
-            <MySisa key={sisa.id} sisa={sisa}/>
+        myAgreements ? (
+          [...myAgreements].sort(sorter).map(sisa =>
+            <MyAgreement key={sisa.id} sisa={sisa}/>
           )
         ) :
         Array(3).fill().map((_, i) =>
@@ -487,7 +584,7 @@ const sorter = (a, b) => {
   return a < b ? 1 : a > b ? -1 : 0
 }
 
-function MySisa({ sisa }){
+function MyAgreement({ sisa }){
   return <ListItem {...{
     sx: {px: 0},
     secondaryAction: (

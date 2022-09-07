@@ -325,7 +325,7 @@ function ProfileForm(props){
 
     <IdentifierSelectInput
       value={props.value.did}
-      onChange={e => { props.onChange({ did: e.target.value }) }}
+      onChange={did => { props.onChange({ did }) }}
     />
     <Stack spacing={2} direction="row" alignItems="center" mt={2}>
       <Box sx={{ width: 56, height: 56 }}>

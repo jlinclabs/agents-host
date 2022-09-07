@@ -13,7 +13,7 @@ import VaultPage from './pages/VaultPage'
 import ProfilesPage from './pages/ProfilesPage'
 import IdentifiersPage from './pages/IdentifiersPage'
 import ContractsPage from './pages/ContractsPage'
-import SisasPage from './pages/SisasPage'
+import AgreementsPage from './pages/AgreementsPage'
 
 export default function Routes() {
   const { currentUser } = useCurrentUser()
@@ -29,7 +29,7 @@ export default function Routes() {
       <Route path="/profiles/*" element={<ProfilesPage />} />
       <Route path="/identifiers/*" element={<IdentifiersPage />} />
       <Route path="/contracts/*" element={<ContractsPage />} />
-      <Route path="/sisas/*" element={<SisasPage />} />
+      <Route path="/agreements/*" element={<AgreementsPage />} />
     </_Routes>
   </Layout>
 }

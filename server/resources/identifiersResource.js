@@ -24,12 +24,10 @@ const identifiers = {
     async create({ session }){
       await session.ensureLoggedIn()
       const { id, secretSeed } = await identifiers.commands.create()
-      await session.useVault(async vault => {
-        await vault.records('identifiers').set(id, {
-          id,
-          secretSeed,
-          createdAt: new Date,
-        })
+      await session.vault.records('identifiers').set(id, {
+        id,
+        secretSeed,
+        createdAt: new Date,
       })
       return { id }
     },
@@ -37,16 +35,12 @@ const identifiers = {
 
   views: {
     'mine': async ({ session }) => {
-      return await session.useVault(async vault => {
-        return await vault.records('identifiers').all()
-      })
+      return await session.vault.records('identifiers').all()
     },
     ':id': async ({ session, id }) => {
-      return await session.useVault(async vault => {
-        const record = await vault.records('identifiers').get(id)
-        const did = await getDidFromCeramic(id, record?.secretSeed)
-        if (did) return identifierToJSON(id, did, record)
-      })
+      const record = await session.vault.records('identifiers').get(id)
+      const did = await getDidFromCeramic(id, record?.secretSeed)
+      if (did) return identifierToJSON(id, did, record)
     }
   }
 }

@@ -26,6 +26,10 @@ export default class Session {
 
   get id(){ return this._id }
 
+  close () {
+    if (this._vault) this._vault.close()
+  }
+
   async reload(){
     console.log('Session reload', this.id)
     const sessionRecord = await sessionResource.queries.get(this.id)
@@ -37,7 +41,11 @@ export default class Session {
     this._userId = sessionRecord.userId
     if (sessionRecord.user){
       this._userCreatedAt = sessionRecord.user.createdAt
-      this._vaultKey = sessionRecord.user.vaultKey
+      // this._vaultKey = sessionRecord.user.vaultKey
+      this._vault = await openVault(
+        `user-${this.userId}`,
+        sessionRecord.user.vaultKey
+      )
     }
   }
 
@@ -80,19 +88,21 @@ export default class Session {
     throw new Error(`not logged in`)
   }
 
-  async useVault(handler){
-    await this.ensureLoggedIn()
-    const vault = await openVault(
-      `user-${this.userId}`,
-      this._vaultKey
-    )
-    try{
-      return await handler(vault)
-    }catch(error){
-      throw error
-    // }finally{
-    //   await vault.close()
-    }
-  }
+  get vault () { return this._vault }
+
+  // async useVault(handler){
+  //   await this.ensureLoggedIn()
+  //   const vault = await openVault(
+  //     `user-${this.userId}`,
+  //     this._vaultKey
+  //   )
+  //   try{
+  //     return await handler(vault)
+  //   }catch(error){
+  //     throw error
+  //   // }finally{
+  //   //   await vault.close()
+  //   }
+  // }
 }
 

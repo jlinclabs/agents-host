@@ -6,6 +6,7 @@ import vault from './vaultResource.js'
 import profiles from './profilesResource.js'
 import identifiers from './identifiersResource.js'
 import contracts from './contractsResource.js'
+import agreements from './agreementsResource.js'
 import sisas from './sisasResource.js'
 import { NotFoundError } from '../errors.js'
 
@@ -17,6 +18,7 @@ const resources = {
   profiles,
   identifiers,
   contracts,
+  agreements,
   sisas,
 }
 
