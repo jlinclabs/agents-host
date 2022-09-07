@@ -86,6 +86,7 @@ export async function getDid(didString, secretSeed){
 
 
 export async function resolveDidDocument(didString){
+  if (!didString) throw new Error(`didString is required`)
   await ready()
 
   const didResolver = new DidResolver(
@@ -101,9 +102,13 @@ export async function resolveDidDocument(didString){
     didDocument,
     didDocumentMetadata,
   } = await didResolver.resolve(didString)
+  if (!didDocument){
+    throw new Error(`failed to resolve did="${didString}"`)
+  }
   if (didDocument.id !== didString){
     throw new Error(`resolved the wrong did: "${did.id}" !== "${didString}"`)
   }
+  console.log({  didDocument })
   return didDocument
 }
 

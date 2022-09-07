@@ -34,13 +34,8 @@ const agreements = {
   },
 
   views: {
-    'mine': async ({ session }) => {
-      const agreements = await session.vault.records('agreements').all()
-      return Promise.all(
-        agreements.map(agreement =>
-          agreements.queries.byId(agreement.id)
-        )
-      )
+    'mine': async ({ agent }) => {
+      const agreements = await agent.agreements.all()
     },
     ':id': async ({ id }) => {
       return await session.vault.records('agreements').get(id)

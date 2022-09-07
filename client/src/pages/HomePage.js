@@ -6,12 +6,26 @@ import Button from '@mui/material/Button'
 
 import { useCurrentAgent } from '../resources/session'
 import Link from '../components/Link'
-import LoginForm from '../components/LoginForm'
-import SignupForm from '../components/SignupForm'
+import LinkToDid from '../components/LinkToDid'
+import Timestamp from '../components/Timestamp'
 
 export default function HomePage() {
   const { currentAgent } = useCurrentAgent()
   return <Container maxWidth="md">
-    THIS IS THE HOME PAGE
+    {currentAgent &&
+      <AgentDescription agent={currentAgent}/>}
   </Container>
+}
+
+function AgentDescription({ agent }){
+  return <Paper sx={{mt:2, p: 2}}>
+    <Typography variant="h3">Jlinx Agent</Typography>
+    <Typography variant="h6">
+      <LinkToDid did={agent.did}/>
+    </Typography>
+    <Typography variant="h6">
+      {`Created: `}
+      <Timestamp at={agent.createdAt}/>
+    </Typography>
+  </Paper>
 }

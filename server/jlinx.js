@@ -15,7 +15,7 @@ const debug = Debug('jlinx')
 
 export class JlinxClient {
 
-  async open(didString, secretSeed){
+  static async open(didString, secretSeed){
     const did = await getDid(didString, secretSeed)
     return new JlinxClient(did)
   }
@@ -25,9 +25,9 @@ export class JlinxClient {
     this.did = did
     this.readOnly = !did
     this.dids = new JlinxDids(this)
-    this.profiles = new JlinxProfiles(this)
-    this.contracts = new JlinxContracts(this)
-    this.sisas = new JlinxSisas(this)
+    // this.profiles = new JlinxProfiles(this)
+    // this.contracts = new JlinxContracts(this)
+    // this.sisas = new JlinxSisas(this)
   }
 
   // async getDid(){
@@ -109,19 +109,23 @@ class JlinxDids extends JlinxPlugin {
       didDocument,
     })
   }
-  async get(didString, secretSeed){
-    // const did = await getDid(didString, secretSeed)
-    // return new Did(this, did, secretSeed)
-    const { jlinxClient } = this
-    const did = secretSeed ? await getDid(didString, secretSeed) : undefined
-    const didDocument = await resolveDidDocument(didString)
-    return new Did({
-      jlinxClient,
-      // did,
-      secretSeed,
-      didDocument,
-    })
+
+  async resolve(did){
+    return await resolveDidDocument(did)
   }
+  // async get(didString, secretSeed){
+  //   // const did = await getDid(didString, secretSeed)
+  //   // return new Did(this, did, secretSeed)
+  //   const { jlinxClient } = this
+  //   const did = secretSeed ? await getDid(didString, secretSeed) : undefined
+  //   const didDocument = await resolveDidDocument(didString)
+  //   return new Did({
+  //     jlinxClient,
+  //     // did,
+  //     secretSeed,
+  //     didDocument,
+  //   })
+  // }
 }
 
 class Did {

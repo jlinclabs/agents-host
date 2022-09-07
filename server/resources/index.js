@@ -3,11 +3,13 @@ import ceramic from './ceramicResource.js'
 import agents from './agentsResource.js'
 import session from './sessionResource.js'
 import vault from './vaultResource.js'
-import profiles from './profilesResource.js'
-import identifiers from './identifiersResource.js'
-import contracts from './contractsResource.js'
+import dids from './didsResource.js'
+import contacts from './contactsResource.js'
 import agreements from './agreementsResource.js'
-import sisas from './sisasResource.js'
+// import profiles from './profilesResource.js'
+// import identifiers from './identifiersResource.js'
+// import contracts from './contractsResource.js'
+// import sisas from './sisasResource.js'
 import { NotFoundError } from '../errors.js'
 
 const resources = {
@@ -15,11 +17,13 @@ const resources = {
   agents,
   session,
   vault,
-  profiles,
-  identifiers,
-  contracts,
+  dids,
+  contacts,
   agreements,
-  sisas,
+  // profiles,
+  // identifiers,
+  // contracts,
+  // sisas,
 }
 
 export async function getView({ viewId, session }) {
@@ -48,7 +52,7 @@ export async function getView({ viewId, session }) {
   if (!view) throw new NotFoundError('view', viewId)
 
   return await resource.views[view.pattern]({
-    ...view.params, session
+    ...view.params, session, agent: session.agent
   })
 }
 
@@ -60,7 +64,7 @@ export async function takeAction({ actionId, options, session }) {
     throw new NotFoundError('action', actionId)
   try{
     const result = await resource.actions[actionName]({
-      ...options, session,
+      ...options, session, agent: session.agent
     })
     console.log('ACTION COMPLETE', { actionId, options, session, result })
     return result

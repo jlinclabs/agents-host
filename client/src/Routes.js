@@ -10,6 +10,8 @@ import Layout from './Layout'
 import LogoutPage from './pages/LogoutPage'
 import SettingsPage from './pages/SettingsPage'
 import VaultPage from './pages/VaultPage'
+import DidsPage from './pages/DidsPage'
+import ContactsPage from './pages/ContactsPage'
 import ProfilesPage from './pages/ProfilesPage'
 import IdentifiersPage from './pages/IdentifiersPage'
 import ContractsPage from './pages/ContractsPage'
@@ -26,9 +28,11 @@ export default function Routes() {
       <Route path="/logout" element={<LogoutPage />} />
       <Route path="/settings" element={<SettingsPage />} />
       <Route path="/vault" element={<VaultPage />} />
-      <Route path="/profiles/*" element={<ProfilesPage />} />
+      <Route path="/dids/*" element={<DidsPage />} />
+      <Route path="/contacts/*" element={<ContactsPage />} />
+      {/* <Route path="/profiles/*" element={<ProfilesPage />} />
       <Route path="/identifiers/*" element={<IdentifiersPage />} />
-      <Route path="/contracts/*" element={<ContractsPage />} />
+      <Route path="/contracts/*" element={<ContractsPage />} /> */}
       <Route path="/agreements/*" element={<AgreementsPage />} />
     </_Routes>
   </Layout>

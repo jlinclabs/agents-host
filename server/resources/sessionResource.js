@@ -10,7 +10,7 @@ const sessionResource = {
 
   queries: {
     async get(sessionId){
-      return await prisma.session.findUnique({
+      const record = await prisma.session.findUnique({
         where: { id: sessionId },
         select: {
           id: true,
@@ -19,13 +19,18 @@ const sessionResource = {
           agentId: true,
           agent: {
             select: {
-              id: true,
+              did: true,
+              didSecret: true,
               createdAt: true,
               vaultKey: true,
             }
           },
         }
       })
+      if (record && record.agent){
+        record.agent.didSecret = Buffer.from(record.agent.didSecret, 'hex')
+      }
+      return record
     }
   },
 
@@ -91,14 +96,10 @@ const sessionResource = {
   },
 
   views: {
-    'current': async ({ session }) => {
-      return {...session}
-    },
-
     'currentAgent': async ({ session }) => {
-      if (session.agentId) return {
-        id: session.agentId,
-        createdAt: session.userCreatedAt,
+      if (session.agent) return {
+        did: session.agent.did,
+        createdAt: session.agent.createdAt,
       }
       return null
     },

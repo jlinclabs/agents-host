@@ -11,8 +11,9 @@ import ListItemText from '@mui/material/ListItemText'
 import Skeleton from '@mui/material/Skeleton'
 import PersonIcon from '@mui/icons-material/Person'
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined'
-import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined'
+import ContactPageIcon from '@mui/icons-material/ContactPage';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
+import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import HomeIcon from '@mui/icons-material/Home'
 import LockIcon from '@mui/icons-material/Lock'
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
@@ -70,7 +71,7 @@ function SideNav({ loading, currentAgent }) {
       )
     ) :
     currentAgent ? <>
-      <NavButton {...{
+      {/* <NavButton {...{
         icon: <AccountBoxOutlinedIcon/>,
         text: 'Identifiers',
         to: '/identifiers',
@@ -84,6 +85,16 @@ function SideNav({ loading, currentAgent }) {
         icon: <ArticleOutlinedIcon/>,
         text: 'Contracts',
         to: '/contracts',
+      }}/> */}
+      <NavButton {...{
+        icon: <ContactPageIcon/>,
+        text: 'Contacts',
+        to: '/contacts',
+      }}/>
+      <NavButton {...{
+        icon: <FingerprintIcon/>,
+        text: 'DIDs',
+        to: '/dids',
       }}/>
       <NavButton {...{
         icon: <AssignmentTurnedInIcon/>,

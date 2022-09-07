@@ -26,7 +26,6 @@ import {
   useIdentifier,
 } from '../resources/identifiers'
 
-import Layout from '../Layout'
 import Link from '../components/Link'
 import ErrorMessage from '../components/ErrorMessage'
 import Timestamp from '../components/Timestamp'

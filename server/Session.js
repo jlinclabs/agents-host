@@ -1,5 +1,6 @@
 import Cookies from 'cookies'
 import sessionResource from './resources/sessionResource.js'
+import Agent from './Agent.js'
 import { openVault } from './vaults.js'
 const COOKIE_NAME = 'session-id'
 
@@ -39,26 +40,20 @@ export default class Session {
     this._createdAt = sessionRecord.createdAt
     this._lastSeenAt = sessionRecord.lastSeenAt
     this._agentId = sessionRecord.agentId
-    if (sessionRecord.user){
-      this._userCreatedAt = sessionRecord.user.createdAt
-      // this._vaultKey = sessionRecord.user.vaultKey
+    if (sessionRecord.agent){
+      const { did, didSecret, createdAt, vaultKey } = sessionRecord.agent
       this._agent = await Agent.open({
-        did: sessionRecord.user.did,
-        vaultKey: sessionRecord.user.vaultKey
+        did, didSecret, createdAt, vaultKey
       })
-      this._vault = await openVault(
-        `user-${this.agentId}`,
-        sessionRecord.user.vaultKey
-      )
-      // this.jlinx = new JlinxClient()
     }
   }
 
   get createdAt(){ return this._createdAt }
   get lastSeenAt(){ return this._lastSeenAt }
-  get agentId(){ return this._agentId }
-  get userCreatedAt(){ return this._userCreatedAt }
-  get vault () { return this._vault }
+  get agent(){ return this._agent }
+  // get agentId(){ return this._agentId }
+  // get userCreatedAt(){ return this._userCreatedAt }
+  // get vault () { return this._vault }
   // get jlinx () { return this._jlinx }
 
   async touch(){
