@@ -5,7 +5,7 @@ import Agent from './Agent.js'
 import { openVault } from './vaults.js'
 const COOKIE_NAME = 'session-id'
 
-const debug = (...msg) => console.log('Session', ...msg)
+const debug = Debug('session')
 
 export default class Session {
 
@@ -54,14 +54,9 @@ export default class Session {
     this._cookies.set(COOKIE_NAME, undefined)
   }
 
-
   get createdAt(){ return this._createdAt }
   get lastSeenAt(){ return this._lastSeenAt }
   get agent(){ return this._agent }
-  // get agentId(){ return this._agentId }
-  // get userCreatedAt(){ return this._userCreatedAt }
-  // get vault () { return this._vault }
-  // get jlinx () { return this._jlinx }
 
   async setAgentId(agentId){
     if (this.agentId){ throw new Error(`please logout first`) }
@@ -82,23 +77,8 @@ export default class Session {
   }
 
   async ensureLoggedIn(){
-    if (this.agentId) return
-    throw new Error(`not logged in`)
+    if (!this.agent) throw new Error(`not logged in`)
   }
 
-  // async useVault(handler){
-  //   await this.ensureLoggedIn()
-  //   const vault = await openVault(
-  //     `user-${this.agentId}`,
-  //     this._vaultKey
-  //   )
-  //   try{
-  //     return await handler(vault)
-  //   }catch(error){
-  //     throw error
-  //   // }finally{
-  //   //   await vault.close()
-  //   }
-  // }
 }
 

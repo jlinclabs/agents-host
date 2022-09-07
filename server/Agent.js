@@ -59,10 +59,11 @@ class Agreements extends Plugin {
 
   async all(){
     const agreements = await this.agent.vault.records('agreements').all()
-    return new Promise.all(
-      agreements.map(agreement =>
-        this.agent.jlinx
-      )
+    return Promise.all(
+      agreements.map(async agreement => {
+        // const doc = await this.agent.jlinx.get(agreement.id)
+        // return doc
+      })
     )
   }
 }

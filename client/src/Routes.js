@@ -5,6 +5,7 @@ import { useCurrentAgent } from './resources/session'
 import AuthPage from './pages/AuthPage'
 import HomePage from './pages/HomePage'
 import Layout from './Layout'
+import NotFoundPage from './pages/NotFoundPage'
 // import SignupPage from './pages/SignupPage'
 // import LoginPage from './pages/LoginPage'
 import LogoutPage from './pages/LogoutPage'
@@ -34,6 +35,7 @@ export default function Routes() {
       <Route path="/identifiers/*" element={<IdentifiersPage />} />
       <Route path="/contracts/*" element={<ContractsPage />} /> */}
       <Route path="/agreements/*" element={<AgreementsPage />} />
+      <Route path="*" element={<NotFoundPage />} />
     </_Routes>
   </Layout>
 }

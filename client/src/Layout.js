@@ -11,9 +11,10 @@ import ListItemText from '@mui/material/ListItemText'
 import Skeleton from '@mui/material/Skeleton'
 import PersonIcon from '@mui/icons-material/Person'
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined'
-import ContactPageIcon from '@mui/icons-material/ContactPage';
+import ContactPageIcon from '@mui/icons-material/ContactPage'
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
-import FingerprintIcon from '@mui/icons-material/Fingerprint';
+import FingerprintIcon from '@mui/icons-material/Fingerprint'
+import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove'
 import HomeIcon from '@mui/icons-material/Home'
 import LockIcon from '@mui/icons-material/Lock'
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
@@ -99,6 +100,11 @@ function SideNav({ loading, currentAgent }) {
         icon: <AssignmentTurnedInIcon/>,
         text: 'Agreements',
         to: '/agreements',
+      }}/>
+      <NavButton {...{
+        icon: <DriveFileMoveIcon/>,
+        text: 'Data Sharing',
+        to: '/data-sharing',
       }}/>
       <Box sx={{ flex: '1 1'}}/>
       <Divider />
