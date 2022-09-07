@@ -24,13 +24,15 @@ import Switch from '@mui/material/Switch'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 
 import { useStateObject } from '../lib/reactStateHelpers'
-import {
-  useAgreement,
-  useMyAgreements,
-  useOfferAgreement,
-  useSignAgreement,
-  useAckAgreementSignature
-} from '../resources/agreements'
+import { useAction } from '../lib/actions'
+import { useView } from '../lib/views'
+// import {
+//   useAgreement,
+//   useMyAgreements,
+//   useOfferAgreement,
+//   useSignAgreement,
+//   useAckAgreementSignature
+// } from '../resources/agreements'
 
 import { useMyIdentifiers } from '../resources/identifiers'
 import Link from '../components/Link'
@@ -164,7 +166,8 @@ function OfferAgreementForm({ agreement, setAgreement }){
     })
   }
 
-  const offerAgreement = useOfferAgreement({
+  // const offerAgreement = useOfferAgreement({
+  const offerAgreement = useAction('agreements.offer', {
     onSuccess(agreement){
       setAgreement(undefined, true)
       navigate(`/agreements/${agreement.id}`)
@@ -186,7 +189,7 @@ function OfferAgreementForm({ agreement, setAgreement }){
     sx: { p: 2, m: 1 },
     onSubmit(event){
       event.preventDefault()
-      offerAgreement(agreement)
+      offerAgreement({agreement})
     }
   }}>
     <Typography component="h1" variant="h3" sx={{mb: 3}}>
@@ -603,7 +606,7 @@ function AckAgreementSignatureForm({ sisa, reloadAgreement }){
 
 
 function MyAgreementsList(){
-  const [myAgreements, {error}] = useMyAgreements()
+  const {view: myAgreements, error} = useView('agreements.mine')
 
   return (
     <List sx={{
@@ -611,15 +614,18 @@ function MyAgreementsList(){
       // bgcolor: 'background.paper',
       // flexGrow: 1,
     }}>
-      {
-        error ? <ErrorMessage {...{error}}/> :
-        myAgreements ? (
-          [...myAgreements].sort(sorter).map(sisa =>
-            <MyAgreement key={sisa.id} sisa={sisa}/>
-          )
-        ) :
+      <ErrorMessage {...{error}}/>
+      {myAgreements ||
         Array(3).fill().map((_, i) =>
           <Skeleton key={i} animation="wave" height="100px" />
+        )
+      }
+      {myAgreements && (
+        myAgreements.length === 0
+          ? <span>You dont have any agreements</span>
+          : [...myAgreements].sort(sorter).map(sisa =>
+            <MyAgreement key={sisa.id} sisa={sisa}/>
+          )
         )
       }
     </List>

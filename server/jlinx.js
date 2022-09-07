@@ -9,34 +9,38 @@ import {
   resolveDidDocument
 } from './ceramic.js'
 
-import identifiersResource from './resources/identifiersResource.js'
+// import identifiersResource from './resources/identifiersResource.js'
 
 const debug = Debug('jlinx')
 
 export class JlinxClient {
 
-  constructor(userId, did){
-    debug('new JlinxClient', { userId, did })
-    this.userId = userId
+  async open(didString, secretSeed){
+    const did = await getDid(didString, secretSeed)
+    return new JlinxClient(did)
+  }
+
+  constructor(did){
+    debug('new JlinxClient', { did })
     this.did = did
-    this.readOnly = !!(this.userId && this.did)
+    this.readOnly = !did
     this.dids = new JlinxDids(this)
     this.profiles = new JlinxProfiles(this)
     this.contracts = new JlinxContracts(this)
     this.sisas = new JlinxSisas(this)
   }
 
-  async getDid(){
-    if (this._did) return this._did
-    const { userId, did } = this
-    // go get the private key from the db
-    const secretSeed = await identifiersResource.queries.getSecretSeed({ userId, did })
-    if (!secretSeed){
-      throw new Error(`unable to get secretSeed for userId="${userId}" did="${did}"`)
-    }
-    this._did = await getDid(did, secretSeed)
-    return this._did
-  }
+  // async getDid(){
+  //   if (this._did) return this._did
+  //   const { userId, did } = this
+  //   // go get the private key from the db
+  //   const secretSeed = await identifiersResource.queries.getSecretSeed({ userId, did })
+  //   if (!secretSeed){
+  //     throw new Error(`unable to get secretSeed for userId="${userId}" did="${did}"`)
+  //   }
+  //   this._did = await getDid(did, secretSeed)
+  //   return this._did
+  // }
 
   async get(id, opts = {}){
     const doc = await loadDocument(
@@ -48,11 +52,10 @@ export class JlinxClient {
   }
 
   async create(content, { metadata, ...opts } = {}){
-    if (!opts.asDID) opts.asDID = await this.getDid()
     const doc = await createDocument(
       content,
       metadata,
-      opts
+      { asDID: this.did, ...opts }
     )
     return doc
   }
@@ -82,8 +85,7 @@ class JlinxDocument {
 
   async update(content, metadata, opts = {}) {
     await this.doc.update(content, metadata, {
-      asDID: await this.jlinxClient.getDid(),
-      ...opts
+      asDID: this.did, ...opts
     })
     await this.sync()
     // TODO consider this.doc.requestAnchor()

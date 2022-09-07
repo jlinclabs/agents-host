@@ -5,7 +5,7 @@ export function useStateObject(init){
   const patchValue = useCallback(
     (patch, replace = false) => {
       let newValue
-      if (typeof newValue === undefined) {
+      if (typeof patch === 'undefined') {
         newValue = {...init}
       }else if (typeof patch === 'function') {
         newValue = {...value}
@@ -13,7 +13,7 @@ export function useStateObject(init){
       }else{
         newValue = replace ? patch : {...value, ...patch}
       }
-      console.log('NEW OBJ VALUE', { newValue })
+      if (typeof newValue !== 'object') newValue = {}
       setValue(value = newValue)
     },
     [setValue]

@@ -34,25 +34,32 @@ export default class Session {
     console.log('Session reload', this.id)
     const sessionRecord = await sessionResource.queries.get(this.id)
     if (!sessionRecord){
-      throw new Error(`invalid session`)
+      throw new Error(`invalid session id=${this.id}`)
     }
     this._createdAt = sessionRecord.createdAt
     this._lastSeenAt = sessionRecord.lastSeenAt
-    this._userId = sessionRecord.userId
+    this._agentId = sessionRecord.agentId
     if (sessionRecord.user){
       this._userCreatedAt = sessionRecord.user.createdAt
       // this._vaultKey = sessionRecord.user.vaultKey
+      this._agent = await Agent.open({
+        did: sessionRecord.user.did,
+        vaultKey: sessionRecord.user.vaultKey
+      })
       this._vault = await openVault(
-        `user-${this.userId}`,
+        `user-${this.agentId}`,
         sessionRecord.user.vaultKey
       )
+      // this.jlinx = new JlinxClient()
     }
   }
 
   get createdAt(){ return this._createdAt }
   get lastSeenAt(){ return this._lastSeenAt }
-  get userId(){ return this._userId }
+  get agentId(){ return this._agentId }
   get userCreatedAt(){ return this._userCreatedAt }
+  get vault () { return this._vault }
+  // get jlinx () { return this._jlinx }
 
   async touch(){
     console.log('Session touch', this.id)
@@ -65,9 +72,9 @@ export default class Session {
     this._cookies.set(COOKIE_NAME, undefined)
   }
 
-  async setUserId(userId){
-    if (this.userId){ throw new Error(`please logout first`) }
-    await sessionResource.commands.setUserId(this.id, userId)
+  async setAgentId(agentId){
+    if (this.agentId){ throw new Error(`please logout first`) }
+    await sessionResource.commands.setAgentId(this.id, agentId)
     await this.reload()
   }
 
@@ -79,21 +86,19 @@ export default class Session {
       indent + '  id: ' + opts.stylize(this.id, 'string') + '\n' +
       indent + '  createdAt: ' + opts.stylize(this.createdAt, 'date') + '\n' +
       indent + '  lastSeenAt: ' + opts.stylize(this.lastSeenAt, 'date') + '\n' +
-      indent + '  userId: ' + opts.stylize(this.userId, 'number') + '\n' +
+      indent + '  agentId: ' + opts.stylize(this.agentId, 'number') + '\n' +
       indent + ')'
   }
 
   async ensureLoggedIn(){
-    if (this.userId) return
+    if (this.agentId) return
     throw new Error(`not logged in`)
   }
-
-  get vault () { return this._vault }
 
   // async useVault(handler){
   //   await this.ensureLoggedIn()
   //   const vault = await openVault(
-  //     `user-${this.userId}`,
+  //     `user-${this.agentId}`,
   //     this._vaultKey
   //   )
   //   try{

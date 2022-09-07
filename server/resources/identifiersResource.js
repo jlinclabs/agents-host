@@ -4,7 +4,9 @@ import profiles from './profilesResource.js'
 
 const identifiers = {
   queries: {
-
+    async getByDid({ session, did }){
+      return await session.vault.records('identifiers').get(id)
+    }
   },
 
   commands: {

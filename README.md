@@ -9,7 +9,8 @@
   - ¿¿ can you scan through the keys of a leveldb ??
   - LATER: make it exportable and importable to a new account
 
-- 
+- switch to one DID for your agent
+  - users can just have more than one
 
 - auth
   - NOTE: implementing idx id3 "ceramic logic" will change how identifirs and profiles work

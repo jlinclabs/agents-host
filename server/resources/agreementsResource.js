@@ -1,17 +1,28 @@
 import { postJSON } from '../lib/http.js'
 import db from '../../prisma/client.js'
 import { JlinxClient } from '../jlinx.js'
+// import identifiers from './identifiersResource.js'
 
 const agreements = {
   queries: {
-
+    async byId(id){
+      console.log('agreements.queries.getAll', { id })
+    }
   },
 
   commands: {
   },
 
   actions: {
-    async offer({ currentUser, ...options }){
+    async offer({ session, agreement }){
+      console.log('OFFER', { session, agreement })
+      agreement.offererDid
+      // const identifiers = await identifiers.queries.getByDid(agreement.offererDid)
+      console.log('OFFER', { identifiers })
+      JlinxClient.open(
+        identifiers.did,
+        identifiers.secretKey
+      )
 
     },
     async sign({ currentUser, sisaId, identifierId }){
@@ -24,7 +35,12 @@ const agreements = {
 
   views: {
     'mine': async ({ session }) => {
-      return await session.vault.records('agreements').all()
+      const agreements = await session.vault.records('agreements').all()
+      return Promise.all(
+        agreements.map(agreement =>
+          agreements.queries.byId(agreement.id)
+        )
+      )
     },
     ':id': async ({ id }) => {
       return await session.vault.records('agreements').get(id)

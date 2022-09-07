@@ -111,6 +111,7 @@ export async function createDocument(content, metadata, opts){
   await ready()
   return await TileDocument.create(ceramic, content, metadata, opts)
 }
+
 export async function loadStream(streamId){
   await ready()
   return await ceramic.loadStream(streamId)

@@ -3,7 +3,7 @@ import { InvalidArgumentError } from '../errors.js'
 import { createDid } from '../ceramic.js'
 import { JlinxClient } from '../jlinx.js'
 import { isEmail, isPassword } from '../lib/validators.js'
-import users from './usersResource.js'
+import users from './agentsResource.js'
 import identifiers from './identifiersResource.js'
 
 const sessionResource = {
@@ -16,8 +16,8 @@ const sessionResource = {
           id: true,
           createdAt: true,
           lastSeenAt: true,
-          userId: true,
-          user: {
+          agentId: true,
+          agent: {
             select: {
               id: true,
               createdAt: true,
@@ -39,11 +39,11 @@ const sessionResource = {
         data: { lastSeenAt: new Date }
       })
     },
-    async setUserId(id, userId){
-      console.log('setUserId', {id, userId})
+    async setAgentId(id, agentId){
+      console.log('setAgentId', {id, agentId})
       return await prisma.session.update({
         where: { id },
-        data: { userId }
+        data: { agentId }
       })
     },
     async delete(id){
@@ -61,19 +61,19 @@ const sessionResource = {
       // if (!isPassword(password)) throw new InvalidArgumentError('password', password)
 
       console.log('signup', { session, password, email })
-      if (session.userId){
+      if (session.agentId){
         throw new Error(`please logout first`)
       }
       const user = await users.commands.create({ password })
-      const userId = user.id
-      // await identifiers.commands.create({ userId })
-      await session.setUserId(userId)
+      const agentId = user.id
+      // await identifiers.commands.create({ agentId })
+      await session.setAgentId(agentId)
 
       if (email){
 
       }
       // await session.save();
-      return { userId, email }
+      return { agentId, email }
     },
 
     async login({ session, email, password }){
@@ -82,7 +82,7 @@ const sessionResource = {
         user = await users.queries.findByEmailAndPassword(email)
         if (!user){ throw new Error(`invalid password`)}
       }
-      await session.setUserId(user.id)
+      await session.setAgentId(user.id)
     },
 
     async logout({ session }){
@@ -96,8 +96,8 @@ const sessionResource = {
     },
 
     'currentUser': async ({ session }) => {
-      if (session.userId) return {
-        id: session.userId,
+      if (session.agentId) return {
+        id: session.agentId,
         createdAt: session.userCreatedAt,
       }
       return null

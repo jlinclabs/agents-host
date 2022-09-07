@@ -4,8 +4,6 @@ import { InvalidArgumentError } from '../errors.js'
 import { createDid } from '../ceramic.js'
 import { JlinxClient } from '../jlinx.js'
 import { isEmail, isPassword } from '../lib/validators.js'
-import users from './usersResource.js'
-import identifiers from './identifiersResource.js'
 
 const SKIPPED_KEYS = new Set([
   'KEY_CHECK'
