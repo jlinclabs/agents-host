@@ -41,9 +41,9 @@ export default class Session {
     this._createdAt = record.createdAt
     this._lastSeenAt = record.lastSeenAt
     if (record.agent){
-      const { did, didSecret, createdAt, vaultKey } = record.agent
+      const { id, did, didSecret, createdAt, vaultKey } = record.agent
       this._agent = await Agent.open({
-        did, didSecret, createdAt, vaultKey
+        id, did, didSecret, createdAt, vaultKey
       })
     }
   }

@@ -55,8 +55,14 @@ export class JlinxClient {
   async create(content, { metadata, ...opts } = {}){
     const doc = await createDocument(
       content,
-      metadata,
-      { asDID: this.did, ...opts }
+      {
+        family: 'jlinx',
+        ...metadata
+      },
+      {
+        asDID: this.did,
+        ...opts
+      }
     )
     return doc
   }

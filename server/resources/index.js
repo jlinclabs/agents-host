@@ -61,7 +61,7 @@ export async function takeAction({ actionId, options, session }) {
   const [resourceName, actionName] = parseId(actionId)
   const resource = resources[resourceName]
   if (!resource || !resource.actions || !resource.actions[actionName])
-    throw new NotFoundError('action', actionId)
+    throw new NotFoundError(`action "${actionId}"`)
   try{
     const result = await resource.actions[actionName]({
       ...options, session, agent: session.agent

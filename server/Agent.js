@@ -4,10 +4,10 @@ const COOKIE_NAME = 'session-id'
 
 export default class Agent {
 
-  static async open({ did, didSecret, createdAt, vaultKey }){
+  static async open({ id, did, didSecret, createdAt, vaultKey }){
     console.log('OPEN AGENT', { did, didSecret, createdAt, vaultKey })
     const jlinx = await JlinxClient.open(did, didSecret)
-    const vault = await openVault(`agent-${did}`, vaultKey)
+    const vault = await openVault(`agent-${id}`, vaultKey)
     return new Agent({ did, createdAt, jlinx, vault })
   }
 
@@ -53,12 +53,31 @@ class Contacts extends Plugin {
 
 class Agreements extends Plugin {
 
-  async get(agreementId){
+  async create(agreement){
+    console.log('creating agreement', { agreement })
+    const doc = await this.agent.jlinx.create(
+      agreement,
+      {
+        // schema: //TODO
+      }
+    )
+    const id = doc.id.toString()
+    await this.agent.vault.records('agreements').set(id, { id })
+    return { id }
+  }
 
+  async get(id){
+    const doc = await this.agent.jlinx.get(id)
+    // TODO check schema matches
+    return {
+      ...doc.content,
+      id,
+    }
   }
 
   async all(){
     const agreements = await this.agent.vault.records('agreements').all()
+    console.log({ agreements })
     return Promise.all(
       agreements.map(async agreement => {
         // const doc = await this.agent.jlinx.get(agreement.id)

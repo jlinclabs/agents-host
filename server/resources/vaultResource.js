@@ -47,9 +47,13 @@ async function vaultToJson(vault){
   const dump = {}
   for (const key of await vault.keys()) {
     if (SKIPPED_KEYS.has(key)) continue
-    let value = await vault.get(key)
-    if (b4a.isBuffer(value)) value = value.toString('hex')
-    dump[key] = value
+    try{
+      let value = await vault.get(key)
+      if (b4a.isBuffer(value)) value = value.toString('hex')
+      dump[key] = value
+    }catch(error){
+      console.error(error)
+    }
   }
   return dump
 }

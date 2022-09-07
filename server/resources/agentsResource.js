@@ -50,6 +50,7 @@ const users = {
       })
 
       const agent = await Agent.open({
+        id,
         did: did.id,
         didSecret,
         createdAt,

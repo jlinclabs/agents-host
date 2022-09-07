@@ -14,15 +14,18 @@ const agreements = {
   },
 
   actions: {
-    async offer({ session, agreement }){
-      console.log('OFFER', { session, agreement })
-      agreement.offererDid
-      // const identifiers = await identifiers.queries.getByDid(agreement.offererDid)
-      console.log('OFFER', { identifiers })
-      JlinxClient.open(
-        identifiers.did,
-        identifiers.secretKey
-      )
+    async create({ agent, agreement }){
+      console.log('agreements.create', { agent, agreement })
+      agreement = await agent.agreements.create(agreement)
+      console.log('agreements.create', { agreement })
+      return agreement
+      // agreement.offererDid
+      // // const identifiers = await identifiers.queries.getByDid(agreement.offererDid)
+      // console.log('OFFER', { identifiers })
+      // JlinxClient.open(
+      //   identifiers.did,
+      //   identifiers.secretKey
+      // )
 
     },
     async sign({ currentAgent, sisaId, identifierId }){
@@ -35,10 +38,11 @@ const agreements = {
 
   views: {
     'mine': async ({ agent }) => {
+
       return await agent.agreements.all()
     },
-    ':id': async ({ id }) => {
-      return await session.vault.records('agreements').get(id)
+    ':id': async ({ agent, id }) => {
+      return await agent.agreements.get(id)
     }
   }
 }
