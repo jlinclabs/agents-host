@@ -8,7 +8,7 @@ global.getView = viewId => fetchView(viewIdToSwrKey(viewId))
 export function useView(viewId){
   const swrKey = viewIdToSwrKey(viewId)
   const { data: view, error, mutate } = useSWR(swrKey, fetchView)
-  const loading = typeof view === 'undefined'
+  const loading = typeof view === 'undefined' && !error
   const reload = useCallback(() => { mutate(swrKey) }, [swrKey, mutate])
   return { view, loading, error, mutate, reload }
 }

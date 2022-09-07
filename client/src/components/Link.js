@@ -3,7 +3,10 @@ import { Link as RouterLink } from 'react-router-dom'
 import MUILink from '@mui/material/Link'
 
 const Link = React.forwardRef(({...props}, ref) => {
-  props.component = RouterLink
+  props.component = 'a'
+  if (props.to){
+    props.component = RouterLink
+  }
   if (props.to && props.to.startsWith('http')){
     props.href = props.to
     delete props.to

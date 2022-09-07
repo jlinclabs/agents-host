@@ -23,8 +23,9 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 import { useAction } from '../lib/actions'
 import { useView, useReloadView } from '../lib/views'
+import { useCurrentAgent } from '../resources/session'
 import { useDidDocument } from '../resources/dids'
-import Layout from '../Layout'
+
 import Link from '../components/Link'
 import ErrorMessage from '../components/ErrorMessage'
 import InspectObject from '../components/InspectObject'
@@ -33,25 +34,28 @@ export default function DidsPage() {
   return <Container p={4}>
     <Routes>
       <Route path="/" element={<Index />} />
-      <Route path="/add" element={<Add />} />
       <Route path="/:did" element={<Show />} />
-      <Route path="/:did/did-document" element={<ShowDidDocument />} />
-      <Route path="/:did/edit" element={<Edit />} />
     </Routes>
   </Container>
 }
 
 function Index(){
+  const { currentAgent } = useCurrentAgent()
+
   return <Box>
     <Typography my={2} variant="h3">DIDs</Typography>
     <Typography my={2} variant="h6">Decentralized Identifiers</Typography>
+    <Box>
+      <Button
+        variant="contained"
+        component={Link}
+        to={`/dids/${currentAgent.did}`}
+      >View your Agent's DID</Button>
+    </Box>
+
+    <Typography my={2} variant="h6">View another DID:</Typography>
     <ResolveDidForm/>
   </Box>
-}
-
-
-function Add(){
-
 }
 
 function Show(){
@@ -67,25 +71,12 @@ function Show(){
   </Box>
 }
 
-function ShowDidDocument(){
-
-}
-
-function Edit(){
-
-}
-
-
-
-
-
 function DidDocument({ didDocument }){
   // TODO display nicer than json dump
   return <Paper sx={{p: 2}}>
     <InspectObject object={didDocument}/>
   </Paper>
 }
-
 
 function ResolveDidForm({ disabled, ...props }){
   const navigate = useNavigate()
