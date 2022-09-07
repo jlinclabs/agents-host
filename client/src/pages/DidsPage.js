@@ -92,8 +92,10 @@ function ResolveDidForm({ disabled, ...props }){
   >
     <Stack flexDirection="row" alignItems="center">
       <TextField
+        autoFocus
         sx={{ flex: '1 1', mr: 2 }}
         label="DID"
+        placeholder="did:3:kjzl6cwe1jw148wwvtzi1e70s28h18lpk4uobmum14fmev0imwebvodj8qkuc6l"
         variant="outlined"
         value={did}
         onChange={e => setDid(e.target.value)}

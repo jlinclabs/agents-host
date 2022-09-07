@@ -26,21 +26,13 @@ const sessionResource = {
 
   views: {
     'dump': async ({ agent }) => {
-      const { vault } = agent
-      const dump = {}
-      for (const key of await vault.keys()) {
-        if (SKIPPED_KEYS.has(key)) continue
-        let value = await vault.get(key)
-        if (b4a.isBuffer(value)) value = value.toString('hex')
-        dump[key] = value
-      }
-      return dump
+      return await vaultToJson(agent.vault)
     },
 
     'currentAgent': async ({ agent }) => {
       if (agent) return {
         did: agent.did,
-        createdAt: session.userCreatedAt,
+        createdAt: agent.createdAt,
       }
       return null
     },
@@ -52,5 +44,12 @@ const sessionResource = {
 export default sessionResource
 
 async function vaultToJson(vault){
-
+  const dump = {}
+  for (const key of await vault.keys()) {
+    if (SKIPPED_KEYS.has(key)) continue
+    let value = await vault.get(key)
+    if (b4a.isBuffer(value)) value = value.toString('hex')
+    dump[key] = value
+  }
+  return dump
 }

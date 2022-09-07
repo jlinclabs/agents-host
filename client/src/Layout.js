@@ -34,7 +34,6 @@ export default function Layout(props) {
     redirectToIfFound: requireNotLoggedIn ? '/' : undefined,
     redirectToIfNotFound: requireLoggedIn ? '/' : undefined,
   })
-  console.log(`currentAgent => ${JSON.stringify(currentAgent)}`)
 
   return (
     <Container maxWidth={false} disableGutters>

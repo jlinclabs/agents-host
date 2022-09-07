@@ -4,6 +4,11 @@ import { useNavigate } from 'react-router-dom'
 import { useAction } from '../lib/actions'
 import { useView, useReloadView } from '../lib/views'
 
+function logCurrentAgentIfChanged(agent){
+  if (logCurrentAgentIfChanged.last === agent) return
+  logCurrentAgentIfChanged.last = agent
+  console.log(`currentAgent => ${JSON.stringify(agent)}`)
+}
 export function useCurrentAgent({
   redirectToIfFound,
   redirectToIfNotFound,
@@ -28,8 +33,15 @@ export function useCurrentAgent({
       redirectToIfNotFound
     ]
   )
+
+  useEffect(
+    () => {
+      logCurrentAgentIfChanged(currentAgent)
+    },
+    [currentAgent]
+  )
+
   const reload = () => { mutate() }
-  console.log('useCurrentAgent', { currentAgent })
   return { currentAgent, loading, error, mutate, reload }
 }
 
