@@ -12,6 +12,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar'
 import Skeleton from '@mui/material/Skeleton'
 import Box from '@mui/material/Box'
 import FormControl from '@mui/material/FormControl'
+import TextField from '@mui/material/TextField'
 import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
@@ -42,15 +43,9 @@ export default function DidsPage() {
 
 function Index(){
   return <Box>
-    <Typography mt={2} variant="h3">My Identifiers</Typography>
-    <Stack spacing={2} sx={{maxWidth: '400px'}}>
-      <Button
-      variant="contained"
-        component={Link}
-        to="/identifiers/new"
-      >{`New Identifier`}</Button>
-    </Stack>
-    <MyContactsList />
+    <Typography my={2} variant="h3">DIDs</Typography>
+    <Typography my={2} variant="h6">Decentralized Identifiers</Typography>
+    <ResolveDidForm/>
   </Box>
 }
 
@@ -61,12 +56,14 @@ function Add(){
 
 function Show(){
   const { did } = useParams()
-  const [didDocument, ] = useDidDocument(did)
+  const [didDocument, {loading, error} ] = useDidDocument(did)
   return <Box>
     <Typography variant="h5" sx={{my: 2}}>
       {`DID: ${did}`}
     </Typography>
-    <DidDocument didDocument={didDocument}/>
+    <ErrorMessage {...{error}}/>
+    {loading && <CircularProgress />}
+    {didDocument && <DidDocument didDocument={didDocument}/>}
   </Box>
 }
 
@@ -81,40 +78,40 @@ function Edit(){
 
 
 
-function MyContactsList(){
-  const {view: contacts, error, loading } = useView('contacts.all')
-
-  if (error){
-    return <ErrorMessage {...{error}}/>
-  }
-
-  if (loading) {
-    return Array(3).fill().map((_, i) =>
-      <Skeleton key={i} animation="wave" height="100px" />
-    )
-  }
-
-  if (contacts.length === 0){
-    return <span>you dont have any contacts</span>
-  }
-  return <List sx={{
-    width: '100%',
-  }}>
-    {contacts.map(contact =>
-      <MyContact {...{ key: contact.did, contact }}/>
-    )}
-  </List>
-}
-
-
-function MyContact({ did }){
-  return <Box>{`did: ${did}`}</Box>
-}
-
 
 function DidDocument({ didDocument }){
   // TODO display nicer than json dump
   return <Paper sx={{p: 2}}>
     <InspectObject object={didDocument}/>
   </Paper>
+}
+
+
+function ResolveDidForm({ disabled, ...props }){
+  const navigate = useNavigate()
+  const [did, setDid] = useState('')
+  const submittable = did && /did:(\w+):(\w+)$/.test(did)
+  return <Box
+    {...props}
+    component="form"
+    onSubmit={event => {
+      event.preventDefault()
+      navigate(`/dids/${did}`)
+    }}
+  >
+    <Stack flexDirection="row" alignItems="center">
+      <TextField
+        sx={{ flex: '1 1', mr: 2 }}
+        label="DID"
+        variant="outlined"
+        value={did}
+        onChange={e => setDid(e.target.value)}
+      />
+      <Button
+        type="submit"
+        variant="contained"
+        disabled={disabled || !submittable}
+      >{`Resolve DID`}</Button>
+    </Stack>
+  </Box>
 }
