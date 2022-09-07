@@ -13,10 +13,11 @@ import SettingsPage from './pages/SettingsPage'
 import VaultPage from './pages/VaultPage'
 import DidsPage from './pages/DidsPage'
 import ContactsPage from './pages/ContactsPage'
-import ProfilesPage from './pages/ProfilesPage'
-import IdentifiersPage from './pages/IdentifiersPage'
-import ContractsPage from './pages/ContractsPage'
 import AgreementsPage from './pages/AgreementsPage'
+import DataSharingPage from './pages/DataSharingPage'
+// import ProfilesPage from './pages/ProfilesPage'
+// import IdentifiersPage from './pages/IdentifiersPage'
+// import ContractsPage from './pages/ContractsPage'
 
 export default function Routes() {
   const { currentAgent } = useCurrentAgent()
@@ -31,10 +32,11 @@ export default function Routes() {
       <Route path="/vault" element={<VaultPage />} />
       <Route path="/dids/*" element={<DidsPage />} />
       <Route path="/contacts/*" element={<ContactsPage />} />
+      <Route path="/agreements/*" element={<AgreementsPage />} />
+      <Route path="/data-sharing/*" element={<DataSharingPage />} />
       {/* <Route path="/profiles/*" element={<ProfilesPage />} />
       <Route path="/identifiers/*" element={<IdentifiersPage />} />
       <Route path="/contracts/*" element={<ContractsPage />} /> */}
-      <Route path="/agreements/*" element={<AgreementsPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </_Routes>
   </Layout>

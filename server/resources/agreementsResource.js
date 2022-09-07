@@ -35,7 +35,7 @@ const agreements = {
 
   views: {
     'mine': async ({ agent }) => {
-      const agreements = await agent.agreements.all()
+      return await agent.agreements.all()
     },
     ':id': async ({ id }) => {
       return await session.vault.records('agreements').get(id)
