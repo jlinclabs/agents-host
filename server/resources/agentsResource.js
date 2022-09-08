@@ -2,7 +2,7 @@ import { generateVaultKey } from '../vaults.js'
 import env from '../../environment.js'
 import prisma from '../../prisma/client.js'
 import { createDid } from '../ceramic.js'
-import Agent from '../Agent.js'
+import Agent from '../Agent/index.js'
 
 const agents = {
   queries: {

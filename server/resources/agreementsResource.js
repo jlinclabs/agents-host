@@ -1,6 +1,6 @@
 import { postJSON } from '../lib/http.js'
 import db from '../../prisma/client.js'
-import Agent from '../Agent.js'
+import Agent from '../Agent/index.js'
 import { JlinxClient } from '../jlinx.js'
 // import identifiers from './identifiersResource.js'
 

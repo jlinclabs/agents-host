@@ -1,9 +1,9 @@
 import { randomBytes } from 'jlinx-util'
-import { openVault } from './vaults.js'
-import { JlinxClient } from './jlinx.js'
-import { postJSON } from './lib/http.js'
-import { base64ToObject } from './lib/encoding.js'
-import agentsResource from './resources/agentsResource.js'
+import { openVault } from '../vaults.js'
+import { JlinxClient } from '../jlinx.js'
+import { postJSON } from '../lib/http.js'
+import { base64ToObject } from '../lib/encoding.js'
+import agentsResource from '../resources/agentsResource.js'
 
 const COOKIE_NAME = 'session-id'
 

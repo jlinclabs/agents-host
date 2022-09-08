@@ -1,7 +1,7 @@
 import Debug from 'debug'
 import Cookies from 'cookies'
 import sessionResource from './resources/sessionResource.js'
-import Agent from './Agent.js'
+import Agent from './Agent/index.js'
 import { openVault } from './vaults.js'
 const COOKIE_NAME = 'session-id'
 

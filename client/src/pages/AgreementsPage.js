@@ -23,6 +23,7 @@ import FormLabel from '@mui/material/FormLabel'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
+import Chip from '@mui/material/Chip'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
@@ -296,29 +297,45 @@ function Agreement({ currentAgent, agreement }){
       />
     </FormControl>
 
-    <Typography variant="h6">Parties:</Typography>
-    <Stack>
+    <Typography variant="h6" mt={2}>Parties:</Typography>
+    <Stack spacing={2}>
       {agreement.details.parties.map(did =>
         <Stack key={did} spacing={2} direction="row" alignItems="center">
-          {agreement.signatures[did]
+          {/* {agreement.signatures[did]
             ? <CheckCircleOutlineIcon/>
             : <RadioButtonUncheckedIcon/>
-          }
+          } */}
           <LinkToDid {...{did}}/>
+          {agreement.signatures[did]
+            ? <Chip
+              size="small"
+              color="success"
+              label="SIGNED"
+            />
+            : <Chip
+              size="small"
+              color="warning"
+              label="UNSIGNED"
+            />
+          }
         </Stack>
       )}
     </Stack>
 
     <AgreementActions {...{currentAgent, agreement}}/>
-    <InspectObject object={agreement}/>
+    {/* <InspectObject object={agreement}/> */}
   </Paper>
 }
 
+function hasEveryoneSigned(agreement){
+  return agreement.details.parties
+    .every(did => did in agreement.signatures )
+}
 function AgreementActions({ currentAgent, agreement }){
   if (agreement.details.owner === currentAgent.did){
-    const everyoneHasSigned = false
+    const everyoneHasSigned = hasEveryoneSigned(agreement)
     if (everyoneHasSigned){
-
+      return null
     }
 
     return <Box my={2}>
