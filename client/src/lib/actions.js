@@ -52,7 +52,11 @@ async function takeAction(actionId, options){
 
   if (error){
     console.log('ACTION :(', { actionId, options, error })
-    const _error = new Error(error.message)
+    const _error = new Error(
+      `ACTION ERROR` +
+      // TODO if development
+      (error && `\n${error.message}\n${error.stack}`)
+    )
     if (error.stack) {
       _error.stack = error.stack + '\n' + error.stack
     }

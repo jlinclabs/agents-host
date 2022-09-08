@@ -35,7 +35,7 @@ export default class Agent {
     const jws = await this.jlinx.createJWS(signable)
     const id = jws.signatures[0].signature
     this.vault.records('signatures').set(id, {
-      signedAt: now(), jws, metadata,
+      signedAt: this.now, jws, metadata,
     })
     return jws
   }
