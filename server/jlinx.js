@@ -7,10 +7,6 @@ import {
   getDid,
   resolveDidDocument
 } from './ceramic.js'
-import {
-  objectToBase64,
-  base64ToObject
-} from './lib/encoding.js'
 
 const debug = Debug('jlinx')
 
@@ -27,51 +23,10 @@ export class JlinxClient {
     this.did = did
     this.readOnly = !did
     this.dids = new JlinxDids(this)
-    // this.profiles = new JlinxProfiles(this)
-    // this.contracts = new JlinxContracts(this)
-    // this.sisas = new JlinxSisas(this)
   }
-
-  // async getDid(){
-  //   if (this._did) return this._did
-  //   const { userId, did } = this
-  //   // go get the private key from the db
-  //   const secretSeed = await identifiersResource.queries.getSecretSeed({ userId, did })
-  //   if (!secretSeed){
-  //     throw new Error(`unable to get secretSeed for userId="${userId}" did="${did}"`)
-  //   }
-  //   this._did = await getDid(did, secretSeed)
-  //   return this._did
-  // }
 
   async createJWS(signable){
     return await this.did.createJWS(signable)
-  }
-
-  async sign(signable){
-    if (typeof signable === 'object')
-      signable = JSON.parse(jsonCanonicalize(signable))
-    console.log('SIGNING', { signable })
-    const jws = await this.did.createJWS(signable)
-    console.log('SIGNED', JSON.stringify(jws, null, 2))
-    const sig = jws.signatures[0]
-
-    const verified = await this.did.verifyJWS(jws)
-    console.log('VERIFIED??', JSON.stringify(verified, null, 2))
-
-    const jws2 = JSON.parse(JSON.stringify(jws))
-    delete jws2.signatures[0].protected
-    // bad signature
-    // jws2.signatures[0].signature =
-    //   jws2.signatures[0].signature.replace(/\d/g, '0')
-    console.log('VERIFYING BAD JWS2', JSON.stringify(jws2, null, 2))
-    const verified2 = await this.did.verifyJWS(jws2)
-    console.log('VERIFIED2??', JSON.stringify(verified2, null, 2))
-
-    // BASE64URL(UTF8(JWS Protected Header)) || '.' ||
-    // BASE64URL(JWS Payload) || '.' ||
-    // BASE64URL(JWS Signature)
-    return `${sig.protected}..${sig.signature}`
   }
 
   async get(id, opts = {}){

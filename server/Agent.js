@@ -1,6 +1,7 @@
 import { randomBytes } from 'jlinx-util'
 import { openVault } from './vaults.js'
 import { JlinxClient } from './jlinx.js'
+import { base64ToObject } from './lib/encoding.js'
 
 const COOKIE_NAME = 'session-id'
 
@@ -85,10 +86,12 @@ class Agreements extends Plugin {
       createdAt: now(),
     }
 
+    const jws = await this.agent.jlinx.createJWS(details)
     const agreement = {
       details,
+      signableDetails: jws.payload,
       signatures: {
-        [this.agent.did]: await this.agent.sign(details),
+        [this.agent.did]: jws.signatures[0],
       },
     }
     console.log({ agreement })
