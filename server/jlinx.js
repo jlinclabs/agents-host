@@ -1,6 +1,5 @@
 import Debug from 'debug'
-import crypto from 'crypto'
-import { randomBytes } from '@stablelib/random'
+import jsonCanonicalize from 'canonicalize'
 import {
   createDocument,
   loadDocument,
@@ -8,8 +7,6 @@ import {
   getDid,
   resolveDidDocument
 } from './ceramic.js'
-
-// import identifiersResource from './resources/identifiersResource.js'
 
 const debug = Debug('jlinx')
 
@@ -42,6 +39,14 @@ export class JlinxClient {
   //   this._did = await getDid(did, secretSeed)
   //   return this._did
   // }
+
+  async sign(signable){
+    if (typeof signable === 'object') signable = jsonCanonicalize(signable)
+    console.log('SIGNING', { signable })
+    const jws = await this.did.createJWS(signable)
+    console.log('SIGNED', { jws, signatures: jws.signatures })
+    return jws.signatures[0].signature
+  }
 
   async get(id, opts = {}){
     const doc = await loadDocument(

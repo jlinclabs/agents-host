@@ -25,6 +25,7 @@ export default function Routes() {
   const { currentAgent, loading, error } = useCurrentAgent()
   console.log('🔥Routes render', { currentAgent, loading, error })
   if (!currentAgent) return <AuthPage {...{loading, error}} />
+  const props = { currentAgent }
   return <Layout>
     <_Routes>
       <Route path="/" element={<HomePage />} />
@@ -34,17 +35,17 @@ export default function Routes() {
       <Route path="/forgot-password/*" element={<RedirectPage to="/"/>} />
       <Route path="/signup/*" element={<RedirectPage to="/"/>} />
 
-      <Route path="/logout" element={<LogoutPage />} />
-      <Route path="/settings" element={<SettingsPage />} />
-      <Route path="/vault" element={<VaultPage />} />
-      <Route path="/dids/*" element={<DidsPage />} />
-      <Route path="/contacts/*" element={<ContactsPage />} />
-      <Route path="/agreements/*" element={<AgreementsPage />} />
-      <Route path="/data-sharing/*" element={<DataSharingPage />} />
-      {/* <Route path="/profiles/*" element={<ProfilesPage />} />
-      <Route path="/identifiers/*" element={<IdentifiersPage />} />
-      <Route path="/contracts/*" element={<ContractsPage />} /> */}
-      <Route path="*" element={<NotFoundPage />} />
+      <Route path="/logout" element={<LogoutPage {...props} />} />
+      <Route path="/settings" element={<SettingsPage {...props} />} />
+      <Route path="/vault" element={<VaultPage {...props} />} />
+      <Route path="/dids/*" element={<DidsPage {...props} />} />
+      <Route path="/contacts/*" element={<ContactsPage {...props} />} />
+      <Route path="/agreements/*" element={<AgreementsPage {...props} />} />
+      <Route path="/data-sharing/*" element={<DataSharingPage {...props} />} />
+      {/* <Route path="/profiles/*" element={<ProfilesPage {...props} />} />
+      <Route path="/identifiers/*" element={<IdentifiersPage {...props} />} />
+      <Route path="/contracts/*" element={<ContractsPage {...props} />} /> */}
+      <Route path="*" element={<NotFoundPage {...props} />} />
     </_Routes>
   </Layout>
 }

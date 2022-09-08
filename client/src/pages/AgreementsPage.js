@@ -19,14 +19,18 @@ import CircularProgress from '@mui/material/CircularProgress'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
+import FormLabel from '@mui/material/FormLabel'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 
 import { useStateObject } from '../lib/reactStateHelpers'
 import { useAction } from '../lib/actions'
 import { useView } from '../lib/views'
+import { useCurrentAgent } from '../resources/session'
 
 import Link from '../components/Link'
 import LinkToCeramicApi from '../components/LinkToCeramicApi'
@@ -39,15 +43,16 @@ import CeramicStreamLink from '../components/CeramicStreamLink'
 import CeramicStreamEvents from '../components/CeramicStreamEvents'
 import ButtonRow from '../components/ButtonRow'
 import TermsTextField from '../components/TermsTextField'
+import AgreementPartiesInput from '../components/AgreementPartiesInput'
 import InspectObject from '../components/InspectObject'
 
-export default function Agreements() {
+export default function Agreements(props) {
   return <Container maxWidth="lg">
     <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="/new" element={<New />} />
-      <Route path="/find" element={<Find />} />
-      <Route path="/:id" element={<Show />} />
+      <Route path="/" element={<Index {...props} />} />
+      <Route path="/new" element={<New {...props} />} />
+      <Route path="/find" element={<Find {...props} />} />
+      <Route path="/:id" element={<Show {...props} />} />
     </Routes>
   </Container>
 }
@@ -75,9 +80,13 @@ function Index(props) {
   </Container>
 }
 
-function New({ router }) {
+function New({ currentAgent, router }) {
   const navigate = useNavigate()
   const [agreement, patchAgreement] = useStateObject({
+    parties: [
+      currentAgent.did,
+      '',
+    ],
     terms: '',
   })
 
@@ -86,11 +95,8 @@ function New({ router }) {
       navigate(`/agreements/${agreement.id}`)
     }
   })
-  console.log({ createAgreement })
 
-  console.log(`AGREEMENT: ${JSON.stringify(agreement, null, 2)}`)
-
-  return <Container maxwidth="lg">
+  return <Container maxWidth="md">
     <AgreementForm {...{
       router,
       agreement,
@@ -109,7 +115,7 @@ function New({ router }) {
 }
 
 
-function Show() {
+function Show({ currentAgent }) {
   const { id } = useParams()
   const { view: agreement, loading, error } = useView(`agreements.${id}`)
 
@@ -117,7 +123,7 @@ function Show() {
   return <Container maxwidth="md">
     {
       error ? <ErrorMessage {...{ error }}/> :
-      agreement ? <Agreement {...{ agreement }}/> :
+      agreement ? <Agreement {...{ currentAgent, agreement }}/> :
       <CircularProgress/>
     }
   </Container>
@@ -127,7 +133,7 @@ function Show() {
 
 function Find() {
   const navigate = useNavigate()
-  return <Container maxWidth="sm">
+  return <Container maxWidth="sm">FormLabel
     <Paper sx={{p:2, m:2}}>
       <Typography variant="h4">Find Agreement</Typography>
       <LookupAgreementForm
@@ -156,14 +162,21 @@ function AgreementForm({
     }
   }}>
     <Typography component="h1" variant="h3" sx={{mb: 3}}>
-      Offer an Agreement
+      Create an Agreement
     </Typography>
 
     <ErrorMessage error={error}/>
 
+    <AgreementPartiesInput
+      sx={{mb: 2}}
+      value={agreement.parties}
+      onChange={parties => patchAgreement({ parties })}
+    />
+
     <FormControl fullWidth>
+      <FormLabel required>Terms</FormLabel>
       <TermsTextField
-        label="Agreement Text"
+        label=""
         value={agreement.terms}
         onChange={e => patchAgreement({ terms: e.target.value })}
       />
@@ -173,7 +186,11 @@ function AgreementForm({
       <Button
         variant="contained"
         type="submit"
-      >Offer</Button>
+      >Create</Button>
+      <Button
+        variant="outlined"
+        onClick={() => { patchAgreement(undefined) }}
+      >reset</Button>
       <Button
         variant="text"
         component={Link}
@@ -183,22 +200,10 @@ function AgreementForm({
   </Paper>
 }
 
-function PreviewAgreementForm(){
-  return <Paper>PREVIEW</Paper>
-}
-
-function Sign() {
-  const [search, setSearch] = useSearchParams()
-  const setId = id => { setSearch({ id }) }
-  const sisaId = search.get('id')
-
-  const navigate = useNavigate()
-  return <Container maxWidth="lg">
-    {sisaId
-      ? <SignAgreementOfferingForm {...{ sisaId }}/>
-      : <LookupAgreementOfferingForm {...{ setId }}/>
-    }
-  </Container>
+function PreviewAgreementForm({ agreement }){
+  return <Paper sx={{p:2}}>
+    <InspectObject object={agreement}/>
+  </Paper>
 }
 
 function LookupAgreementOfferingForm({ setId }){
@@ -234,90 +239,7 @@ function LookupAgreementOfferingForm({ setId }){
   </Paper>
 }
 
-
-function SignAgreementOfferingForm({ sisaId }){
-  const navigate = useNavigate()
-  const [identifierId, setIdentifierId] = useState('')
-
-  const [sisa, { loading, error }] = useView(sisaId)
-  const signAgreement = useSignAgreement({
-    onSuccess({ signatureId }){
-      console.log('SIGNED', { signatureId })
-      navigate(`/agreements/${sisaId}`)
-      // setSignatureId(signatureId)
-    }
-  })
-  if (loading) return <span>Loading…</span>
-  const disabled = signAgreement.pending
-  if (sisa && sisa.state !== 'offered'){
-    return <Paper {...{
-      elevation: 3,
-      sx: { p: 2, mt: 2 },
-    }}>
-      <Typography component="h1" variant="h3" mb={3}>
-        Agreement Already Signed!
-      </Typography>
-
-      <InspectObject object={sisa}/>
-    </Paper>
-  }
-
-  return <Paper {...{
-    elevation: 3,
-    component: 'form',
-    sx: { p: 2, mt: 2 },
-    onSubmit(event){
-      event.preventDefault()
-      signAgreement({
-        sisaId,
-        identifierId,
-      })
-    }
-  }}>
-    <ErrorMessage error={error}/>
-    <Typography component="h1" variant="h3" mb={3}>
-      Sign Agreement Offering
-    </Typography>
-
-    <Box>
-      <LinkToCeramicApi endpoint={sisa.id}/>
-    </Box>
-
-    <Typography paragraph>
-      <LinkToDid did={sisa.offerer}/>
-      {`would like you to share:`}
-    </Typography>
-
-    <ul>
-      {agreement.requestedData.map(({ type, description }) =>
-        <Box component="li">
-          <Typography component="span" variant="body1">{description}</Typography>
-          <Typography component="span" variant="body1"> ({type})</Typography>
-        </Box>
-      )}
-    </ul>
-
-    {/* <Paper elevation={2} sx={{p: 2, m: 2}}>
-      <IdentifierProfile identifierId={sisa.offerer}/>
-    </Paper> */}
-
-
-    <Typography variant="body1" sx={{my: 2}}>
-      Which identifier do you want to sign this sisa as?
-    </Typography>
-    <IdentifierSelectInput {...{
-      autoFocus: true,
-      value: identifierId,
-      onChange: setIdentifierId,
-    }}/>
-    <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
-      <Button type="submit" variant="contained">{`Sign Agreement`}</Button>
-    </Box>
-  </Paper>
-}
-
-
-function Agreement({ agreement }){
+function Agreement({ currentAgent, agreement }){
   return <Paper
     sx={{
       m: 4,
@@ -339,61 +261,101 @@ function Agreement({ agreement }){
 
     <Box my={2}>
       <Typography variant="h6">Created:</Typography>
-      <Timestamp at={agreement.createdAt}/>
+      <Timestamp at={agreement.details.createdAt}/>
     </Box>
 
     <Box my={2}>
       <Typography variant="h6">Offered by:</Typography>
-      <Typography variant="body1">
-        <LinkToDid did={agreement.offererDid}/>
-      </Typography>
+      <LinkToDid did={agreement.details.owner}/>
     </Box>
 
     <Typography variant="h6">Terms:</Typography>
-    <FormControl
-      fullWidth
-      sx={{}}
-    >
+    <FormControl fullWidth>
       <TermsTextField
         multiline
         readOnly
-        value={agreement.terms}
+        value={agreement.details.terms}
       />
     </FormControl>
 
-    {agreement.state === 'offered' &&
-      <Box my={2}>
-        <Typography variant="h6" sx={{mt: 2}}>
-          Give this ID to the parties you want to sign this agreement:
-        </Typography>
-        <Box sx={{
-          '> input': {
-            outline: 'none',
-            width: '100%',
-            fontFamily: 'monospace',
-            fontSize: '20px',
-            p: 1,
+    <Typography variant="h6">Parties:</Typography>
+    <Stack>
+      {agreement.details.parties.map(did =>
+        <Stack key={did} spacing={2} direction="row" alignItems="center">
+          {agreement.signatures[did]
+            ? <CheckCircleOutlineIcon/>
+            : <RadioButtonUncheckedIcon/>
           }
-        }}>
-          <input type="text" readOnly value={agreement.id} onClick={e => { e.target.select() }}/>
-        </Box>
-      </Box>
-    }
+          <LinkToDid {...{did}}/>
+        </Stack>
+      )}
+    </Stack>
 
-    {agreement.state === 'signed' &&
-      <>
-        <Typography variant="h6">Signed by</Typography>
-        <LinkToDid did={agreement.signer}/>
-
-        {/* <Paper elevation={2}>
-          <IdentifierProfile identifierId={sisa.signer}/>
-        </Paper> */}
-      </>
-    }
+    <AgreementActions {...{currentAgent, agreement}}/>
+    <InspectObject object={agreement}/>
   </Paper>
 }
 
+function AgreementActions({ currentAgent, agreement }){
+  if (agreement.details.owner === currentAgent.did){
+    const everyoneHasSigned = false
+    if (everyoneHasSigned){
 
+    }
+
+    return <Box my={2}>
+      <Typography variant="h6" sx={{mt: 2}}>
+        Share this Agreement ID with other parties:
+      </Typography>
+      <Box sx={{
+        '> input': {
+          outline: 'none',
+          width: '100%',
+          fontFamily: 'monospace',
+          fontSize: '20px',
+          p: 1,
+        }
+      }}>
+        <input type="text" readOnly value={agreement.id} onClick={e => { e.target.select() }}/>
+      </Box>
+    </Box>
+  }
+  if (agreement.details.parties.includes(currentAgent.did)){
+    const signature = agreement.signatures[currentAgent.did]
+    if (signature){
+      return <Box>you signed!</Box>
+    }else{
+      return <SignAgreementForm {...{ currentAgent, agreement }} />
+    }
+  }
+}
+
+function SignAgreementForm({ currentAgent, agreement }){
+  const navigate = useNavigate()
+
+  const signAgreement = useAction('agreements.sign', {
+    // onSuccess({ signatureId }){
+    //   console.log('SIGNED', { signatureId })
+    //   navigate(`/agreements/${sisaId}`)
+    //   // setSignatureId(signatureId)
+    // }
+  })
+
+  const disabled = signAgreement.pending
+  return <Box {...{
+    mt: 2,
+    component: 'form',
+    onSubmit(event){
+      event.preventDefault()
+      signAgreement({ agreementId: agreement.id })
+    }
+  }}>
+    <ErrorMessage error={signAgreement.error}/>
+    <ButtonRow>
+      <Button type="submit" variant="contained">{`Sign Agreement`}</Button>
+    </ButtonRow>
+  </Box>
+}
 
 
 function AckAgreementSignatureForm({ sisa, reloadAgreement }){
@@ -438,8 +400,6 @@ function AckAgreementSignatureForm({ sisa, reloadAgreement }){
 
 function MyAgreementsList(){
   const {view: myAgreements, loading, error} = useView('agreements.mine')
-
-  console.log({ myAgreements })
   return (
     <List sx={{
       width: '100%',

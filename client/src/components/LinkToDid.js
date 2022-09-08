@@ -6,9 +6,10 @@ import CeramicStreamLink from '../components/CeramicStreamLink'
 import Link from './Link'
 
 export default function LinkToDid({ did, children = did, ...props }){
+  const streamId = did && did.split(':')[2]
   return <Box>
     <Link to={`/dids/${did}`}>{did}</Link>&nbsp;
     {/* <LinkToCeramicApi endpoint={did}/> */}
-    <CeramicStreamLink streamId={did.split(':')[2]}/>
+    {streamId && <CeramicStreamLink streamId={streamId}/> }
   </Box>
 }

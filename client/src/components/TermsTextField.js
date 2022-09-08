@@ -4,13 +4,12 @@ import TextField from '@mui/material/TextField'
 
 export default function TermsTextField({
   minRows = 3,
-  maxRow,
+  maxRows,
   readOnly = false,
   spellCheck = !readOnly,
   ...props
 }) {
   return <TextField {...{
-    label: "terms",
     name: "terms",
     ...props,
     multiline: true,
@@ -18,7 +17,7 @@ export default function TermsTextField({
       inputComponent: TextareaAutosize,
       inputProps: {
         minRows,
-        maxRow,
+        maxRows,
         spellCheck,
       }
     },
