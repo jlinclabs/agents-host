@@ -16,7 +16,10 @@ export function useView(viewId){
 export function useReloadView(viewId){
   const swrKey = viewIdToSwrKey(viewId)
   const { mutate } = useSWRConfig()
-  return useCallback(() => { mutate(swrKey) }, [swrKey, mutate])
+  return useCallback(
+    (value, options) => { mutate(swrKey, value, options) },
+    [swrKey, mutate]
+  )
 }
 
 async function fetchView(url, tries = 0){

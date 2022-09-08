@@ -3,7 +3,7 @@ import { InvalidArgumentError } from '../errors.js'
 import { createDid } from '../ceramic.js'
 import { JlinxClient } from '../jlinx.js'
 import { isEmail, isPassword } from '../lib/validators.js'
-import users from './agentsResource.js'
+import agents from './agentsResource.js'
 import identifiers from './identifiersResource.js'
 
 const sessionResource = {
@@ -68,38 +68,31 @@ const sessionResource = {
       if (session.agentId){
         throw new Error(`please logout first`)
       }
-      const user = await users.commands.create({ password })
-      const agentId = user.id
-      // await identifiers.commands.create({ agentId })
-      await session.setAgentId(agentId)
-
-      if (email){
-
-      }
-      // await session.save();
-      return { agentId, email }
+      const agent = await agents.commands.create({ email, password })
+      await session.setAgentId(agent.id)
+      console.log('CREATED', { agent })
+      return { did: agent.did }
     },
 
     async login({ session, email, password }){
-      let user
+      let agent
       if (email && password){
-        user = await users.queries.findByEmailAndPassword(email)
-        if (!user){ throw new Error(`invalid password`)}
+        agent = await agents.queries.findByEmailAndPassword(email)
+        if (!agent){ throw new Error(`invalid password`)}
       }
-      await session.setAgentId(user.id)
+      await session.setAgentId(agent.id)
+      return { did: agent.did }
     },
 
     async logout({ session }){
       await session.delete()
+      return null
     }
   },
 
   views: {
     'currentAgent': async ({ session }) => {
-      if (session.agent) return {
-        did: session.agent.did,
-        createdAt: session.agent.createdAt,
-      }
+      if (session.agent) return { did: session.agent.did }
       return null
     },
 

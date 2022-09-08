@@ -20,7 +20,6 @@ import Avatar from '@mui/material/Avatar'
 import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
-
 import { useAction } from '../lib/actions'
 import { useView, useReloadView } from '../lib/views'
 import { useCurrentAgent } from '../resources/session'
@@ -42,7 +41,7 @@ export default function DidsPage() {
 function Index(){
   const { currentAgent } = useCurrentAgent()
 
-  return <Box>
+  return <Container maxWidth="sm">
     <Typography my={2} variant="h3">DIDs</Typography>
     <Typography my={2} variant="h6">Decentralized Identifiers</Typography>
     <Box>
@@ -55,20 +54,20 @@ function Index(){
 
     <Typography my={2} variant="h6">View another DID:</Typography>
     <ResolveDidForm/>
-  </Box>
+  </Container>
 }
 
 function Show(){
   const { did } = useParams()
   const [didDocument, {loading, error} ] = useDidDocument(did)
-  return <Box>
+  return <Container>
     <Typography variant="h5" sx={{my: 2}}>
       {`DID: ${did}`}
     </Typography>
     <ErrorMessage {...{error}}/>
     {loading && <CircularProgress />}
     {didDocument && <DidDocument didDocument={didDocument}/>}
-  </Box>
+  </Container>
 }
 
 function DidDocument({ didDocument }){

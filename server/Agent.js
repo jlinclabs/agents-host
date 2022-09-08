@@ -8,10 +8,11 @@ export default class Agent {
     console.log('OPEN AGENT', { did, didSecret, createdAt, vaultKey })
     const jlinx = await JlinxClient.open(did, didSecret)
     const vault = await openVault(`agent-${id}`, vaultKey)
-    return new Agent({ did, createdAt, jlinx, vault })
+    return new Agent({ id, did, createdAt, jlinx, vault })
   }
 
-  constructor({ did, createdAt, jlinx, vault }){
+  constructor({ id, did, createdAt, jlinx, vault }){
+    this.id = id
     this.did = did
     this.createdAt = createdAt
     this.jlinx = jlinx

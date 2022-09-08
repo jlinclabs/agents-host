@@ -38,6 +38,7 @@ import LinkToDid from '../components/LinkToDid'
 import CeramicStreamLink from '../components/CeramicStreamLink'
 import CeramicStreamEvents from '../components/CeramicStreamEvents'
 import ButtonRow from '../components/ButtonRow'
+import TermsTextField from '../components/TermsTextField'
 import InspectObject from '../components/InspectObject'
 
 export default function Agreements() {
@@ -45,13 +46,14 @@ export default function Agreements() {
     <Routes>
       <Route path="/" element={<Index />} />
       <Route path="/new" element={<New />} />
+      <Route path="/find" element={<Find />} />
       <Route path="/:id" element={<Show />} />
     </Routes>
   </Container>
 }
 
 function Index(props) {
-  return <Container maxwidth="lg">
+  return <Container maxWidth="sm">
     <Typography my={2} variant="h3">Agreements</Typography>
     <Typography my={2} variant="h6">Standard Information Sharing Agreemnts</Typography>
 
@@ -61,29 +63,15 @@ function Index(props) {
         component={Link}
         to="/agreements/new"
       >{`Create an Agreement`}</Button>
+
       <Button
         variant="contained"
         component={Link}
-        to="/agreements/sign"
-        sx={{ml: 1}}
-      >{`View An Agreement Offering`}</Button>
+        to="/agreements/find"
+      >{`View an Agreement`}</Button>
     </Stack>
 
     <MyAgreementsList />
-  </Container>
-}
-
-function Show() {
-  const { id } = useParams()
-  const { view: agreement, loading, error } = useView(`agreements.${id}`)
-
-  if (error) return <ErrorMessage {...{ error }}/>
-  return <Container maxwidth="md">
-    {
-      error ? <ErrorMessage {...{ error }}/> :
-      agreement ? <Agreement {...{ agreement }}/> :
-      <CircularProgress/>
-    }
   </Container>
 }
 
@@ -120,6 +108,36 @@ function New({ router }) {
   </Container>
 }
 
+
+function Show() {
+  const { id } = useParams()
+  const { view: agreement, loading, error } = useView(`agreements.${id}`)
+
+  if (error) return <ErrorMessage {...{ error }}/>
+  return <Container maxwidth="md">
+    {
+      error ? <ErrorMessage {...{ error }}/> :
+      agreement ? <Agreement {...{ agreement }}/> :
+      <CircularProgress/>
+    }
+  </Container>
+}
+
+
+
+function Find() {
+  const navigate = useNavigate()
+  return <Container maxWidth="sm">
+    <Paper sx={{p:2, m:2}}>
+      <Typography variant="h4">Find Agreement</Typography>
+      <LookupAgreementForm
+        onSubmit={id => { navigate(`/agreements/${id}`) }}
+      />
+    </Paper>
+  </Container>
+}
+
+
 function AgreementForm({
   router,
   agreement,
@@ -144,11 +162,8 @@ function AgreementForm({
     <ErrorMessage error={error}/>
 
     <FormControl fullWidth>
-      <TextField
-        multiline
+      <TermsTextField
         label="Agreement Text"
-        rows={4}
-        maxRows={12}
         value={agreement.terms}
         onChange={e => patchAgreement({ terms: e.target.value })}
       />
@@ -327,16 +342,22 @@ function Agreement({ agreement }){
       <Timestamp at={agreement.createdAt}/>
     </Box>
 
+    <Box my={2}>
+      <Typography variant="h6">Offered by:</Typography>
+      <Typography variant="body1">
+        <LinkToDid did={agreement.offererDid}/>
+      </Typography>
+    </Box>
+
     <Typography variant="h6">Terms:</Typography>
     <FormControl
       fullWidth
       sx={{}}
     >
-      <TextField
+      <TermsTextField
         multiline
         readOnly
         value={agreement.terms}
-        rows={4}
       />
     </FormControl>
 
@@ -478,4 +499,38 @@ function MyAgreement({ agreement }){
       }}/>
     </ListItemButton>
   </ListItem>
+}
+
+
+
+function LookupAgreementForm({ disabled, ...props }){
+  const [id, setId] = useState('')
+  const submittable = id && /^[a-z0-9]{63}$/.test(id)
+  return <Box
+    {...props}
+    component="form"
+    onSubmit={event => {
+      event.preventDefault()
+      props.onSubmit(id)
+    }}
+  >
+    <FormControl fullWidth sx={{my: 2}}>
+      <TextField
+        autoFocus
+        label="Agreement ID"
+        placeholder="kjzl6cwe1jw148qlksigdqvn0ho7p81buk9370isxq0xi4kbbaczgvxfkpopikt"
+        variant="outlined"
+        value={id}
+        onChange={e => setId(e.target.value)}
+      />
+    </FormControl>
+
+    <ButtonRow>
+      <Button
+        type="submit"
+        variant="contained"
+        disabled={disabled || !submittable}
+      >{`Lookup`}</Button>
+    </ButtonRow>
+  </Box>
 }

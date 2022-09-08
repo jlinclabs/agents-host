@@ -53,8 +53,8 @@ function useActionAndReloadCurrentAgent(action, callbacks = {}){
   const reloadCurrentAgent = useReloadCurrentAgent()
   return useAction(action, {
     ...callbacks,
-    onSuccess(result){
-      reloadCurrentAgent()
+    onSuccess(currentAgent){
+      reloadCurrentAgent(currentAgent)
       if (callbacks.onSuccess) callbacks.onSuccess(result)
     },
   })

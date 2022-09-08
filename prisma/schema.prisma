@@ -11,6 +11,7 @@ generator client {
 model Agent {
   id           Int       @id @default(autoincrement())
   createdAt    DateTime  @default(now())
+  email        String?   @unique
   passwordSalt String?
   passwordHash String?
   vaultKey     String

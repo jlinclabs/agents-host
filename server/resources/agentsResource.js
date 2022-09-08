@@ -58,7 +58,7 @@ const users = {
       })
       agent.vault.set('did', did.id, 'string')
       agent.vault.set('didSecret', didSecret, 'raw')
-      return { id }
+      return agent
     }
   },
 

@@ -5,6 +5,7 @@ import { useCurrentAgent } from './resources/session'
 import AuthPage from './pages/AuthPage'
 import HomePage from './pages/HomePage'
 import Layout from './Layout'
+import RedirectPage from './pages/RedirectPage'
 import NotFoundPage from './pages/NotFoundPage'
 // import SignupPage from './pages/SignupPage'
 // import LoginPage from './pages/LoginPage'
@@ -21,13 +22,18 @@ import DataSharingPage from './pages/DataSharingPage'
 
 export default function Routes() {
   // useErrorBoundry
-  const { currentAgent } = useCurrentAgent()
-  if (!currentAgent) return <AuthPage />
+  const { currentAgent, loading, error } = useCurrentAgent()
+  console.log('🔥Routes render', { currentAgent, loading, error })
+  if (!currentAgent) return <AuthPage {...{loading, error}} />
   return <Layout>
     <_Routes>
       <Route path="/" element={<HomePage />} />
       {/* <Route path="/signup" element={<SignupPage />} /> */}
       {/* <Route path="/login" element={<LoginPage />} /> */}
+      <Route path="/login/*" element={<RedirectPage to="/"/>} />
+      <Route path="/forgot-password/*" element={<RedirectPage to="/"/>} />
+      <Route path="/signup/*" element={<RedirectPage to="/"/>} />
+
       <Route path="/logout" element={<LogoutPage />} />
       <Route path="/settings" element={<SettingsPage />} />
       <Route path="/vault" element={<VaultPage />} />
