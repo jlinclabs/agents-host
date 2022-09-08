@@ -30,9 +30,6 @@ export default class Agent {
       ...metadata,
       signedAt: now(),
     })
-    // if (signature === 'jlinx'){
-    //   throw new Error(`HOW THE FUCK IS THIS HAPPENING!?!?`)
-    // }
     console.log('SIGNED!', { signature })
     return signature
   }

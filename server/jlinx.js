@@ -7,6 +7,7 @@ import {
   getDid,
   resolveDidDocument
 } from './ceramic.js'
+import { base64 } from 'encoding'
 
 const debug = Debug('jlinx')
 
@@ -41,11 +42,30 @@ export class JlinxClient {
   // }
 
   async sign(signable){
-    if (typeof signable === 'object') signable = jsonCanonicalize(signable)
+    if (typeof signable === 'object')
+      signable = JSON.parse(jsonCanonicalize(signable))
     console.log('SIGNING', { signable })
     const jws = await this.did.createJWS(signable)
-    console.log('SIGNED', { jws, signatures: jws.signatures })
-    return jws.signatures[0].signature
+    console.log('SIGNED', JSON.stringify(jws, null, 2))
+    const sig = jws.signatures[0]
+
+    const verified = await this.did.verifyJWS(jws)
+    console.log('VERIFIED??', JSON.stringify(verified, null, 2))
+
+    const jws2 = JSON.parse(JSON.stringify(jws))
+    delete jws2.signatures[0].protected
+    // bad signature
+    // jws2.signatures[0].signature =
+    //   jws2.signatures[0].signature.replace(/\d/g, '0')
+    console.log('VERIFYING BAD JWS2', JSON.stringify(jws2, null, 2))
+    const verified2 = await this.did.verifyJWS(jws2)
+    console.log('VERIFIED2??', JSON.stringify(verified2, null, 2))
+
+
+    // BASE64URL(UTF8(JWS Protected Header)) || '.' ||
+    // BASE64URL(JWS Payload) || '.' ||
+    // BASE64URL(JWS Signature)
+    return `${sig.protected}..${sig.signature}`
   }
 
   async get(id, opts = {}){
