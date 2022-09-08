@@ -4,30 +4,24 @@ import prisma from '../../prisma/client.js'
 import { createDid } from '../ceramic.js'
 import Agent from '../Agent.js'
 
-const users = {
+const agents = {
   queries: {
-    // async findByEmailAndPassword(email, password){
-    //   const user = await prisma.user.findUnique({
-    //     where: { email },
-    //     select: {
-    //       passwordSalt: true,
-    //       passwordHash: true,
-    //     }
-    //   })
-    //   if (!user) return
-    //   const match = await bcrypt.compare(password, user.passwordHash)
-    // },
-    // async findBySecreyKey(secretKey){
-    //   return await prisma.user.findUnique({
-    //     where: { secretKey },
-    //     select: {
-    //       id: true,
-    //       createdAt: true,
-    //       email: true,
-    //       secretKey: false,
-    //     }
-    //   })
-    // }
+    async findByDid(did){
+      const record = await prisma.agent.findUnique({
+        where: { did },
+        select: {
+          id: true,
+          createdAt: true,
+          did: true,
+          didSecret: true,
+          vaultKey: true,
+        }
+      })
+      if (record){
+        record.didSecret = Buffer.from(record.didSecret, 'hex')
+      }
+      return record
+    },
   },
 
   commands: {
@@ -67,11 +61,9 @@ const users = {
   },
 
   views: {
-    ':id': async ({ id }) => {
-      // session
-    }
+
   }
 }
 
 
-export default users
+export default agents

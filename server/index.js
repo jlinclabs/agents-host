@@ -38,6 +38,7 @@ router.use(bodyParser.json({
 
 router.use(async (req, res, next) => {
   req.session = await Session.open(req, res)
+  // req.origin = `${req.protocol}://${req.get('host')}`
   next()
 })
 
@@ -68,24 +69,24 @@ router.post('/api/actions/*', async (req, res) => {
   res.json({ result, error })
 })
 
-router.post('/api/jlinx/contracts/signatures', async (req, res) => {
-  const { contractId, signatureId } = req.body
-  const result = await takeAction({
-    actionId: 'contracts.ackSignature',
-    session: req.session,
-    options: { contractId, signatureId },
-  })
-  res.json(result)
-})
+// router.post('/api/jlinx/contracts/signatures', async (req, res) => {
+//   const { contractId, signatureId } = req.body
+//   const result = await takeAction({
+//     actionId: 'contracts.ackSignature',
+//     session: req.session,
+//     options: { contractId, signatureId },
+//   })
+//   res.json(result)
+// })
 
-router.post('/api/jlinx/sisas/signatures', async (req, res) => {
-  const { sisaId, signatureId } = req.body
-  const result = await takeAction({
-    actionId: 'sisas.ackSignature',
+router.post('/api/jlinx/agreements/signatures', async (req, res) => {
+  const { agreementId, signatureId } = req.body
+  await takeAction({
+    actionId: 'agreements.ackSignature',
     session: req.session,
-    options: { sisaId, signatureId },
+    options: { agreementId, signatureId },
   })
-  res.json(result)
+  res.json({ success: true })
 })
 
 router.use((error, req, res, next) => {

@@ -29,7 +29,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 
 import { useStateObject } from '../lib/reactStateHelpers'
 import { useAction } from '../lib/actions'
-import { useView } from '../lib/views'
+import { useView, useReloadView } from '../lib/views'
 import { useCurrentAgent } from '../resources/session'
 
 import Link from '../components/Link'
@@ -110,9 +110,7 @@ function New({ currentAgent, router }) {
         patchAgreement,
         submitting: createAgreement.pending,
         error: createAgreement.error,
-        onSubmit(){
-          createAgreement({ agreement })
-        }
+        onSubmit: createAgreement,
       }}/>
     </Paper>
     <PreviewAgreementForm {...{
@@ -151,6 +149,10 @@ function Find() {
   </Container>
 }
 
+const uniqueAndReal = parties =>
+  parties.filter((party, index, self) =>
+    party && parties.indexOf(party) === index
+  )
 
 function AgreementForm({
   router,
@@ -160,11 +162,21 @@ function AgreementForm({
   error,
   onSubmit,
 }){
+
+  const submittable = (
+    agreement &&
+    agreement.terms.length > 4 &&
+    uniqueAndReal(agreement.parties).length >= 2
+  )
+
   return <Box {...{
     component: 'form',
     onSubmit(event){
       event.preventDefault()
-      onSubmit()
+      if (!submittable) return
+      agreement = {...agreement}
+      agreement.parties = uniqueAndReal(agreement.parties)
+      onSubmit(agreement)
     }
   }}>
     <ErrorMessage error={error}/>
@@ -186,6 +198,7 @@ function AgreementForm({
 
     <ButtonRow mt={2}>
       <Button
+        disabled={!submittable}
         variant="contained"
         type="submit"
       >Create</Button>
@@ -337,13 +350,11 @@ function AgreementActions({ currentAgent, agreement }){
 
 function SignAgreementForm({ currentAgent, agreement }){
   const navigate = useNavigate()
-
+  const reloadAgreement = useReloadView(`agreements.${agreement.id}`)
   const signAgreement = useAction('agreements.sign', {
-    // onSuccess({ signatureId }){
-    //   console.log('SIGNED', { signatureId })
-    //   navigate(`/agreements/${sisaId}`)
-    //   // setSignatureId(signatureId)
-    // }
+    onSuccess(){
+      reloadAgreement()
+    }
   })
 
   const disabled = signAgreement.pending
@@ -357,7 +368,14 @@ function SignAgreementForm({ currentAgent, agreement }){
   }}>
     <ErrorMessage error={signAgreement.error}/>
     <ButtonRow>
-      <Button type="submit" variant="contained">{`Sign Agreement`}</Button>
+      <Button
+        type="submit"
+        variant="contained"
+        disabled={disabled}
+      >{signAgreement.pending
+        ? 'Signing…'
+        : `Sign Agreement`
+      }</Button>
     </ButtonRow>
   </Box>
 }

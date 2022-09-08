@@ -10,6 +10,10 @@ export async function postJSON(url, body){
     body: JSON.stringify(body)
   })
   if (!response.ok){
+    console.error(`post json failed url=${url}`, {
+      status: response.status,
+      text: await response.text(),
+    })
     throw new Error(`post json failed url=${url}`)
   }
   return await response.json()

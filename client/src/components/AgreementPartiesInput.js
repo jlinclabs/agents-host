@@ -15,14 +15,16 @@ export default function AgreementPartiesInput({
   onChange,
   ...props
 }){
+  const parties = Array.from(value || [])
   const { currentAgent } = useCurrentAgent()
   return <FormControl fullWidth {...props}>
     <FormLabel required>Parties</FormLabel>
     <Stack>
-      {Array.from(value || []).map((did, index) =>
+      {parties.map((did, index) =>
         <Party
           key={index}
           did={did}
+          dupliate={parties.indexOf(did) !== index}
           label={
             currentAgent.did === did
               ? "your agent"
@@ -51,13 +53,14 @@ export default function AgreementPartiesInput({
   </FormControl>
 }
 
-function Party({ did, onChange, disabled, label }){
+function Party({ did, onChange, disabled, label, dupliate }){
   return <Stack flexDirection="row" my={1} alignItems="center">
     <DidInput {...{
       value: did,
       onChange,
       sx: {flex: '1 1'},
       label,
+      dupliate,
     }}/>
     <Button
       tabIndex={-1}
@@ -69,11 +72,14 @@ function Party({ did, onChange, disabled, label }){
   </Stack>
 }
 
-function DidInput({value, onChange, ...props}){
+function DidInput({value, onChange, dupliate, ...props}){
   const valid = value && /did:(\w+):(\w+)$/.test(value)
   if (value && !valid){
     props.error = true
     props.helperText = `invalid did`
+  }else if (dupliate){
+    props.error = true
+    props.helperText = `duplicate`
   }
   return <TextField {...{
     label: 'DID',
