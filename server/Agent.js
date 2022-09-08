@@ -25,13 +25,13 @@ export default class Agent {
 
   async sign(signable, metadata = {}){
     console.log('SIGNING!', signable)
-    const signature = await this.jlinx.sign(signable, this.did)
-    this.vault.records('signatures').set(signature, {
-      ...metadata,
-      signedAt: now(),
+    const jws = await this.jlinx.createJWS(signable)
+    console.log('SIGNED!', { jws })
+    const id = jws.signatures[0].signature
+    this.vault.records('signatures').set(id, {
+      signedAt: now(), jws, metadata,
     })
-    console.log('SIGNED!', { signature })
-    return signature
+    return jws
   }
 
 }

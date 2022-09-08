@@ -7,7 +7,10 @@ import {
   getDid,
   resolveDidDocument
 } from './ceramic.js'
-import { base64 } from 'encoding'
+import {
+  objectToBase64,
+  base64ToObject
+} from './lib/encoding.js'
 
 const debug = Debug('jlinx')
 
@@ -41,6 +44,10 @@ export class JlinxClient {
   //   return this._did
   // }
 
+  async createJWS(signable){
+    return await this.did.createJWS(signable)
+  }
+
   async sign(signable){
     if (typeof signable === 'object')
       signable = JSON.parse(jsonCanonicalize(signable))
@@ -60,7 +67,6 @@ export class JlinxClient {
     console.log('VERIFYING BAD JWS2', JSON.stringify(jws2, null, 2))
     const verified2 = await this.did.verifyJWS(jws2)
     console.log('VERIFIED2??', JSON.stringify(verified2, null, 2))
-
 
     // BASE64URL(UTF8(JWS Protected Header)) || '.' ||
     // BASE64URL(JWS Payload) || '.' ||
