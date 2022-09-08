@@ -38,6 +38,7 @@ export default class Session {
   async load(){
     debug('load', this.id)
     const record = await sessionResource.commands.touch(this.id)
+    if (!record) return await this.create()
     debug('loaded', record)
     this._createdAt = record.createdAt
     this._lastSeenAt = record.lastSeenAt

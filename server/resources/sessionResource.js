@@ -37,6 +37,12 @@ const sessionResource = {
             }
           },
         }
+      }).catch(error => {
+        if (
+          error instanceof prisma.Error &&
+          error.code === 'P2025'
+        ) return null
+        throw error
       })
       if (record && record.agent){
         record.agent.didSecret = Buffer.from(record.agent.didSecret, 'hex')

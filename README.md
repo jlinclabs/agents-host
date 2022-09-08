@@ -12,6 +12,8 @@
 - [x] switch to one DID for your agent
   - [x] users can just have more than one
 
+- [ ] pin files on ipfs.jlinx.io
+
 - auth
   - NOTE: implementing idx id3 "ceramic logic" will change how identifirs and profiles work
   - login with wallet

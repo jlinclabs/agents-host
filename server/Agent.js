@@ -7,7 +7,6 @@ const COOKIE_NAME = 'session-id'
 export default class Agent {
 
   static async open({ id, did, didSecret, createdAt, vaultKey }){
-    console.log('OPEN AGENT', { did, didSecret, createdAt, vaultKey })
     const jlinx = await JlinxClient.open(did, didSecret)
     const vault = await openVault(`agent-${id}`, vaultKey)
     return new Agent({ id, did, createdAt, jlinx, vault })

@@ -97,16 +97,24 @@ function New({ currentAgent, router }) {
   })
 
   return <Container maxWidth="md">
-    <AgreementForm {...{
-      router,
-      agreement,
-      patchAgreement,
-      submitting: createAgreement.pending,
-      error: createAgreement.error,
-      onSubmit(){
-        createAgreement({ agreement })
-      }
-    }}/>
+    <Paper {...{
+      elevation: 3,
+      sx: { p: 2, my: 2 },
+    }}>
+      <Typography component="h1" variant="h3" sx={{mb: 3}}>
+        Create an Agreement
+      </Typography>
+      <AgreementForm {...{
+        router,
+        agreement,
+        patchAgreement,
+        submitting: createAgreement.pending,
+        error: createAgreement.error,
+        onSubmit(){
+          createAgreement({ agreement })
+        }
+      }}/>
+    </Paper>
     <PreviewAgreementForm {...{
       router,
       agreement
@@ -152,19 +160,13 @@ function AgreementForm({
   error,
   onSubmit,
 }){
-  return <Paper {...{
-    elevation: 3,
+  return <Box {...{
     component: 'form',
-    sx: { p: 2, m: 1 },
     onSubmit(event){
       event.preventDefault()
       onSubmit()
     }
   }}>
-    <Typography component="h1" variant="h3" sx={{mb: 3}}>
-      Create an Agreement
-    </Typography>
-
     <ErrorMessage error={error}/>
 
     <AgreementPartiesInput
@@ -197,11 +199,14 @@ function AgreementForm({
         to="/agreements"
       >cancel</Button>
     </ButtonRow>
-  </Paper>
+  </Box>
 }
 
 function PreviewAgreementForm({ agreement }){
   return <Paper sx={{p:2}}>
+    <Typography variant="h5" sx={{mb: 3}}>
+      Agreement Preview
+    </Typography>
     <InspectObject object={agreement}/>
   </Paper>
 }
