@@ -5,7 +5,10 @@ export default function Timestamp({
   at, locales, localeOptions, ...props
 }){
   const date = new Date(at)
-  const value = date.toLocaleDateString(locales, localeOptions)
+  const value = (
+    date.toLocaleDateString(locales, localeOptions) + ' ' +
+    date.toLocaleTimeString(locales, localeOptions)
+  )
   return <Typography {...props}>{value}</Typography>
 }
 

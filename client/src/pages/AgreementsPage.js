@@ -463,8 +463,8 @@ function MyAgreementsList(){
   )
 }
 const sorter = (a, b) => {
-  a = a.createdAt
-  b = b.createdAt
+  a = a.details.createdAt
+  b = b.details.createdAt
   return a < b ? 1 : a > b ? -1 : 0
 }
 
@@ -494,7 +494,7 @@ function MyAgreement({ agreement }){
         },
         primary: `${agreement.id}`,
         secondary: <span>
-          created <Timestamp at={agreement.createdAt}/>
+          created <Timestamp at={agreement.details.createdAt}/>
         </span>
       }}/>
     </ListItemButton>

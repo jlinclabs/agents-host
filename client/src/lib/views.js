@@ -37,10 +37,15 @@ async function fetchView(url, tries = 0){
   }
 
   if (!res.ok || error) {
-    const _error = new Error('An error occurred while fetching the data.')
+    const _error = new Error(
+      `An error occurred while fetching the data. ` +
+      // TODO if development
+      (error && `\n${error.message}\n${error.stack}`)
+    )
     _error.error = error
-    _error.info = data
+    // _error.info = data
     _error.status = res.status
+    console.error('VIEW ERROR', url, { error, status: res.status })
     throw _error
   }
   console.log('VIEW <-', url, value)
