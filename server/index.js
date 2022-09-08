@@ -47,15 +47,25 @@ router.get('/api/status', (req, res) => {
 
 router.get('/api/views/*', async (req, res) => {
   const viewId = req.params[0]
-  const value = await getView({ viewId, session: req.session })
-  res.json({ value })
+  let error, value
+  try{
+    value = await getView({ viewId, session: req.session })
+  }catch(e){
+    error = errorToJson(e)
+  }
+  res.json({ value, error })
 })
 
 router.post('/api/actions/*', async (req, res) => {
   const actionId = req.params[0]
   const options = req.body || {}
-  const result = await takeAction({ actionId, session: req.session, options })
-  res.json({ result })
+  let error, result
+  try{
+    result = await takeAction({ actionId, session: req.session, options })
+  }catch(e){
+    error = errorToJson(e)
+  }
+  res.json({ result, error })
 })
 
 router.post('/api/jlinx/contracts/signatures', async (req, res) => {
@@ -81,10 +91,7 @@ router.post('/api/jlinx/sisas/signatures', async (req, res) => {
 router.use((error, req, res, next) => {
   console.error('ERROR', error)
   res.status(error.statusCode || 500).json({
-    error: {
-      message: error.message,
-      stack: error.stack,
-    }
+    error: errorToJson(error)
   })
 })
 
@@ -94,3 +101,9 @@ if (env.NODE_ENV === 'production') {
     res.sendFile(Path.join(env.BUILD_PATH, 'index.html'));
   })
 }
+
+
+const errorToJson = error => ({
+  message: error.message,
+  stack: error.stack,
+})

@@ -23,7 +23,6 @@ import DataSharingPage from './pages/DataSharingPage'
 export default function Routes() {
   // useErrorBoundry
   const { currentAgent, loading, error } = useCurrentAgent()
-  console.log('🔥Routes render', { currentAgent, loading, error })
   if (!currentAgent) return <AuthPage {...{loading, error}} />
   const props = { currentAgent }
   return <Layout>

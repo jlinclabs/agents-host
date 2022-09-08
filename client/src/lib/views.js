@@ -23,27 +23,28 @@ export function useReloadView(viewId){
 }
 
 async function fetchView(url, tries = 0){
+  console.log('VIEW ->', url)
   const res = await fetch(url)
   if (res.status === 504 && tries < 5) {
     await wait(500)
     return fetchView(url, tries + 1)
   }
-  let data, parseError
+  let error, value
   try{
-    data = await res.json()
-  }catch(error){
-    parseError = error
-    console.error(parseError)
+    ({ error, value } = await res.json())
+  }catch(e){
+    error = e
   }
-  if (!res.ok) {
-    const error = new Error('An error occurred while fetching the data.')
-    error.parseError = parseError
-    error.info = data
-    error.status = res.status
-    throw error
+
+  if (!res.ok || error) {
+    const _error = new Error('An error occurred while fetching the data.')
+    _error.error = error
+    _error.info = data
+    _error.status = res.status
+    throw _error
   }
-  console.log('VIEW', url, data.value)
-  return data.value
+  console.log('VIEW <-', url, value)
+  return value
 }
 
 const wait = ms => new Promise(resolve => {
