@@ -45,7 +45,9 @@ async function fetchView(url, tries = 0){
     _error.error = error
     // _error.info = data
     _error.status = res.status
-    console.error('VIEW ERROR', url, { error, status: res.status })
+    console.error('VIEW ERROR', url,
+      (error && `\n${error.message}\n${error.stack}`)
+    )
     throw _error
   }
   console.log('VIEW <-', url, value)

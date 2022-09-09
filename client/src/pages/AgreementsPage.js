@@ -275,17 +275,18 @@ function Agreement({ currentAgent, agreement }){
     <Stack my={2} spacing={2} direction="row" alignItems="center">
       <Typography variant="h6">ID</Typography>
       <Link to={`/agreements/${agreement.id}`}>{agreement.id}</Link>
+      <LinkToCeramicApi endpoint={agreement.id}/>
       <CeramicStreamLink streamId={agreement.id}/>
     </Stack>
 
     <Box my={2}>
       <Typography variant="h6">Created:</Typography>
-      <Timestamp at={agreement.details.createdAt}/>
+      <Timestamp at={agreement.createdAt}/>
     </Box>
 
     <Box my={2}>
       <Typography variant="h6">Offered by:</Typography>
-      <LinkToDid did={agreement.details.owner}/>
+      <LinkToDid did={agreement.owner}/>
     </Box>
 
     <Typography variant="h6">Terms:</Typography>
@@ -293,13 +294,13 @@ function Agreement({ currentAgent, agreement }){
       <TermsTextField
         multiline
         readOnly
-        value={agreement.details.terms}
+        value={agreement.terms}
       />
     </FormControl>
 
     <Typography variant="h6" mt={2}>Parties:</Typography>
     <Stack spacing={2}>
-      {agreement.details.parties.map(did =>
+      {agreement.parties.map(did =>
         <Stack key={did} spacing={2} direction="row" alignItems="center">
           {/* {agreement.signatures[did]
             ? <CheckCircleOutlineIcon/>
@@ -328,11 +329,11 @@ function Agreement({ currentAgent, agreement }){
 }
 
 function hasEveryoneSigned(agreement){
-  return agreement.details.parties
+  return agreement.parties
     .every(did => did in agreement.signatures )
 }
 function AgreementActions({ currentAgent, agreement }){
-  if (agreement.details.owner === currentAgent.did){
+  if (agreement.owner === currentAgent.did){
     const everyoneHasSigned = hasEveryoneSigned(agreement)
     if (everyoneHasSigned){
       return null
@@ -355,7 +356,7 @@ function AgreementActions({ currentAgent, agreement }){
       </Box>
     </Box>
   }
-  if (agreement.details.parties.includes(currentAgent.did)){
+  if (agreement.parties.includes(currentAgent.did)){
     const signature = agreement.signatures[currentAgent.did]
     if (signature){
       return <Box>you signed!</Box>
@@ -439,7 +440,7 @@ function AckAgreementSignatureForm({ sisa, reloadAgreement }){
 
 
 function MyAgreementsList(){
-  const {view: myAgreements, loading, error} = useView('agreements.mine')
+  const {view: myAgreements = [], loading, error} = useView('agreements.mine')
   return (
     <List sx={{
       width: '100%',
@@ -463,8 +464,8 @@ function MyAgreementsList(){
   )
 }
 const sorter = (a, b) => {
-  a = a.details.createdAt
-  b = b.details.createdAt
+  a = a.createdAt
+  b = b.createdAt
   return a < b ? 1 : a > b ? -1 : 0
 }
 
@@ -494,14 +495,12 @@ function MyAgreement({ agreement }){
         },
         primary: `${agreement.id}`,
         secondary: <span>
-          created <Timestamp at={agreement.details.createdAt}/>
+          created <Timestamp at={agreement.createdAt}/>
         </span>
       }}/>
     </ListItemButton>
   </ListItem>
 }
-
-
 
 function LookupAgreementForm({ disabled, ...props }){
   const [id, setId] = useState('')

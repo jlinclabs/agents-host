@@ -13,21 +13,24 @@ export default class Agreements extends AgentPlugin {
     if (!parties.includes(this.agent.did)){
       parties.unshift(this.agent.did)
     }
+    const createdAt = this.agent.now
     const details = {
       '@context': 'https://agents.jlinx.io/agreement.json',
       owner: this.agent.did,
       unique: randomBytes(16).toString('hex'),
       parties,
       terms,
-      createdAt: this.agent.now,
+      createdAt,
     }
-
     const jws = await this.agent.createJWS(details)
     const agreement = {
       details,
       signableDetails: jws.payload,
       signatures: {
-        [this.agent.did]: jws.signatures[0],
+        [this.agent.did]: {
+          ...jws.signatures[0],
+          signedAt: createdAt,
+        }
       },
       signatureDropoffUrl,
     }
@@ -39,112 +42,174 @@ export default class Agreements extends AgentPlugin {
       }
     )
     const id = doc.id.toString()
-    await this._records.set(id, { id })
+    await this._records.set(id, { })
     return { id }
   }
 
-  async _get(id){
-    const agreement = await this.agent.jlinx.get(id)
-    console.log({ agreement })
-    // TODO check schema matches
-    return agreement
-  }
-
   async get(id){
-    return { ...(await this._get(id)).content, id }
+    return await Agreement.get(this, id)
   }
 
   async sign(id){
-    const agreement = await this._get(id)
-    const {
-      details,
-      signableDetails,
-      signatureDropoffUrl,
-    } = agreement.content
+    const agreement = await this.get(id)
+    await agreement.sign()
+    await this._records.set(id, { })
+  }
 
-    if (!details?.parties?.includes(this.agent.did))
+  async ackSignature(signatureId){
+    const signature = await Signature.get(this, signatureId)
+    console.log('ACKING', { signature })
+    if (!signature.agreementId) {
+      throw new Error(`unable to find agreement id in signature`)
+    }
+    const agreement = await this.get(signature.agreementId)
+    await agreement.ackSignature(signature)
+  }
+
+  async all(){
+    const ids = await this._records.ids.all()
+    return Promise.all(
+      ids.map(async id => this.get(id))
+    )
+  }
+}
+
+
+class Document {
+
+  static async get(collection, id){
+    const doc = await collection.agent.jlinx.get(id)
+    return new this(collection, doc)
+  }
+
+  constructor(agreements, doc){
+    this.agreements = agreements
+    this.doc = doc
+    this.agent = agreements.agent
+  }
+
+  get id () { return this.doc.id.toString() }
+}
+
+class Agreement extends Document {
+
+  get details() { return this.doc.content.details }
+  get signatures() { return this.doc.content.signatures }
+  get signableDetails() { return this.doc.content.signableDetails }
+  get signatureDropoffUrl() { return this.doc.content.signatureDropoffUrl }
+  get owner(){ return this.details.owner }
+  get unique(){ return this.details.unique }
+  get parties(){ return this.details.parties }
+  get terms(){ return this.details.terms }
+  get createdAt(){ return this.details.createdAt }
+
+  sync(){ return this.doc.sync() }
+
+  toJSON () {
+    return {
+      id: this.id,
+      signatures: this.signatures,
+      owner: this.owner,
+      unique: this.unique,
+      parties: this.parties,
+      terms: this.terms,
+      createdAt: this.createdAt,
+    }
+  }
+
+  async sign(){
+    if (!this.parties.includes(this.agent.did))
       throw new Error(`you are not a party of this agreement`)
 
-    const jws = await this.agent.createJWS(details)
-    if (jws.payload !== signableDetails)
+    const jws = await this.agent.createJWS(this.details)
+    if (jws.payload !== this.signableDetails)
       throw new Error(`jws payload mismatch`)
 
-    const signature = await this.agent.jlinx.create(
+    const signature = await Signature.create(this, {
+      agreementId: this.id,
+      ...jws.signatures[0]
+    })
+
+    console.log({ signature })
+
+    await postJSON(
+      this.signatureDropoffUrl,
       {
+        agreementId: this.id,
+        signatureId: signature.id,
+      }
+    )
+    await this.sync()
+
+    const sig = this.signatures[this.agent.did]
+    console.log('GOT SIG ACKd', sig)
+
+    return {
+      agreementId: this.id,
+      signatureId: signature.id,
+    }
+  }
+
+  async ackSignature(signature){
+    const signerDid = signature.signerDid
+    console.log('ackSignature', this, signature)
+    // if (!agreement.details.parties.includes(this.agent.did))
+    if (!this.parties.includes(signerDid))
+      throw new Error(`not party to agreement. did="${signerDid}"`)
+
+    if (this.signatures[signerDid])
+      throw new Error(`party already signed agreement. did="${signerDid}"`)
+
+    await this.doc.update({
+      ...this.doc.content,
+      signatures: {
+        ...this.doc.content.signatures,
+        [signerDid]: signature.toAgreementRef(),
+      }
+    })
+    console.log('ACKd Signature', {
+      signature,
+      agreement: this,
+    })
+  }
+
+}
+
+class Signature extends Document {
+
+  static async create(agreements, content){
+    const doc = await agreements.agent.jlinx.create(
+      {
+        ...content,
         '@context': 'https://agents.jlinx.io/agreement-signature.json',
-        agreement: id,
-        signedAt: this.agent.now,
-        signature: {
-          ...jws.signatures[0],
-        }
+        signedAt: agreements.agent.now,
       },
       {
         // schema: //TODO
       }
     )
+    return new Signature(agreements, doc)
+  }
 
-    await postJSON(
-      signatureDropoffUrl,
-      {
-        signatureId: signature.id.toString(),
-      }
-    )
-    await agreement.sync()
+  get signedAt () { return this.doc.content.signedAt }
+  get agreementId () { return this.doc.content.agreementId }
+  get signature () { return this.doc.content.signature }
+  get protected () { return this.doc.content.protected }
+  get signerDid () { return this.doc.metadata.controllers[0] }
 
-    const sig = agreement.content.signatures[this.agent.did]
-    console.log('GOT SIG ACKd', sig)
-
-    await this._records.set(id, { id })
+  toJSON(){
     return {
-      agreementId: id,
-      signatureId: signature.id.toString(),
+      id: this.id,
+      agreementId: this.agreementId,
+      signerDid: this.signerDid,
     }
   }
 
-  async ackSignature(signatureId){
-    const signature = await this.agent.jlinx.get(signatureId)
-    // todo check signature schema
-    console.log('~~~ signature', signature)
-    console.log('~~~ signature.content', signature.content)
-    console.log('~~~ signature.metadata', signature.metadata)
-    const signerDid = signature.metadata.controllers[0]
-    const agreementId = signature?.content?.agreement
-    if (!agreementId) {
-      throw new Error(`unable to find agreement id in signature`)
+  toAgreementRef(){
+    return {
+      signature: this.signature,
+      protected: this.protected,
+      signedAt: this.signedAt,
     }
-    // const agreement = await this.get(agreementId)
-    const agreement = await this.agent.jlinx.get(agreementId)
-    // TODO ensure agreement schema
-    const { details, signatures } = agreement.content
-    console.log('agreement', agreement.content)
-    // if (!agreement.details.parties.includes(this.agent.did))
-    if (!details.parties.includes(signerDid))
-      throw new Error(`not party to agreement. did="${signerDid}"`)
-
-    if (signatures[signerDid])
-      throw new Error(`party already signed agreement. did="${signerDid}"`)
-
-    const jws = await this.agent.jlinx.createJWS(details)
-    await agreement.update({
-      ...agreement.content,
-      signatures: {
-        ...signatures,
-        [signerDid]: jws.signatures[0],
-      }
-    })
-    console.log('ACKd Signature', {
-      signature: signature.content,
-      agreement: agreement.content,
-    })
-  }
-
-  async all(){
-    const agreements = await this._records.all()
-    console.log({ agreements })
-    return Promise.all(
-      agreements.map(async agreement =>
-        this.get(agreement.id)
-      )
-    )
   }
 }
