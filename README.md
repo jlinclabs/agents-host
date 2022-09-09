@@ -13,8 +13,12 @@
   - [x] users can just have more than one
 
 - [x] multiparty text agreements
+- [ ] setup multiple local agent apps
+- [ ] jlinx agent as a did document service
 - [ ] deploy two agents instances
 - [ ] pin files on ipfs.jlinx.io
+- [ ] encrypted agreements 
+- [ ] data sharing agreements (with events)
 
 - auth
   - NOTE: implementing idx id3 "ceramic logic" will change how identifirs and profiles work

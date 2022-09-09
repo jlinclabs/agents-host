@@ -23,7 +23,7 @@ export function useReloadView(viewId){
 }
 
 async function fetchView(url, tries = 0){
-  console.log('VIEW ->', url)
+  // console.log('VIEW ->', url)
   const res = await fetch(url)
   if (res.status === 504 && tries < 5) {
     await wait(500)

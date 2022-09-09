@@ -37,7 +37,7 @@ export function useAction(actionId, callbacks = {}){
 }
 
 async function takeAction(actionId, options){
-  console.log('ACTION ->', actionId, options)
+  // console.log('ACTION ->', actionId, options)
   const response = await fetch(
     `/api/actions/${actionId}`,
     {

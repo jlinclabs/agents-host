@@ -11,13 +11,12 @@ import { getResolver as getDid3IDResolver } from '@ceramicnetwork/3id-did-resolv
 
 const API_URL = env.CERAMIC_API_URL
 
-
-
 let ceramic
 export async function ready(){
   if (ceramic) return
-  console.log('connecting to ceramic', env.CERAMIC_API_URL)
+  console.log('[ceramic] connecting', env.CERAMIC_API_URL)
   ceramic = new CeramicClient(API_URL)
+  console.log('[ceramic] connected', env.CERAMIC_API_URL)
 
   // // https://developers.ceramic.network/reference/accounts/3id-did/#3id-did-provider
   // const app3id = await ThreeIdProvider.create({
@@ -34,16 +33,19 @@ ready().catch(error => {
 
 export async function createDid(){
   await ready()
+  console.log('[ceramic] creating did')
   const secretSeed = Buffer.alloc(32)
   crypto.randomFillSync(secretSeed)
 
   // https://developers.ceramic.network/reference/accounts/3id-did/#3id-did-provider
+  console.log('[ceramic] creating threeID provider')
   const threeID = await ThreeIdProvider.create({
     ceramic,
     seed: secretSeed,
     async getPermission(request){ return request.payload.paths },
   })
 
+  console.log('[ceramic] creating did using threeID provider')
   const did = new DID({
     provider: threeID.getDidProvider(),
     resolver: {
@@ -52,6 +54,7 @@ export async function createDid(){
     },
   })
 
+  console.log('[ceramic] authenticating did')
   await did.authenticate()
 
   // return the did and secret so we can store the secret safely
@@ -60,8 +63,10 @@ export async function createDid(){
 
 export async function getDid(didString, secretSeed){
   await ready()
+  console.log('[ceramic] getting did', didString)
   // TODO fail fast on did ≠ secret mismatch
 
+  // THIS IS SO SLOW
   // https://developers.ceramic.network/reference/accounts/3id-did/#3id-did-provider
   const threeID = await ThreeIdProvider.create({
     ceramic,
@@ -69,6 +74,7 @@ export async function getDid(didString, secretSeed){
     did: didString,
     async getPermission(request){ return request.payload.paths },
   })
+
   const did = new DID({
     provider: threeID.getDidProvider(),
     resolver: {
@@ -76,18 +82,21 @@ export async function getDid(didString, secretSeed){
       ...getDidKeyResolver(),
     },
   })
+
+  // THIS IS ALSO QUITE SLOW
+  console.log('[ceramic] authenticating did', { did })
   await did.authenticate()
+
   if (did.id !== didString){
     throw new Error(`resolved the wrong did: "${did.id}" !== "${didString}"`)
   }
   return did
 }
 
-
-
 export async function resolveDidDocument(didString){
   if (!didString) throw new Error(`didString is required`)
   await ready()
+  console.log('[ceramic] resolving did document', didString)
 
   const didResolver = new DidResolver(
     {
@@ -108,22 +117,25 @@ export async function resolveDidDocument(didString){
   if (didDocument.id !== didString){
     throw new Error(`resolved the wrong did: "${did.id}" !== "${didString}"`)
   }
-  console.log({  didDocument })
+  console.log('[ceramic]', { didDocument })
   return didDocument
 }
 
 export async function createDocument(content, metadata, opts){
   await ready()
+  console.log('[ceramic] creating document', { content, metadata, opts })
   return await TileDocument.create(ceramic, content, metadata, opts)
 }
 
 export async function loadStream(streamId){
   await ready()
+  console.log('[ceramic] loading stream', streamId)
   return await ceramic.loadStream(streamId)
 }
 
 export async function loadDocument(streamId){
   await ready()
+  console.log('[ceramic] loading document', streamId)
   return await TileDocument.load(ceramic, streamId)
 }
 

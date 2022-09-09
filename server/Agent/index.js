@@ -1,4 +1,4 @@
-import { openVault } from '../vaults.js'
+import { openVault, generateVaultKey } from '../vaults.js'
 import { JlinxClient } from '../jlinx.js'
 import agentsResource from '../resources/agentsResource.js'
 import Dids from './dids.js'

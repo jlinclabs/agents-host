@@ -59,23 +59,24 @@ export default function Agreements(props) {
 }
 
 function Index(props) {
-  return <Container maxWidth="sm">
-    <Typography my={2} variant="h3">Agreements</Typography>
-    <Typography my={2} variant="h6">Standard Information Sharing Agreemnts</Typography>
+  return <Container maxWidth="md">
+    <Container maxWidth="sm">
+      <Typography my={2} variant="h3">Agreements</Typography>
+      <Typography my={2} variant="h6">Standard Information Sharing Agreemnts</Typography>
+      <Stack spacing={2}>
+        <Button
+          variant="contained"
+          component={Link}
+          to="/agreements/new"
+        >{`Create an Agreement`}</Button>
 
-    <Stack spacing={2}>
-      <Button
-        variant="contained"
-        component={Link}
-        to="/agreements/new"
-      >{`Create an Agreement`}</Button>
-
-      <Button
-        variant="contained"
-        component={Link}
-        to="/agreements/find"
-      >{`View an Agreement`}</Button>
-    </Stack>
+        <Button
+          variant="contained"
+          component={Link}
+          to="/agreements/find"
+        >{`View an Agreement`}</Button>
+      </Stack>
+    </Container>
 
     <MyAgreementsList />
   </Container>
@@ -128,7 +129,7 @@ function Show({ currentAgent }) {
   const { view: agreement, loading, error } = useView(`agreements.${id}`)
 
   if (error) return <ErrorMessage {...{ error }}/>
-  return <Container maxwidth="md">
+  return <Container maxwidth="md" sx={{pt: 2}}>
     {
       error ? <ErrorMessage {...{ error }}/> :
       agreement ? <Agreement {...{ currentAgent, agreement }}/> :
@@ -141,7 +142,7 @@ function Show({ currentAgent }) {
 
 function Find() {
   const navigate = useNavigate()
-  return <Container maxWidth="sm">FormLabel
+  return <Container maxWidth="sm">
     <Paper sx={{p:2, m:2}}>
       <Typography variant="h4">Find Agreement</Typography>
       <LookupAgreementForm
