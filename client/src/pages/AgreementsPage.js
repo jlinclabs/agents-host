@@ -446,7 +446,7 @@ function AckAgreementSignatureForm({ sisa, reloadAgreement }){
 
 
 function MyAgreementsList(){
-  const {view: myAgreements = [], loading, error} = useView('agreements.mine')
+  const {view: myAgreements = [], loading, error} = useView('agreements.all')
   return (
     <List sx={{
       width: '100%',

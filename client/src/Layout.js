@@ -1,5 +1,7 @@
 import * as React from 'react'
+import { useLocation } from 'react-router-dom'
 import { useMemo } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -22,20 +24,19 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
 
 import { useCurrentAgent } from './resources/session'
 import Link from './components/Link'
+import AppError from './components/AppError'
 
 export default function Layout(props) {
   const {
     children,
+    currentAgent,
     // title = 'JLINX Demo',
     // description = 'JLINX Demo',
     // favicon = '/favicon.ico',
     requireNotLoggedIn = false,
     requireLoggedIn = false,
   } = props
-  const { currentAgent, loading } = useCurrentAgent({
-    redirectToIfFound: requireNotLoggedIn ? '/' : undefined,
-    redirectToIfNotFound: requireLoggedIn ? '/' : undefined,
-  })
+  const location = useLocation()
 
   return (
     <Container maxWidth={false} disableGutters>
@@ -50,14 +51,17 @@ export default function Layout(props) {
         minHeight: '100vh',
         minWidth: '100vw',
       }}>
-        <SideNav {...{ loading, currentAgent }}/>
+        <SideNav {...{ currentAgent }}/>
         <Box sx={{
           flex: '1 1'
-        }}>{
-          loading
-            ? <span>loading…</span>
-            : children
-        }</Box>
+        }}>
+          <ErrorBoundary
+            key={location.pathname}
+            FallbackComponent={AppError}
+          >
+            {children}
+          </ErrorBoundary>
+        </Box>
       </Box>
     </Container>
   )

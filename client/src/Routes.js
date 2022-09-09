@@ -21,11 +21,10 @@ import DataSharingPage from './pages/DataSharingPage'
 // import ContractsPage from './pages/ContractsPage'
 
 export default function Routes() {
-  // useErrorBoundry
   const { currentAgent, loading, error } = useCurrentAgent()
   if (!currentAgent) return <AuthPage {...{loading, error}} />
   const props = { currentAgent }
-  return <Layout>
+  return <Layout {...{ currentAgent }}>
     <_Routes>
       <Route path="/" element={<HomePage />} />
       {/* <Route path="/signup" element={<SignupPage />} /> */}

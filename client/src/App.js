@@ -4,9 +4,7 @@ import AppError from './components/AppError'
 
 export default function App() {
   return (
-    <ErrorBoundary
-      FallbackComponent={AppError}
-    >
+    <ErrorBoundary FallbackComponent={AppError}>
       <Routes/>
     </ErrorBoundary>
   )

@@ -26,13 +26,6 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import { useStateObject } from '../lib/reactStateHelpers'
 import { useAction } from '../lib/actions'
 import { useView } from '../lib/views'
-// import {
-//   useAgreement,
-//   useMyAgreements,
-//   useOfferAgreement,
-//   useSignAgreement,
-//   useAckAgreementSignature
-// } from '../resources/data-sharing'
 
 import Link from '../components/Link'
 import LinkToCeramicApi from '../components/LinkToCeramicApi'
@@ -56,25 +49,26 @@ export default function Agreements() {
 }
 
 function Index(props) {
-  return <Container maxwidth="lg">
-    <Typography my={2} variant="h3">Data Sharing</Typography>
-    <Typography my={2} variant="h6">Share data with other JLINX agents</Typography>
+  return <Container maxwidth="md">
+    <Container maxWidth="sm">
+      <Typography my={2} variant="h3">Data Sharing Agreements</Typography>
+      <Typography my={2} variant="h6">Share data with other JLINX agents</Typography>
+      <Stack spacing={2} sx={{maxWidth: '400px'}}>
+        <Button
+          variant="contained"
+          component={Link}
+          to="/data-sharing/request"
+        >{`Request Data`}</Button>
+        <Button
+          variant="contained"
+          component={Link}
+          to="/data-sharing/sign"
+          sx={{ml: 1}}
+        >{`View An Data Request`}</Button>
+      </Stack>
 
-    <Stack spacing={2} sx={{maxWidth: '400px'}}>
-      <Button
-        variant="contained"
-        component={Link}
-        to="/data-sharing/request"
-      >{`Request Data`}</Button>
-      <Button
-        variant="contained"
-        component={Link}
-        to="/data-sharing/sign"
-        sx={{ml: 1}}
-      >{`View An Data Request`}</Button>
-    </Stack>
-
-    <MyAgreementsList />
+      <MyDataSharingAgreementsList />
+    </Container>
   </Container>
 }
 
@@ -572,7 +566,7 @@ function AckAgreementSignatureForm({ sisa, reloadAgreement }){
 }
 
 
-function MyAgreementsList(){
+function MyDataSharingAgreementsList(){
   const {view: myAgreements, error} = useView('agreements.mine')
 
   return (
