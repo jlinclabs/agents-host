@@ -27,6 +27,7 @@ import { useDidDocument } from '../resources/dids'
 
 import Link from '../components/Link'
 import ErrorMessage from '../components/ErrorMessage'
+import CopyButton from '../components/CopyButton'
 import InspectObject from '../components/InspectObject'
 
 export default function DidsPage() {
@@ -62,7 +63,8 @@ function Show(){
   const [didDocument, {loading, error} ] = useDidDocument(did)
   return <Container>
     <Typography variant="h5" sx={{my: 2}}>
-      {`DID: ${did}`}
+      <span>{`DID: ${did}`}</span>
+      <CopyButton variant="icon" value={did} />
     </Typography>
     <ErrorMessage {...{error}}/>
     {loading && <CircularProgress />}

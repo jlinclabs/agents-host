@@ -116,6 +116,7 @@ function New({ currentAgent, router }) {
     </Paper>
     <PreviewAgreementForm {...{
       router,
+      currentAgent,
       agreement
     }}/>
   </Container>
@@ -216,13 +217,18 @@ function AgreementForm({
   </Box>
 }
 
-function PreviewAgreementForm({ agreement }){
-  return <Paper sx={{p:2}}>
-    <Typography variant="h5" sx={{mb: 3}}>
-      Agreement Preview
-    </Typography>
-    <InspectObject object={agreement}/>
-  </Paper>
+function PreviewAgreementForm({ currentAgent, agreement }){
+  return <Agreement {...{
+    currentAgent,
+    agreement: {
+      ...agreement,
+      currentAgent,
+      parties: uniqueAndReal(agreement.parties),
+      owner: currentAgent.did,
+      createdAt: (new Date()).toISOString(),
+      signatures: {},
+    },
+  }}/>
 }
 
 function LookupAgreementOfferingForm({ setId }){
@@ -258,26 +264,22 @@ function LookupAgreementOfferingForm({ setId }){
   </Paper>
 }
 
-function Agreement({ currentAgent, agreement }){
-  return <Paper
-    sx={{
-      m: 4,
-      p: 2,
-    }}
-    component="div"
-  >
+function Agreement({ currentAgent, agreement, ...props }){
+  return <Paper sx={{p: 2}} {...props}>
     <Stack flexDirection="row" justifyContent="space-between">
       <Typography variant="h4">
         {`Agreement`}
       </Typography>
     </Stack>
 
-    <Stack my={2} spacing={2} direction="row" alignItems="center">
-      <Typography variant="h6">ID</Typography>
-      <Link to={`/agreements/${agreement.id}`}>{agreement.id}</Link>
-      <LinkToCeramicApi endpoint={agreement.id}/>
-      <CeramicStreamLink streamId={agreement.id}/>
-    </Stack>
+    {agreement.id &&
+      <Stack my={2} spacing={2} direction="row" alignItems="center">
+        <Typography variant="h6">ID</Typography>
+        <Link to={`/agreements/${agreement.id}`}>{agreement.id}</Link>
+        <LinkToCeramicApi endpoint={agreement.id}/>
+        <CeramicStreamLink streamId={agreement.id}/>
+      </Stack>
+    }
 
     <Box my={2}>
       <Typography variant="h6">Created:</Typography>
@@ -300,8 +302,8 @@ function Agreement({ currentAgent, agreement }){
 
     <Typography variant="h6" mt={2}>Parties:</Typography>
     <Stack spacing={2}>
-      {agreement.parties.map(did =>
-        <Stack key={did} spacing={2} direction="row" alignItems="center">
+      {agreement.parties.map((did, index) =>
+        <Stack key={`${did}-${index}`} spacing={2} direction="row" alignItems="center">
           {/* {agreement.signatures[did]
             ? <CheckCircleOutlineIcon/>
             : <RadioButtonUncheckedIcon/>
@@ -332,7 +334,10 @@ function hasEveryoneSigned(agreement){
   return agreement.parties
     .every(did => did in agreement.signatures )
 }
+
 function AgreementActions({ currentAgent, agreement }){
+  if (!agreement || !agreement.id) return
+  console.log('AgreementActions', { currentAgent, agreement })
   if (agreement.owner === currentAgent.did){
     const everyoneHasSigned = hasEveryoneSigned(agreement)
     if (everyoneHasSigned){

@@ -16,6 +16,7 @@ export default function LinkToDid({
     <Link to={`/dids/${did}`}>{children}</Link>
     {/* <LinkToCeramicApi endpoint={did}/> */}
     {/* {streamId && <CeramicStreamLink streamId={streamId}/> } */}
+    {/* // TODO dropdown */}
   </Box>
 }
 
