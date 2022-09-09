@@ -8,7 +8,7 @@ import uploads from './uploads.js'
 // import Session from './Session.js'
 // import { getView, takeAction } from './resources/index.js'
 import ceramicRestApi from './ceramicRestApi.js'
-import jsonRpcApi from './jsonRpcApi.js'
+import jlinxRpcApi from './jlinxRpcApi/index.js'
 // import jlinxRestApi from './jlinxRestApi.js'
 
 const app = express()
@@ -30,7 +30,7 @@ app.use(async (req, res, next) => {
 
 app.use(uploads)
 app.use('/api/ceramic', ceramicRestApi)
-app.use('/api/jlinx/v0', jsonRpcApi)
+app.use('/api/jlinx/v0', jlinxRpcApi)
 
 // ROUTES
 // const router = Router()
@@ -39,7 +39,7 @@ app.use('/api/jlinx/v0', jsonRpcApi)
 //   limit: 102400 * 10,
 // }))
 
-// router.use(jsonRpcApi)
+// router.use(jlinxRpcApi)
 // router.use(ceramicRestApi)
 // router.use(jlinxRestApi)
 

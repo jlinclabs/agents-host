@@ -1,27 +1,38 @@
 import jaysonBrowserClient from 'jayson/promise/lib/client/browser'
-// import fetch from 'node-fetch'
 
-const callServer = request =>
-  fetch('/api/jlinx/v0', {
+async function callServer(body, tries = 0){
+  const res = await fetch('/api/jlinx/v0', {
     method: 'POST',
-    body: request,
+    body,
     headers: {
       'Content-Type': 'application/json',
     }
   })
-  .then(res => res.text())
+  if (res.status === 504 && tries < 5) {
+    await wait(500)
+    return callServer(body, tries + 1)
+  }
+  if (res.status >= 400) {
+    // throw new Error('RPC ERROR')
+  }
+  const text = await res.text()
+  console.log({ text })
+  return text
+}
 
 const client = new jaysonBrowserClient(callServer, {
   // other options go here
 });
 
-export async function rpc(name, options){
-  const { result } = await client.request(name, options)
+export async function rpc(name, args, opts = {}){
+  let id = undefined // set to null to ignore server response
+  const { result } = await client.request(name, args, id)
   return result
 }
 
 window.rpc = rpc
-// client.request('multiply', [5, 5], function(err, error, result) {
-//   if(err) throw err;
-//   console.log(result); // 25
-// });
+
+const wait = ms => new Promise(resolve => {
+  setTimeout(() => { resolve() }, ms)
+})
+

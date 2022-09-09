@@ -2,8 +2,8 @@ import jayson from 'jayson/promise/index.js'
 import Router from 'express-promise-router'
 import bodyParser from 'body-parser'
 
-import Agent from './Agent/index.js'
-import { JlinxClient } from './jlinx.js'
+import Agent from '../Agent/index.js'
+import { JlinxClient } from '../jlinx.js'
 
 const procedures = {
 
@@ -14,6 +14,15 @@ const procedures = {
   async ping (args) {
     return { pong: args }
   },
+
+  async throw (errorMessage) {
+    console.log('???', this.error(-32602))
+    throw new Error(`${errorMessage}`)
+  },
+
+  async fail(){
+    return this.error(-32602)
+  },
 }
 
 const server = new jayson.server(procedures, {
@@ -21,6 +30,7 @@ const server = new jayson.server(procedures, {
   useContext: true
 });
 
+console.log(server.errorMessages)
 
 const router = Router()
 
@@ -36,6 +46,7 @@ router.post('/', function(req, res, next) {
       headers: req.headers
     },
     (error, result) => {
+      console.log('RPC', { error, result })
       if (error) {
         // return next(error)
         res.status(400)
