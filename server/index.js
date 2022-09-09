@@ -5,10 +5,11 @@ import bodyParser from 'body-parser'
 import Router from 'express-promise-router'
 
 import uploads from './uploads.js'
-import Session from './Session.js'
-import { getView, takeAction } from './resources/index.js'
+// import Session from './Session.js'
+// import { getView, takeAction } from './resources/index.js'
 import ceramicRestApi from './ceramicRestApi.js'
-import jlinxRestApi from './jlinxRestApi.js'
+import jsonRpcApi from './jsonRpcApi.js'
+// import jlinxRestApi from './jlinxRestApi.js'
 
 const app = express()
 
@@ -28,56 +29,59 @@ app.use(async (req, res, next) => {
 })
 
 app.use(uploads)
-
+app.use('/api/ceramic', ceramicRestApi)
+app.use('/api/jlinx/v0', jsonRpcApi)
 
 // ROUTES
-const router = Router()
-app.use(router)
-router.use(bodyParser.json({
-  limit: 102400 * 10,
-}))
-router.use(ceramicRestApi)
-router.use(jlinxRestApi)
+// const router = Router()
+// app.use(router)
+// router.use(bodyParser.json({
+//   limit: 102400 * 10,
+// }))
 
-router.use(async (req, res, next) => {
-  req.session = await Session.open(req, res)
-  // req.origin = `${req.protocol}://${req.get('host')}`
-  next()
-})
+// router.use(jsonRpcApi)
+// router.use(ceramicRestApi)
+// router.use(jlinxRestApi)
 
-router.get('/api/status', (req, res) => {
-  res.send({ ok: true })
-})
+// router.use(async (req, res, next) => {
+//   req.session = await Session.open(req, res)
+//   // req.origin = `${req.protocol}://${req.get('host')}`
+//   next()
+// })
 
-router.get('/api/views/*', async (req, res) => {
-  const viewId = req.params[0]
-  let error, value
-  try{
-    value = await getView({ viewId, session: req.session })
-  }catch(e){
-    error = errorToJson(e)
-  }
-  res.json({ value, error })
-})
+// router.get('/api/status', (req, res) => {
+//   res.send({ ok: true })
+// })
 
-router.post('/api/actions/*', async (req, res) => {
-  const actionId = req.params[0]
-  const options = req.body || {}
-  let error, result
-  try{
-    result = await takeAction({ actionId, session: req.session, options })
-  }catch(e){
-    error = errorToJson(e)
-  }
-  res.json({ result, error })
-})
+// router.get('/api/views/*', async (req, res) => {
+//   const viewId = req.params[0]
+//   let error, value
+//   try{
+//     value = await getView({ viewId, session: req.session })
+//   }catch(e){
+//     error = errorToJson(e)
+//   }
+//   res.json({ value, error })
+// })
 
-router.use((error, req, res, next) => {
-  console.error('ERROR', error)
-  res.status(error.statusCode || 500).json({
-    error: errorToJson(error)
-  })
-})
+// router.post('/api/actions/*', async (req, res) => {
+//   const actionId = req.params[0]
+//   const options = req.body || {}
+//   let error, result
+//   try{
+//     result = await takeAction({ actionId, session: req.session, options })
+//   }catch(e){
+//     error = errorToJson(e)
+//   }
+//   res.json({ result, error })
+// })
+
+// router.use((error, req, res, next) => {
+//   console.error('ERROR', error)
+//   res.status(error.statusCode || 500).json({
+//     error: errorToJson(error)
+//   })
+// })
 
 if (env.NODE_ENV === 'production') {
   router.use(express.static('client/build'))

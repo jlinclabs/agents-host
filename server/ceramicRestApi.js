@@ -10,19 +10,19 @@ import {
 const debug = Debug('ceramic api')
 const router = Router()
 
-router.get('/api/ceramic/did::did*', async (req, res) => {
+router.get('/did::did*', async (req, res) => {
   const did = 'did:' + req.params.did
   const didDocument = await resolveDidDocument(did)
   res.json(didDocument)
 })
 
-router.get('/api/ceramic/:streamId', async (req, res) => {
+router.get('/:streamId', async (req, res) => {
   const { streamId } = req.params
   const doc = await loadDocument(streamId)
   res.json(doc.content)
 })
 
-router.get('/api/ceramic/:streamId/meta', async (req, res) => {
+router.get('/:streamId/meta', async (req, res) => {
   const { streamId } = req.params
   const doc = await loadDocument(streamId)
   res.json({
@@ -45,7 +45,7 @@ router.get('/api/ceramic/:streamId/meta', async (req, res) => {
   })
 })
 
-router.get('/api/ceramic/:streamId/events', async (req, res) => {
+router.get('/:streamId/events', async (req, res) => {
   const { streamId } = req.params
   const doc = await loadDocument(streamId)
 
