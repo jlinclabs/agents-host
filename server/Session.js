@@ -24,6 +24,9 @@ export default class Session {
   }
 
   get id(){ return this._id }
+  get createdAt(){ return this._createdAt }
+  get lastSeenAt(){ return this._lastSeenAt }
+  get agent(){ return this._agent }
 
   async create(){
     debug('create')
@@ -55,10 +58,6 @@ export default class Session {
     await sessionResource.commands.delete(this.id)
     this._cookies.set(COOKIE_NAME, undefined)
   }
-
-  get createdAt(){ return this._createdAt }
-  get lastSeenAt(){ return this._lastSeenAt }
-  get agent(){ return this._agent }
 
   async setAgentId(agentId){
     if (this.agentId){ throw new Error(`please logout first`) }

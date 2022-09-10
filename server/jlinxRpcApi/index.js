@@ -7,30 +7,11 @@ import readDirRecursive from 'recursive-readdir'
 
 import Agent from '../Agent/index.js'
 import { JlinxClient } from '../jlinx.js'
+import Session from '../Session.js'
 
 
-const procedures = {
-
-  // async status (){
-  //   return { ok: true }
-  // },
-
-  async ping (args) {
-    return { pong: args }
-  },
-
-  async throw (errorMessage) {
-    console.log('???', this.error(-32602))
-    throw new Error(`${errorMessage}`)
-  },
-
-  async fail(){
-    return this.error(-32602)
-  },
-}
-
-// load procedures
-await (async () => {
+const procedures = await (async () => {
+  // TODO reduce this function to some helpers
   const __dirname = Path.dirname(fileURLToPath(import.meta.url))
   const root = __dirname + '/procedures'
   const paths = (await readDirRecursive(root))
@@ -40,25 +21,37 @@ await (async () => {
       parts: path.match(/(.+).js$/),
     }))
     .filter(({parts}) => parts)
-  console.log({ paths })
   const modules = await Promise.all(
     paths.map(({path}) => import('./procedures/' +  path))
   )
-  console.log({ modules })
+  const procedures = {}
+
+  const set = (name, func) => {
+    procedures[name] = async (...args) => {
+      console.log(`jlinx rpc call "${name}"`, args)
+      try{
+        return await func(...args)
+      }catch(error){
+        console.error(`jlinx rpc error "${name}"`, error)
+        throw error
+      }
+    }
+  }
 
   paths.forEach(({path, parts}, index) => {
-    console.log({path, parts, index})
     const name = parts[1].replace('/', '.')
     const module = modules[index]
     for (const key in module){
       if (key === 'default'){
-        procedures[name] = module.default
+        // procedures[name] = module.default
+        set(name, module.default)
       }else{
-        procedures[`${name}.${key}`] = module[key]
+        // procedures[`${name}.${key}`] = module[key]
+        set(`${name}.${key}`, module[key])
       }
     }
   })
-
+  return procedures
 })()
 
 console.log({ procedures })
@@ -69,7 +62,7 @@ const server = new jayson.server(procedures, {
   useContext: true
 });
 
-console.log(server.errorMessages)
+// console.log(server.errorMessages)
 
 const router = Router()
 
@@ -77,12 +70,16 @@ router.use(bodyParser.json({
   limit: 102400 * 10,
 }))
 
-router.post('/', function(req, res, next) {
-  console.log('RPC', req.method, req.url)
+router.post('/', async function(req, res, next) {
+
+  const session = await Session.open(req, res)
+  console.log('RPC', req.body, session)
   server.call(
     req.body,
     {
-      headers: req.headers
+      headers: req.headers,
+      session: session,
+      agent: session.agent,
     },
     (error, result) => {
       console.log('RPC', { error, result })
