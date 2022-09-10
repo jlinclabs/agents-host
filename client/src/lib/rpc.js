@@ -22,11 +22,12 @@ const client = new jaysonBrowserClient(callServer, {
 });
 
 export async function rpc(name, args = {}, opts = {}){
-  // console.log('RPC call', {name, args})
-  let id = undefined // set to null to ignore server response
+  const desc = `${name}?${new URLSearchParams(args)}`
+  console.log('[RPC] call', desc)
+  let id = opts.ignoreResponse ? null : undefined // set to null to ignore server response
   const res = await client.request(name, args, id)
   if (res.error) {
-    let message = `RPC call failed NAME=${name}`
+    let message = `RPC ERROR NAME=${name}`
     if (res.error?.error?.code)
       message += ` CODE=${res.error.error.code}`
     if (res.error?.error?.message)
@@ -37,10 +38,10 @@ export async function rpc(name, args = {}, opts = {}){
     if (res.error?.error?.data?.stack)
       error.stack += `\n${res.error.error.data.stack}`
     error.data = res.error
-    console.error(error)
+    console.error('[RPC] err', desc, res.error?.error?.data ?? error)
     throw error
   }
-  // console.log('RPC resp', { name, args }, res.result)
+  console.log('[RPC] resp', desc, res.result)
   return res.result
 }
 
@@ -57,7 +58,7 @@ export function useRemoteQuery(name, args = {}){
   const swrKey = name ? { name, args } : null
   const { data: view, error, mutate } = useSWR(swrKey, fetchView)
   const loading = typeof view === 'undefined' && !error
-  const reload = useCallback(() => { mutate(swrKey) }, [swrKey, mutate])
+  const reload = useCallback(() => { mutate() }, [swrKey, mutate])
   return { view, loading, error, mutate, reload }
 }
 

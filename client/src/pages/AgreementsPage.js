@@ -207,6 +207,7 @@ function AgreementForm({
         type="submit"
       >Create</Button>
       <Button
+        tabIndex={-1}
         variant="outlined"
         onClick={() => { patchAgreement(undefined) }}
       >reset</Button>
@@ -267,6 +268,7 @@ function LookupAgreementOfferingForm({ setId }){
 }
 
 function Agreement({ currentAgent, agreement, ...props }){
+  console.log({ agreement })
   return <Paper sx={{p: 2}} {...props}>
     <Stack flexDirection="row" justifyContent="space-between">
       <Typography variant="h4">
@@ -377,6 +379,7 @@ function SignAgreementForm({ currentAgent, agreement }){
   const { reload: reloadAgreement } = useAgreement(agreement.id)
   const signAgreement = useRemoteCommand('agreements.sign', {
     onSuccess(){
+      console.log('SIGNED! RELOADING AGREEMNT')
       reloadAgreement()
     }
   })
@@ -462,7 +465,7 @@ function MyAgreementsList(){
           myAgreements.length === 0
             ? <span>You dont have any agreements</span>
             : [...myAgreements].sort(sorter).map(agreement =>
-              <MyAgreement key={agreement.id} agreement={agreement}/>
+              <MyAgreement key={agreement.id} id={agreement.id}/>
             )
         )
       }
@@ -475,7 +478,8 @@ const sorter = (a, b) => {
   return a < b ? 1 : a > b ? -1 : 0
 }
 
-function MyAgreement({ agreement }){
+function MyAgreement({ id }){
+  const { view: agreement, loading, error, reload, mutate } = useAgreement(id)
   return <ListItem {...{
     sx: {px: 0},
     secondaryAction: (
@@ -489,7 +493,7 @@ function MyAgreement({ agreement }){
       role: undefined,
       dense: true,
       component: Link,
-      to: `/agreements/${agreement.id}`
+      to: `/agreements/${id}`
     }}>
       <ListItemIcon><ArticleOutlinedIcon/></ListItemIcon>
       <ListItemText {...{
@@ -499,12 +503,13 @@ function MyAgreement({ agreement }){
             whiteSpace: 'nowrap',
           },
         },
-        primary: `${agreement.id}`,
+        primary: `${id}`,
         secondary: <span>
-          created <Timestamp at={agreement.createdAt}/>
+          created <Timestamp at={agreement?.createdAt}/>
         </span>
       }}/>
     </ListItemButton>
+    <Button onClick={reload}>reload</Button>
   </ListItem>
 }
 
