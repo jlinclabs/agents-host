@@ -58,7 +58,7 @@ export function useRemoteQuery(name, args = {}){
   const swrKey = name ? { name, args } : null
   const { data: view, error, mutate } = useSWR(swrKey, fetchView)
   const loading = typeof view === 'undefined' && !error
-  const reload = useCallback(() => { mutate() }, [swrKey, mutate])
+  const reload = useCallback(() => { mutate() }, [mutate])
   return { view, loading, error, mutate, reload }
 }
 

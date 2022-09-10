@@ -1,3 +1,4 @@
+
 import Path from 'path'
 import { fileURLToPath } from 'url'
 import jayson from 'jayson/promise/index.js'
@@ -7,24 +8,11 @@ import Session from '../Session.js'
 
 const procedures = {
 
-  async ping (args, context) {
-    console.log({ context })
-    return { pong: args }
+  async __rpc_inspect (args, context) {
+    return {
+      procedures: Object.keys(procedures)
+    }
   },
-
-  async throw (errorMessage) {
-    console.log('???', this.error(-32602))
-    throw new Error(`${errorMessage}`)
-  },
-
-  async fail(){
-    return this.error(-32602)
-  },
-
-  async test(){
-    throw server.error(501, 'not implemented');
-    return { fog: 'mamoth '}
-  }
 
 }
 
