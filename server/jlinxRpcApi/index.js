@@ -1,15 +1,19 @@
+import Path from 'path'
+import { fileURLToPath } from 'url'
 import jayson from 'jayson/promise/index.js'
 import Router from 'express-promise-router'
 import bodyParser from 'body-parser'
+import readDirRecursive from 'recursive-readdir'
 
 import Agent from '../Agent/index.js'
 import { JlinxClient } from '../jlinx.js'
 
+
 const procedures = {
 
-  async status (){
-    return { ok: true }
-  },
+  // async status (){
+  //   return { ok: true }
+  // },
 
   async ping (args) {
     return { pong: args }
@@ -24,6 +28,41 @@ const procedures = {
     return this.error(-32602)
   },
 }
+
+// load procedures
+await (async () => {
+  const __dirname = Path.dirname(fileURLToPath(import.meta.url))
+  const root = __dirname + '/procedures'
+  const paths = (await readDirRecursive(root))
+    .map(path => Path.relative(root, path))
+    .map(path => ({
+      path,
+      parts: path.match(/(.+).js$/),
+    }))
+    .filter(({parts}) => parts)
+  console.log({ paths })
+  const modules = await Promise.all(
+    paths.map(({path}) => import('./procedures/' +  path))
+  )
+  console.log({ modules })
+
+  paths.forEach(({path, parts}, index) => {
+    console.log({path, parts, index})
+    const name = parts[1].replace('/', '.')
+    const module = modules[index]
+    for (const key in module){
+      if (key === 'default'){
+        procedures[name] = module.default
+      }else{
+        procedures[`${name}.${key}`] = module[key]
+      }
+    }
+  })
+
+})()
+
+console.log({ procedures })
+
 
 const server = new jayson.server(procedures, {
   // all methods will receive a context object as the second arg

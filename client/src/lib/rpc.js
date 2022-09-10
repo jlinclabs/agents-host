@@ -12,12 +12,10 @@ async function callServer(body, tries = 0){
     await wait(500)
     return callServer(body, tries + 1)
   }
-  if (res.status >= 400) {
-    // throw new Error('RPC ERROR')
-  }
-  const text = await res.text()
-  console.log({ text })
-  return text
+  // if (res.status >= 400) {
+  //   // throw new Error('RPC ERROR')
+  // }
+  return await res.text()
 }
 
 const client = new jaysonBrowserClient(callServer, {
