@@ -3,7 +3,7 @@ import prisma from '../../prisma/client.js'
 import { createDid } from '../ceramic.js'
 import Agent from './index.js'
 
-export default async function createAgent(){
+export default async function createAgent({ email, password }){
   const vaultKey = await generateVaultKey()
   const { did, secretSeed: didSecret } = await createDid()
   const data = {

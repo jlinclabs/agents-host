@@ -16,7 +16,6 @@ async function callServer(body, tries = 0){
   const json = await res.text()
   if (res.status >= 400) {
     console.error('RPC error', { json })
-    // throw new Error('RPC ERROR')
   }
   return json
 }

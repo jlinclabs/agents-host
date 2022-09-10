@@ -46,12 +46,6 @@ await (async () => {
         data.stack = error.stack
       }
       throw server.error(-32603, 'Internal error', data)
-      // return {
-      //   code: 400,
-      //   message: error.message,
-      //   stack: error.stack,
-      //   // data: { error },
-      // }
     }
   }
 
@@ -62,13 +56,10 @@ await (async () => {
 
 console.log({ procedures })
 
-
-
 const server = new jayson.server(procedures, {
   // all methods will receive a context object as the second arg
   useContext: true
 });
-
 // console.log(server.errorMessages)
 
 const router = Router()
@@ -78,7 +69,6 @@ router.use(bodyParser.json({
 }))
 
 router.post('/', async function(req, res, next) {
-
   const session = await Session.open(req, res)
   console.log('RPC', req.body, session)
   server.call(
@@ -91,8 +81,6 @@ router.post('/', async function(req, res, next) {
     (error, result) => {
       console.log('RPC', { error, result })
       if (error) {
-        // return next(error)
-        res.status(400)
         res.send({ error })
       }else{
         res.send(result || {})
