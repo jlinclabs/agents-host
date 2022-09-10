@@ -29,9 +29,8 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 
 import { useStateObject } from '../lib/reactStateHelpers'
-import { useAction } from '../lib/actions'
-import { useView, useReloadView } from '../lib/views'
-import { useCurrentAgent } from '../resources/session'
+import { useRemoteQuery, useRemoteCommand } from '../lib/rpc'
+import { useCurrentAgent } from '../resources/auth'
 
 import Link from '../components/Link'
 import LinkToCeramicApi from '../components/LinkToCeramicApi'
@@ -46,6 +45,8 @@ import ButtonRow from '../components/ButtonRow'
 import TermsTextField from '../components/TermsTextField'
 import AgreementPartiesInput from '../components/AgreementPartiesInput'
 import InspectObject from '../components/InspectObject'
+
+const useAgreement = id => useRemoteQuery(id ? 'agreements.get' : null, {id})
 
 export default function Agreements(props) {
   return <Container maxWidth="lg">
@@ -92,7 +93,7 @@ function New({ currentAgent, router }) {
     terms: '',
   })
 
-  const createAgreement = useAction('agreements.create', {
+  const createAgreement = useRemoteCommand('agreements.create', {
     onSuccess(agreement){
       navigate(`/agreements/${agreement.id}`)
     }
@@ -126,7 +127,7 @@ function New({ currentAgent, router }) {
 
 function Show({ currentAgent }) {
   const { id } = useParams()
-  const { view: agreement, loading, error } = useView(`agreements.${id}`)
+  const { view: agreement, loading, error } = useAgreement(id)
 
   if (error) return <ErrorMessage {...{ error }}/>
   return <Container maxwidth="md" sx={{pt: 2}}>
@@ -338,7 +339,6 @@ function hasEveryoneSigned(agreement){
 
 function AgreementActions({ currentAgent, agreement }){
   if (!agreement || !agreement.id) return
-  console.log('AgreementActions', { currentAgent, agreement })
   if (agreement.owner === currentAgent.did){
     const everyoneHasSigned = hasEveryoneSigned(agreement)
     if (everyoneHasSigned){
@@ -374,8 +374,8 @@ function AgreementActions({ currentAgent, agreement }){
 
 function SignAgreementForm({ currentAgent, agreement }){
   const navigate = useNavigate()
-  const reloadAgreement = useReloadView(`agreements.${agreement.id}`)
-  const signAgreement = useAction('agreements.sign', {
+  const { reload: reloadAgreement } = useAgreement(agreement.id)
+  const signAgreement = useRemoteCommand('agreements.sign', {
     onSuccess(){
       reloadAgreement()
     }
@@ -446,7 +446,7 @@ function AckAgreementSignatureForm({ sisa, reloadAgreement }){
 
 
 function MyAgreementsList(){
-  const {view: myAgreements = [], loading, error} = useView('agreements.all')
+  const {view: myAgreements = [], loading, error} = useRemoteQuery('agreements.getAll')
   return (
     <List sx={{
       width: '100%',

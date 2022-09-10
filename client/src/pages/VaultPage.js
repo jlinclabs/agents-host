@@ -3,15 +3,16 @@ import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import Alert from '@mui/material/Alert'
 
-import { useCurrentAgent } from '../resources/session'
-import { useVaultDump } from '../resources/vault'
+import { useCurrentAgent } from '../resources/auth'
+import { useRemoteQuery } from '../lib/rpc'
+
 import Layout from '../Layout'
 import ErrorMessage from '../components/ErrorMessage'
 import InspectObject from '../components/InspectObject'
 
 export default function VaultPage() {
   const { currentAgent } = useCurrentAgent({ redirectToIfNotFound: '/' })
-  const [vaultDump, { loading, error }] = useVaultDump()
+  const { view: vaultDump, error } = useRemoteQuery(`vault.getDump`)
   return <Container sx={{p: 2}}>
     <Typography variant="h3">VaultPage</Typography>
     <Alert severity="warning" sx={{my:2}}>

@@ -11,7 +11,7 @@ import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import RedirectPage from './RedirectPage'
-import { useSignup } from '../resources/session'
+import { useSignup } from '../resources/auth'
 import ErrorMessage from '../components/ErrorMessage'
 import Link from '../components/Link'
 import LoginForm from '../components/LoginForm'

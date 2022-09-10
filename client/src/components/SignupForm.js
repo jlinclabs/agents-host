@@ -16,7 +16,7 @@ import Link from './Link'
 import ErrorMessage from './ErrorMessage'
 import PassphraseInput from './PassphraseInput'
 import randomString from '../lib/randomString'
-import { useSignup } from '../resources/session'
+import { useSignup } from '../resources/auth'
 
 export default function SignupForm(props){
   const [email, setEmail] = useState('')

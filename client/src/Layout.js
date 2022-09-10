@@ -22,7 +22,7 @@ import HomeIcon from '@mui/icons-material/Home'
 import LockIcon from '@mui/icons-material/Lock'
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
 
-import { useCurrentAgent } from './resources/session'
+import { useCurrentAgent } from './resources/auth'
 import Link from './components/Link'
 import AppError from './components/AppError'
 

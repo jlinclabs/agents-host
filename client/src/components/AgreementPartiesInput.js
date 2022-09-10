@@ -6,7 +6,7 @@ import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 
-import { useCurrentAgent } from '../resources/session'
+import { useCurrentAgent } from '../resources/auth'
 import ButtonRow from '../components/ButtonRow'
 
 

@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField'
 import Link from './Link'
 import ErrorMessage from './ErrorMessage'
 import PassphraseInput from './PassphraseInput'
-import { useLogin } from '../resources/session'
+import { useLogin } from '../resources/auth'
 
 export default function LoginForm(props){
   const [secretKey, setSecretKey] = useState('')

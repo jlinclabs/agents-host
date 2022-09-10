@@ -20,9 +20,7 @@ import Avatar from '@mui/material/Avatar'
 import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
-import { useAction } from '../lib/actions'
-import { useView, useReloadView } from '../lib/views'
-import { useCurrentAgent } from '../resources/session'
+import { useCurrentAgent } from '../resources/auth'
 import { useDidDocument } from '../resources/dids'
 
 import Link from '../components/Link'

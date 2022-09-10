@@ -1,6 +1,8 @@
-import { useView } from '../lib/views'
+import { useRemoteQuery } from '../lib/rpc'
 
 export function useCeramicStreamEvents(id){
-  const { view: events, ...state } = useView(id ? `ceramic.events.${id}` : null)
+  const { view: events, ...state } = useRemoteQuery(
+    id ? `ceramic.events` : null, { id }
+  )
   return [events, state]
 }

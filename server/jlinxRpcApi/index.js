@@ -2,7 +2,6 @@ import Path from 'path'
 import { fileURLToPath } from 'url'
 import jayson from 'jayson/promise/index.js'
 import Router from 'express-promise-router'
-import bodyParser from 'body-parser'
 import readDirRecursive from 'recursive-readdir'
 import Session from '../Session.js'
 
@@ -35,7 +34,7 @@ await (async () => {
   console.log({imports})
   async function callImport(name, ...args){
     console.log(callImport, { name, import: imports[name] })
-    console.log(`jlinx rpc call "${name}"`, args)
+    console.log(`jlinx rpc call "${name}"`, args[0])
     try{
       return await imports[name](...args)
     }catch(error){
@@ -63,10 +62,6 @@ const server = new jayson.server(procedures, {
 // console.log(server.errorMessages)
 
 const router = Router()
-
-router.use(bodyParser.json({
-  limit: 102400 * 10,
-}))
 
 router.post('/', async function(req, res, next) {
   const session = await Session.open(req, res)

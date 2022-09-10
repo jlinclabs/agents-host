@@ -8,7 +8,7 @@ import Button from '@mui/material/Button'
 
 export default function AppError({error, resetErrorBoundary}) {
   return (
-    <Container maxWith="lg">
+    <Container maxWidth="lg">
       <Paper
         elevation={3}
         role="alert"

@@ -1,7 +1,6 @@
-import { useAction } from '../lib/actions'
-import { useView, useReloadView } from '../lib/views'
+import { useRemoteQuery, useRemoteCommand } from '../lib/rpc'
 
 export function useDidDocument(did){
-  const { view: didDocument, ...state } = useView(`dids.${did}`)
+  const { view: didDocument, ...state } = useRemoteQuery(`dids.getDidDocument`, {did})
   return [didDocument, state]
 }

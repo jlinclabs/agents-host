@@ -2,14 +2,11 @@ import env from '../environment.js'
 import Path from 'path'
 import express from 'express'
 import bodyParser from 'body-parser'
-import Router from 'express-promise-router'
 
 import uploads from './uploads.js'
-// import Session from './Session.js'
-// import { getView, takeAction } from './resources/index.js'
 import ceramicRestApi from './ceramicRestApi.js'
 import jlinxRpcApi from './jlinxRpcApi/index.js'
-// import jlinxRestApi from './jlinxRestApi.js'
+import jlinxRestApi from './jlinxRestApi.js'
 
 const app = express()
 
@@ -29,8 +26,13 @@ app.use(async (req, res, next) => {
 })
 
 app.use(uploads)
+app.use(bodyParser.json({
+  limit: 102400 * 10,
+}))
 app.use('/api/ceramic', ceramicRestApi)
-app.use('/api/jlinx/v0', jlinxRpcApi)
+app.use('/api/ceramic', jlinxRestApi)
+app.use('/api/jlinx/v0/rpc', jlinxRpcApi)
+app.use('/api/jlinx/v0', jlinxRestApi)
 
 // ROUTES
 // const router = Router()

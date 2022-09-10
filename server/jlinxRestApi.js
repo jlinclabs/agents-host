@@ -4,8 +4,9 @@ import { JlinxClient } from './jlinx.js'
 
 const router = Router()
 
-router.post('/api/jlinx/agreements/signatures', async (req, res) => {
+router.post('/agreements/signatures', async (req, res) => {
   const { agreementId, signatureId } = req.body
+  console.log('RECIEVING SIGNATURE', { agreementId, signatureId })
   const jlinx = new JlinxClient()
 
   // get agentDid for agreement

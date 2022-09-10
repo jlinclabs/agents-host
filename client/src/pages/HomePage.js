@@ -2,7 +2,7 @@ import Container from '@mui/material/Container'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 
-import { useCurrentAgent } from '../resources/session'
+import { useCurrentAgent } from '../resources/auth'
 import LinkToDid from '../components/LinkToDid'
 
 export default function HomePage() {

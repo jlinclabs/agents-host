@@ -1,8 +1,9 @@
 
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAction } from '../lib/actions'
-import { useView, useReloadView } from '../lib/views'
+// import { useAction } from '../lib/actions'
+// import { useView, useReloadView } from '../lib/views'
+import { useRemoteQuery, useRemoteCommand } from '../lib/rpc'
 
 function logCurrentAgentIfChanged(agent){
   if (logCurrentAgentIfChanged.last === agent) return
@@ -14,7 +15,7 @@ export function useCurrentAgent({
   redirectToIfNotFound,
 } = {}) {
   const navigate = useNavigate()
-  const { view: currentAgent, loading, error, mutate } = useView('session.currentAgent')
+  const { view: currentAgent, loading, error, mutate } = useRemoteQuery('auth.getCurrentAgent')
 
   useEffect(
     () => {
@@ -49,21 +50,23 @@ export function useReloadCurrentAgent(){
   return useReloadView('session.currentAgent')
 }
 
-function useActionAndReloadCurrentAgent(action, callbacks = {}){
-  const reloadCurrentAgent = useReloadCurrentAgent()
-  return useAction(action, {
+function useRemoteCommandAndReloadCurrentAgent(action, callbacks = {}){
+  // const reloadCurrentAgent = useReloadCurrentAgent()
+  const { mutate } = useCurrentAgent()
+  return useRemoteCommand(action, {
     ...callbacks,
     onSuccess(currentAgent){
-      reloadCurrentAgent(currentAgent)
+      mutate(currentAgent)
       if (callbacks.onSuccess) callbacks.onSuccess(result)
     },
   })
 }
+
 export const useLogin = callbacks =>
-  useActionAndReloadCurrentAgent('session.login', callbacks)
+  useRemoteCommandAndReloadCurrentAgent('auth.login', callbacks)
 
 export const useLogout = callbacks =>
-  useActionAndReloadCurrentAgent('session.logout', callbacks)
+  useRemoteCommandAndReloadCurrentAgent('auth.logout', callbacks)
 
 export const useSignup = callbacks =>
-  useActionAndReloadCurrentAgent('session.signup', callbacks)
+  useRemoteCommandAndReloadCurrentAgent('auth.signup', callbacks)
