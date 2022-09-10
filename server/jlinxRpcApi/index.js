@@ -24,7 +24,11 @@ await (async () => {
     console.log(callImport, { name, import: imports[name] })
     console.log(`jlinx rpc call "${name}"`, args[0])
     try{
-      return await imports[name](...args)
+      let result = await imports[name](...args)
+      if (process.env.NODE_ENV !== 'production'){
+        result = JSON.parse(JSON.stringify(result))
+      }
+      return result
     }catch(error){
       console.error(`jlinx rpc error "${name}"`, error)
       const data = {}
@@ -98,7 +102,10 @@ async function importProcedures(){
   const procedures = {}
   paths.forEach(({path, parts}, index) => {
     const name = parts[1].replace('/', '.')
-    const module = modules[index]
+    let module = modules[index]
+    if (typeof module.default === 'object'){
+      module = module.default
+    }
     for (const key in module){
       if (key === 'default'){
         procedures[name] = module.default
