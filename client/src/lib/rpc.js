@@ -52,10 +52,10 @@ const wait = ms => new Promise(resolve => {
 })
 
 
-const fetchView = ({ name, args }) => rpc(name, args)
+const fetchView = (name, args) => rpc(name, args)
 export function useRemoteQuery(name, args = {}){
   validateViewName(name)
-  const swrKey = name ? { name, args } : null
+  const swrKey = name ? [name, args] : null
   const { data: view, error, mutate } = useSWR(swrKey, fetchView)
   const loading = typeof view === 'undefined' && !error
   const reload = useCallback(() => { mutate() }, [mutate])

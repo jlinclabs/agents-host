@@ -465,7 +465,7 @@ function MyAgreementsList(){
           myAgreements.length === 0
             ? <span>You dont have any agreements</span>
             : [...myAgreements].sort(sorter).map(agreement =>
-              <MyAgreement key={agreement.id} id={agreement.id}/>
+              <MyAgreement key={agreement.id} agreement={agreement}/>
             )
         )
       }
@@ -478,8 +478,8 @@ const sorter = (a, b) => {
   return a < b ? 1 : a > b ? -1 : 0
 }
 
-function MyAgreement({ id }){
-  const { view: agreement, loading, error, reload, mutate } = useAgreement(id)
+function MyAgreement({ agreement }){
+  const id = agreement.id
   return <ListItem {...{
     sx: {px: 0},
     secondaryAction: (
@@ -509,7 +509,6 @@ function MyAgreement({ id }){
         </span>
       }}/>
     </ListItemButton>
-    <Button onClick={reload}>reload</Button>
   </ListItem>
 }
 
