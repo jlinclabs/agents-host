@@ -54,6 +54,7 @@ export default class Agreements extends AgentPlugin {
     const agreement = await this.get(id)
     await agreement.sign()
     await this._records.set(id, { })
+    return agreement
   }
 
   async ackSignature(signatureId){

@@ -13,7 +13,7 @@
   - [x] users can just have more than one
 
 - [x] multiparty text agreements
-- [ ] change apis to JSON RPC
+- [x] change apis to JSON RPC
 - [ ] setup multiple local agent apps
 - [ ] jlinx agent as a did document service
 - [ ] deploy two agents instances

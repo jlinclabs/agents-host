@@ -12,17 +12,17 @@ export default function LinkToDid({
   ...props
 }){
   // const streamId = did && did.split(':')[2]
-  return <Box>
-    <Link to={`/dids/${did}`}>{children}</Link>
-    {/* <LinkToCeramicApi endpoint={did}/> */}
-    {/* {streamId && <CeramicStreamLink streamId={streamId}/> } */}
-    {/* // TODO dropdown */}
-  </Box>
+  return <Link to={`/dids/${did}`}>{children}</Link>
+  //   {/* <LinkToCeramicApi endpoint={did}/> */}
+  //   {/* {streamId && <CeramicStreamLink streamId={streamId}/> } */}
+  //   {/* // TODO dropdown */}
+  // </Box>
 }
 
 function Mono({children, ...props}){
   return <Typography {...{
     ...props,
+    component: 'span',
     sx: {
       fontFamily: 'monospace',
       ...props.sx,

@@ -23,7 +23,6 @@ const client = new jaysonBrowserClient(callServer, {
 
 export async function rpc(name, args = {}, opts = {}){
   const desc = `${name}?${new URLSearchParams(args)}`
-  console.log('[RPC] call', desc)
   let id = opts.ignoreResponse ? null : undefined // set to null to ignore server response
   const res = await client.request(name, args, id)
   if (res.error) {
@@ -38,10 +37,10 @@ export async function rpc(name, args = {}, opts = {}){
     if (res.error?.error?.data?.stack)
       error.stack += `\n${res.error.error.data.stack}`
     error.data = res.error
-    console.error('[RPC] err', desc, res.error?.error?.data ?? error)
+    console.error('[RPC]', desc, res.error?.error?.data ?? error)
     throw error
   }
-  console.log('[RPC] resp', desc, res.result)
+  console.log('[RPC]', desc, res.result)
   return res.result
 }
 

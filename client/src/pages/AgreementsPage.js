@@ -268,7 +268,6 @@ function LookupAgreementOfferingForm({ setId }){
 }
 
 function Agreement({ currentAgent, agreement, ...props }){
-  console.log({ agreement })
   return <Paper sx={{p: 2}} {...props}>
     <Stack flexDirection="row" justifyContent="space-between">
       <Typography variant="h4">
@@ -376,11 +375,11 @@ function AgreementActions({ currentAgent, agreement }){
 
 function SignAgreementForm({ currentAgent, agreement }){
   const navigate = useNavigate()
-  const { reload: reloadAgreement } = useAgreement(agreement.id)
+  const { mutate: mutateAgreement } = useAgreement(agreement.id)
   const signAgreement = useRemoteCommand('agreements.sign', {
-    onSuccess(){
-      console.log('SIGNED! RELOADING AGREEMNT')
-      reloadAgreement()
+    onSuccess(agreement){
+      console.log('SIGNED! RELOADING AGREEMNT', { agreement })
+      mutateAgreement(agreement)
     }
   })
 

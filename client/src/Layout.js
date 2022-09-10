@@ -212,7 +212,6 @@ function ShortDid({ did }){
     () => `${did.slice(0, 10)}…${did.slice(-6)}`,
     [did]
   )
-  console.log({ did, shortDid })
   return <Box sx={{
     maxWidth: '140px',
     textOverflow: 'ellipsis',
