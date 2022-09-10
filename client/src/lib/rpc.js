@@ -8,14 +8,17 @@ async function callServer(body, tries = 0){
       'Content-Type': 'application/json',
     }
   })
+  console.log({ res })
   if (res.status === 504 && tries < 5) {
     await wait(500)
     return callServer(body, tries + 1)
   }
-  // if (res.status >= 400) {
-  //   // throw new Error('RPC ERROR')
-  // }
-  return await res.text()
+  const json = await res.text()
+  if (res.status >= 400) {
+    console.error('RPC error', { json })
+    // throw new Error('RPC ERROR')
+  }
+  return json
 }
 
 const client = new jaysonBrowserClient(callServer, {
@@ -24,8 +27,19 @@ const client = new jaysonBrowserClient(callServer, {
 
 export async function rpc(name, args, opts = {}){
   let id = undefined // set to null to ignore server response
-  const { result } = await client.request(name, args, id)
-  return result
+  const res = await client.request(name, args, id)
+  console.log('RPC response', res)
+  if (res.error) {
+    let message = `RPC call failed`
+    if (res.error?.error?.data?.message)
+      message += `: ${res.error.error.data.message}`
+    const error = new Error(message)
+    if (res.error?.error?.data?.stack)
+      error.stack += `\n${res.error.error.data.stack}`
+    error.data = res.error
+    throw error
+  }
+  return res.result
 }
 
 window.rpc = rpc

@@ -4,57 +4,64 @@ import jayson from 'jayson/promise/index.js'
 import Router from 'express-promise-router'
 import bodyParser from 'body-parser'
 import readDirRecursive from 'recursive-readdir'
-
-import Agent from '../Agent/index.js'
-import { JlinxClient } from '../jlinx.js'
 import Session from '../Session.js'
 
+const procedures = {
 
-const procedures = await (async () => {
-  // TODO reduce this function to some helpers
-  const __dirname = Path.dirname(fileURLToPath(import.meta.url))
-  const root = __dirname + '/procedures'
-  const paths = (await readDirRecursive(root))
-    .map(path => Path.relative(root, path))
-    .map(path => ({
-      path,
-      parts: path.match(/(.+).js$/),
-    }))
-    .filter(({parts}) => parts)
-  const modules = await Promise.all(
-    paths.map(({path}) => import('./procedures/' +  path))
-  )
-  const procedures = {}
+  async ping (args, context) {
+    console.log({ context })
+    return { pong: args }
+  },
 
-  const set = (name, func) => {
-    procedures[name] = async (...args) => {
-      console.log(`jlinx rpc call "${name}"`, args)
-      try{
-        return await func(...args)
-      }catch(error){
-        console.error(`jlinx rpc error "${name}"`, error)
-        throw error
+  async throw (errorMessage) {
+    console.log('???', this.error(-32602))
+    throw new Error(`${errorMessage}`)
+  },
+
+  async fail(){
+    return this.error(-32602)
+  },
+
+  async test(){
+    throw server.error(501, 'not implemented');
+    return { fog: 'mamoth '}
+  }
+
+}
+
+await (async () => {
+  const imports = await importProcedures()
+
+  console.log({imports})
+  async function callImport(name, ...args){
+    console.log(callImport, { name, import: imports[name] })
+    console.log(`jlinx rpc call "${name}"`, args)
+    try{
+      return await imports[name](...args)
+    }catch(error){
+      console.error(`jlinx rpc error "${name}"`, error)
+      const data = {}
+      if (process.env.NODE_ENV === 'development'){
+        data.message = error.message
+        data.stack = error.stack
       }
+      throw server.error(-32603, 'Internal error', data)
+      // return {
+      //   code: 400,
+      //   message: error.message,
+      //   stack: error.stack,
+      //   // data: { error },
+      // }
     }
   }
 
-  paths.forEach(({path, parts}, index) => {
-    const name = parts[1].replace('/', '.')
-    const module = modules[index]
-    for (const key in module){
-      if (key === 'default'){
-        // procedures[name] = module.default
-        set(name, module.default)
-      }else{
-        // procedures[`${name}.${key}`] = module[key]
-        set(`${name}.${key}`, module[key])
-      }
-    }
-  })
-  return procedures
+  for (const name in imports) {
+    procedures[name] = (...args) => callImport.call(this, name, ...args)
+  }
 })()
 
 console.log({ procedures })
+
 
 
 const server = new jayson.server(procedures, {
@@ -101,3 +108,33 @@ router.post('/', async (req, res) => {
 export default router
 
 
+
+
+async function importProcedures(){
+  // TODO reduce this function to some helpers
+  const __dirname = Path.dirname(fileURLToPath(import.meta.url))
+  const root = __dirname + '/procedures'
+  const paths = (await readDirRecursive(root))
+    .map(path => Path.relative(root, path))
+    .map(path => ({
+      path,
+      parts: path.match(/(.+).js$/),
+    }))
+    .filter(({parts}) => parts)
+  const modules = await Promise.all(
+    paths.map(({path}) => import('./procedures/' +  path))
+  )
+  const procedures = {}
+  paths.forEach(({path, parts}, index) => {
+    const name = parts[1].replace('/', '.')
+    const module = modules[index]
+    for (const key in module){
+      if (key === 'default'){
+        procedures[name] = module.default
+      }else{
+        procedures[`${name}.${key}`] = module[key]
+      }
+    }
+  })
+  return procedures
+}
