@@ -38,21 +38,12 @@ export default function DidsPage() {
 }
 
 function Index(){
-  const { currentAgent } = useCurrentAgent()
-
   return <Container maxWidth="sm">
     <Typography my={2} variant="h3">DIDs</Typography>
     <Typography my={2} variant="h6">Decentralized Identifiers</Typography>
-    <Box>
-      <Button
-        variant="contained"
-        component={Link}
-        to={`/dids/${currentAgent.did}`}
-      >View your Agent's DID</Button>
-    </Box>
-
-    <Typography my={2} variant="h6">View another DID:</Typography>
+    <Typography my={2} variant="h6">Resolve a DID:</Typography>
     <ResolveDidForm/>
+    <MyAgentsDidsList/>
   </Container>
 }
 
@@ -105,5 +96,16 @@ function ResolveDidForm({ disabled, ...props }){
         disabled={disabled || !submittable}
       >{`Resolve DID`}</Button>
     </Stack>
+  </Box>
+}
+
+function MyAgentsDidsList(props){
+  const { currentAgent } = useCurrentAgent()
+  return <Box {...props}>
+    <Typography my={2} variant="h6">Your Agent's DIDs:</Typography>
+
+    <Link
+      to={`/dids/${currentAgent.did}`}
+    >{currentAgent.did}</Link>
   </Box>
 }

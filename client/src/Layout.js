@@ -94,7 +94,7 @@ function SideNav({ loading, currentAgent }) {
       <NavButton {...{
         icon: <FingerprintIcon/>,
         text: 'Identity',
-        to: '/dids',
+        to: '/id',
       }}/>
       {/* <NavButton {...{
         icon: <FingerprintIcon/>,
@@ -116,6 +116,12 @@ function SideNav({ loading, currentAgent }) {
         text: 'Data Sharing',
         to: '/data-sharing',
       }}/>
+      <NavButton {...{
+        icon: <FingerprintIcon/>,
+        text: 'DIDs',
+        to: '/dids',
+      }}/>
+
       <Box sx={{ flex: '1 1'}}/>
       <Divider />
       <NavButton {...{

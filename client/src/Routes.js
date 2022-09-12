@@ -14,6 +14,7 @@ import LogoutPage from './pages/LogoutPage'
 import SettingsPage from './pages/SettingsPage'
 import VaultPage from './pages/VaultPage'
 import DidsPage from './pages/DidsPage'
+import IDPage from './pages/IDPage'
 import ContactsPage from './pages/ContactsPage'
 import AgreementsPage from './pages/AgreementsPage'
 import DataSharingPage from './pages/DataSharingPage'
@@ -38,6 +39,7 @@ export default function Routes() {
       <Route path="/settings" element={<SettingsPage {...props} />} />
       <Route path="/vault" element={<VaultPage {...props} />} />
       <Route path="/dids/*" element={<DidsPage {...props} />} />
+      <Route path="/id" element={<IDPage {...props} />} />
       <Route path="/contacts/*" element={<ContactsPage {...props} />} />
       <Route path="/agreements/*" element={<AgreementsPage {...props} />} />
       <Route path="/data-sharing/*" element={<DataSharingPage {...props} />} />
