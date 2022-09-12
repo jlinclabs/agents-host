@@ -24,8 +24,7 @@ import Switch from '@mui/material/Switch'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 
 import { useStateObject } from '../lib/reactStateHelpers'
-import { useAction } from '../lib/actions'
-import { useView } from '../lib/views'
+import { useRemoteQuery, useRemoteCommand } from '../lib/rpc'
 
 import Link from '../components/Link'
 import LinkToCeramicApi from '../components/LinkToCeramicApi'
@@ -567,7 +566,7 @@ function AckAgreementSignatureForm({ sisa, reloadAgreement }){
 
 
 function MyDataSharingAgreementsList(){
-  const {view: myAgreements, error} = useView('agreements.mine')
+  const {view: myAgreements, error} = useRemoteQuery('agreements.getAll')
 
   return (
     <List sx={{

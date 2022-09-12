@@ -3,6 +3,7 @@ import { JlinxClient } from '../jlinx.js'
 import agentsResource from '../resources/agentsResource.js'
 import Dids from './dids.js'
 import Agreements from './agreements.js'
+import Contacts from './contacts.js'
 
 export default class Agent {
 
@@ -27,6 +28,7 @@ export default class Agent {
     this.dids = new Dids(this)
     // this.contacts = new Contacts(this)
     this.agreements = new Agreements(this)
+    this.contacts = new Contacts(this)
   }
 
   get now() { return new Date().toISOString() }

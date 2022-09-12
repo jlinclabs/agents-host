@@ -7,13 +7,11 @@ import readDirRecursive from 'recursive-readdir'
 import Session from '../Session.js'
 
 const procedures = {
-
   async __rpc_inspect (args, context) {
     return {
       procedures: Object.keys(procedures)
     }
   },
-
 }
 
 await (async () => {
@@ -25,8 +23,16 @@ await (async () => {
     console.log(`jlinx rpc call "${name}"`, args[0])
     try{
       let result = await imports[name](...args)
-      if (process.env.NODE_ENV !== 'production'){
-        result = JSON.parse(JSON.stringify(result))
+      if (
+        typeof result !== 'undefined' &&
+        process.env.NODE_ENV !== 'production'
+      ){
+        try{
+          result = JSON.parse(JSON.stringify(result))
+        }catch(error){
+          console.error({'CANT JSON': result})
+          throw new Error(`cant json result from call to "${name}"`)
+        }
       }
       return result
     }catch(error){
