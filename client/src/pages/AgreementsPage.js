@@ -39,7 +39,7 @@ import ErrorMessage from '../components/ErrorMessage'
 import IdentifierProfile from '../components/IdentifierProfile'
 import IdentifierSelectInput from '../components/IdentifierSelectInput'
 import LinkToDid from '../components/LinkToDid'
-import CeramicStreamLink from '../components/CeramicStreamLink'
+import LinkToCerscan from '../components/LinkToCerscan'
 import CeramicStreamEvents from '../components/CeramicStreamEvents'
 import ButtonRow from '../components/ButtonRow'
 import TermsTextField from '../components/TermsTextField'
@@ -280,7 +280,7 @@ function Agreement({ currentAgent, agreement, ...props }){
         <Typography variant="h6">ID</Typography>
         <Link to={`/agreements/${agreement.id}`}>{agreement.id}</Link>
         <LinkToCeramicApi endpoint={agreement.id}/>
-        <CeramicStreamLink streamId={agreement.id}/>
+        <LinkToCerscan id={agreement.id}/>
       </Stack>
     }
 

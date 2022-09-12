@@ -26,6 +26,8 @@ import { useDidDocument } from '../resources/dids'
 import Link from '../components/Link'
 import ErrorMessage from '../components/ErrorMessage'
 import CopyButton from '../components/CopyButton'
+import LinkToCeramicApi from '../components/LinkToCeramicApi'
+import LinkToCerscan from '../components/LinkToCerscan'
 import InspectObject from '../components/InspectObject'
 
 export default function DidsPage() {
@@ -62,8 +64,11 @@ function Show(){
 }
 
 function DidDocument({ didDocument }){
-  // TODO display nicer than json dump
+  const did = didDocument.id
   return <Paper sx={{p: 2}}>
+    <Stack>
+      <LinkToCerscan id={did.split(':')[2]}/>
+    </Stack>
     <InspectObject object={didDocument}/>
   </Paper>
 }
