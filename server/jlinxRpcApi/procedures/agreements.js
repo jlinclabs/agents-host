@@ -18,4 +18,15 @@ export default {
   async get({ id }, { agent }){
     return await agent.agreements.get(id)
   },
+
+  // idea on how to subscribe to views
+  // sub means wait for next change onNext
+  subs: {
+    async getAll({ }, { agent }){
+      await agent.agreements.next()
+    },
+    async get({ id }, { agent }){
+      await agent.agreements.get(id)
+    }
+  }
 }

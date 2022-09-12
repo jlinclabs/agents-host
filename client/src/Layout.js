@@ -93,9 +93,14 @@ function SideNav({ loading, currentAgent }) {
       }}/> */}
       <NavButton {...{
         icon: <FingerprintIcon/>,
-        text: 'DIDs',
+        text: 'Identity',
         to: '/dids',
       }}/>
+      {/* <NavButton {...{
+        icon: <FingerprintIcon/>,
+        text: 'Idenitity / Auth',
+        to: '/auth',
+      }}/> */}
       <NavButton {...{
         icon: <ContactPageIcon/>,
         text: 'Contacts',
