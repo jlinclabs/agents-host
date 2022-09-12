@@ -111,11 +111,11 @@ function SideNav({ loading, currentAgent }) {
         text: 'Agreements',
         to: '/agreements',
       }}/>
-      {/* <NavButton {...{
+      <NavButton {...{
         icon: <DriveFileMoveIcon/>,
         text: 'Data Sharing',
         to: '/data-sharing',
-      }}/> */}
+      }}/>
       <NavButton {...{
         icon: <FingerprintIcon/>,
         text: 'DIDs',

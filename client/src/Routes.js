@@ -4,7 +4,7 @@ import './lib/rpc'
 import { useCurrentAgent } from './resources/auth'
 
 import AuthPage from './pages/AuthPage'
-import HomePage from './pages/HomePage'
+// import HomePage from './pages/HomePage'
 import Layout from './Layout'
 import RedirectPage from './pages/RedirectPage'
 import NotFoundPage from './pages/NotFoundPage'
@@ -28,13 +28,10 @@ export default function Routes() {
   const props = { currentAgent }
   return <Layout {...{ currentAgent }}>
     <_Routes>
-      <Route path="/" element={<HomePage />} />
-      {/* <Route path="/signup" element={<SignupPage />} /> */}
-      {/* <Route path="/login" element={<LoginPage />} /> */}
+      <Route path="/" element={<RedirectPage to="/id" />} />
       <Route path="/login/*" element={<RedirectPage to="/"/>} />
       <Route path="/forgot-password/*" element={<RedirectPage to="/"/>} />
       <Route path="/signup/*" element={<RedirectPage to="/"/>} />
-
       <Route path="/logout" element={<LogoutPage {...props} />} />
       <Route path="/settings" element={<SettingsPage {...props} />} />
       <Route path="/vault" element={<VaultPage {...props} />} />

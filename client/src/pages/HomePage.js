@@ -1,4 +1,4 @@
-import Container from '@mui/material/Container'
+import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 
@@ -8,18 +8,18 @@ import CopyButton from '../components/CopyButton'
 
 export default function HomePage() {
   const { currentAgent } = useCurrentAgent()
-  return <Container maxWidth="md">
+  return <Box p={2}>
     {currentAgent &&
       <AgentDescription agent={currentAgent}/>}
-  </Container>
+  </Box>
 }
 
 function AgentDescription({ agent }){
-  return <Paper sx={{mt:2, p: 2}}>
+  return <>
     <Typography variant="h3">Jlinx Agent</Typography>
     <Typography variant="h6" sx={{mt: 2}}>
       <LinkToDid did={agent.did}/>
       <CopyButton variant="icon" value={agent.did} />
     </Typography>
-  </Paper>
+  </>
 }

@@ -60,27 +60,27 @@ export default function Agreements(props) {
 }
 
 function Index(props) {
-  return <Container maxWidth="md">
-    <Container maxWidth="sm">
-      <Typography my={2} variant="h3">Agreements</Typography>
-      <Typography my={2} variant="h6">Standard Information Sharing Agreemnts</Typography>
-      <Stack spacing={2}>
-        <Button
-          variant="contained"
-          component={Link}
-          to="/agreements/new"
-        >{`Create an Agreement`}</Button>
+  return <Box>
+    <Typography my={2} variant="h3">Agreements</Typography>
+    <Typography my={2} variant="h6">Standard Information Sharing Agreemnts</Typography>
+    <Stack spacing={2} sx={{maxWidth: '400px'}}>
+      <Button
+        variant="contained"
+        component={Link}
+        to="/agreements/new"
+      >{`Create an Agreement`}</Button>
 
-        <Button
-          variant="contained"
-          component={Link}
-          to="/agreements/find"
-        >{`View an Agreement`}</Button>
-      </Stack>
-    </Container>
+      <Button
+        variant="contained"
+        component={Link}
+        to="/agreements/find"
+      >{`View an Agreement`}</Button>
+    </Stack>
+
+    <Typography mt={4} variant="h6">Your Agreements:</Typography>
 
     <MyAgreementsList />
-  </Container>
+  </Box>
 }
 
 function New({ currentAgent, router }) {

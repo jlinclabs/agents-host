@@ -40,37 +40,29 @@ export default function DidsPage() {
 }
 
 function Index(){
-  return <Container maxWidth="sm">
+  return <>
     <Typography my={2} variant="h3">DIDs</Typography>
     <Typography my={2} variant="h6">Decentralized Identifiers</Typography>
     <Typography my={2} variant="h6">Resolve a DID:</Typography>
     <ResolveDidForm/>
     <MyAgentsDidsList/>
-  </Container>
+  </>
 }
 
 function Show(){
   const { did } = useParams()
   const [didDocument, {loading, error} ] = useDidDocument(did)
-  return <Container>
+  return <>
     <Typography variant="h5" sx={{my: 2}}>
       <span>{`DID: ${did}`}</span>
       <CopyButton variant="icon" value={did} />
+      <LinkToCerscan id={did.split(':')[2]}/>
     </Typography>
     <ErrorMessage {...{error}}/>
     {loading && <CircularProgress />}
-    {didDocument && <DidDocument didDocument={didDocument}/>}
-  </Container>
-}
-
-function DidDocument({ didDocument }){
-  const did = didDocument.id
-  return <Paper sx={{p: 2}}>
-    <Stack>
-      <LinkToCerscan id={did.split(':')[2]}/>
-    </Stack>
-    <InspectObject object={didDocument}/>
-  </Paper>
+    {didDocument &&
+      <InspectObject object={didDocument}/>}
+  </>
 }
 
 function ResolveDidForm({ disabled, ...props }){

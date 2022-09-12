@@ -48,26 +48,24 @@ export default function Agreements() {
 }
 
 function Index(props) {
-  return <Container maxwidth="md">
-    <Container maxWidth="sm">
-      <Typography my={2} variant="h3">Data Sharing Agreements</Typography>
-      <Typography my={2} variant="h6">Share data with other JLINX agents</Typography>
-      <Stack spacing={2} sx={{maxWidth: '400px'}}>
-        <Button
-          variant="contained"
-          component={Link}
-          to="/data-sharing/request"
-        >{`Request Data`}</Button>
-        <Button
-          variant="contained"
-          component={Link}
-          to="/data-sharing/sign"
-          sx={{ml: 1}}
-        >{`View An Data Request`}</Button>
-      </Stack>
+return <Container maxwidth="lg">
+    <Typography my={2} variant="h3">Data Sharing Agreements</Typography>
+    <Typography my={2} variant="h6">Share data with other JLINX agents</Typography>
+    <Stack spacing={2} sx={{maxWidth: '400px'}}>
+      <Button
+        variant="contained"
+        component={Link}
+        to="/data-sharing/request"
+      >{`Request Data`}</Button>
+      <Button
+        variant="contained"
+        component={Link}
+        to="/data-sharing/sign"
+        sx={{ml: 1}}
+      >{`View A Data Request`}</Button>
+    </Stack>
 
-      <MyDataSharingAgreementsList />
-    </Container>
+    {/* <MyDataSharingAgreementsList /> */}
   </Container>
 }
 
@@ -566,7 +564,7 @@ function AckAgreementSignatureForm({ sisa, reloadAgreement }){
 
 
 function MyDataSharingAgreementsList(){
-  const {view: myAgreements, error} = useRemoteQuery('agreements.getAll')
+  const {view: myAgreements, error} = useRemoteQuery('dataSharingAgreements.getAll')
 
   return (
     <List sx={{

@@ -12,8 +12,8 @@ export default function LinkToCerscan({ id, children, ...props }){
 }
 
 function CerscanIcon(){
-  return <Box sx={{
-
+  return <Box component="span" sx={{
+    verticalAlign: 'bottom',
   }}>
     <img src="https://cerscan.com/img/favicon.png"/>
   </Box>

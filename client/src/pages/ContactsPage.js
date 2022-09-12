@@ -32,14 +32,13 @@ export default function ContactsPage() {
     reload: reloadContacts,
   } = useRemoteQuery('contacts.getAll')
 
-  return <Container maxWidth="md">
-    <Paper sx={{p: 2, m: 2}}>
+  return <Box p={2}>
       <Typography variant="h3">Contacts</Typography>
-      <ContactsList {...{contacts, loading, error}} />
-      <Typography variant="h6" sx={{my:2}}>ADD NEW CONTACT</Typography>
+      <Typography variant="h6" sx={{my:2}}>ADD NEW CONTACT:</Typography>
       <AddContactForm {...{ reloadContacts }}/>
-    </Paper>
-  </Container>
+      <Typography variant="h6" sx={{my:2}}>YOUR CONTACTS:</Typography>
+      <ContactsList {...{contacts, loading, error}} />
+  </Box>
 }
 
 function AddContactForm({ reloadContacts, ...props }){
