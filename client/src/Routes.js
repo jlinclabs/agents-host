@@ -18,6 +18,7 @@ import IDPage from './pages/IDPage'
 import ContactsPage from './pages/ContactsPage'
 import AgreementsPage from './pages/AgreementsPage'
 import DataSharingPage from './pages/DataSharingPage'
+import DevCeramicPage from './pages/DevCeramicPage'
 // import ProfilesPage from './pages/ProfilesPage'
 // import IdentifiersPage from './pages/IdentifiersPage'
 // import ContractsPage from './pages/ContractsPage'
@@ -40,6 +41,7 @@ export default function Routes() {
       <Route path="/contacts/*" element={<ContactsPage {...props} />} />
       <Route path="/agreements/*" element={<AgreementsPage {...props} />} />
       <Route path="/data-sharing/*" element={<DataSharingPage {...props} />} />
+      <Route path="/dev/ceramic/*" element={<DevCeramicPage {...props} />} />
       {/* <Route path="/profiles/*" element={<ProfilesPage {...props} />} />
       <Route path="/identifiers/*" element={<IdentifiersPage {...props} />} />
       <Route path="/contracts/*" element={<ContractsPage {...props} />} /> */}

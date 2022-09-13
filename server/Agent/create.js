@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt'
 import { generateVaultKey } from '../vaults.js'
 import prisma from '../../prisma/client.js'
 import { createDid } from '../ceramic.js'
@@ -12,9 +13,7 @@ export default async function createAgent({ email, password }){
     didSecret: didSecret.toString('hex'),
   }
   if (password){
-    data.passwordHash = await bcrypt.hash(
-      password, data.passwordSalt, 10
-    )
+    data.passwordHash = await bcrypt.hash(password, 10)
   }
   console.log('CREATING USER', {data})
   const { id, createdAt } = await prisma.agent.create({

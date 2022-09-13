@@ -15,7 +15,7 @@ import { useSignup } from '../resources/auth'
 import ErrorMessage from '../components/ErrorMessage'
 import Link from '../components/Link'
 import LoginForm from '../components/LoginForm'
-import SignupForm, { generateSecretKey } from '../components/SignupForm'
+import SignupForm from '../components/SignupForm'
 
 export default function AuthPage({ loading, error }) {
   return <Container
@@ -80,9 +80,7 @@ function Signup(){
     },
   })
   const justTryIt = () => {
-    signup({
-      secretKey: generateSecretKey()
-    })
+    signup.call({})
   }
   return <Box>
     <Typography variant="h4" mb={3}>Signup</Typography>
@@ -92,6 +90,7 @@ function Signup(){
         onClick={justTryIt}
         disabled={signup.pending}
       >Just Try It!</Button>
+      <ErrorMessage error={signup.error}/>
       <Button
         variant="contained"
         to="/signup/password"

@@ -1,9 +1,12 @@
 
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-// import { useAction } from '../lib/actions'
-// import { useView, useReloadView } from '../lib/views'
 import { useRemoteQuery, useRemoteCommand } from '../lib/rpc'
+import randomString from '../lib/randomString'
+
+export function generatePassword(){
+  return randomString(128)
+}
 
 function logCurrentAgentIfChanged(agent){
   if (logCurrentAgentIfChanged.last === agent) return
@@ -57,7 +60,7 @@ function useRemoteCommandAndReloadCurrentAgent(action, callbacks = {}){
     ...callbacks,
     onSuccess(currentAgent){
       mutate(currentAgent)
-      if (callbacks.onSuccess) callbacks.onSuccess(result)
+      if (callbacks.onSuccess) callbacks.onSuccess(currentAgent)
     },
   })
 }
@@ -70,3 +73,4 @@ export const useLogout = callbacks =>
 
 export const useSignup = callbacks =>
   useRemoteCommandAndReloadCurrentAgent('auth.signup', callbacks)
+

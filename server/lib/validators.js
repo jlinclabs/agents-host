@@ -5,5 +5,5 @@ export function isEmail(email){
 
 export const isPassword = password => (
   typeof password === 'string' &&
-  password.match(/^[\w\d-_]{6,256}$/)
+  /^.{6,256}$/.test(password)
 )

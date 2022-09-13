@@ -113,7 +113,7 @@ function New({ currentAgent, router }) {
         patchAgreement,
         submitting: createAgreement.pending,
         error: createAgreement.error,
-        onSubmit: createAgreement,
+        onSubmit: createAgreement.call,
       }}/>
     </Paper>
     <PreviewAgreementForm {...{
@@ -389,7 +389,7 @@ function SignAgreementForm({ currentAgent, agreement }){
     component: 'form',
     onSubmit(event){
       event.preventDefault()
-      signAgreement({ agreementId: agreement.id })
+      signAgreement.call({ agreementId: agreement.id })
     }
   }}>
     <ErrorMessage error={signAgreement.error}/>

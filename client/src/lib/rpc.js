@@ -98,10 +98,23 @@ export function useRemoteCommand(name, callbacks = {}){
     }
   )
 
-  call.pending = pending
-  call.failed = value instanceof Error
-  call.success = !call.pending && !call.failed && !!value
-  call.error = call.failed ? value : null
-  call.result = call.success ? value : null
-  return call
+  // call.pending = pending
+  // call.failed = value instanceof Error
+  // call.success = !call.pending && !call.failed && !!value
+  // call.error = call.failed ? value : null
+  // call.result = call.success ? value : null
+  // return call
+
+  const failed = value instanceof Error
+  const success = !pending && !failed && !!value
+  const error = failed ? value : null
+  const result = success ? value : null
+  return {
+    call,
+    pending,
+    failed,
+    success,
+    error,
+    result,
+  }
 }

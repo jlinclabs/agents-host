@@ -1,4 +1,6 @@
 import createAgent from '../../Agent/create.js'
+import { isEmail, isPassword } from '../../lib/validators.js'
+import { InvalidArgumentError } from '../../errors.js'
 
 export async function getCurrentAgent({}, { session }){
   if (session?.agent?.did) return { did: session.agent.did }
@@ -6,17 +8,18 @@ export async function getCurrentAgent({}, { session }){
 }
 
 export async function signup({ password, email }, { session }){
+  console.log('SIGNUP', { password, email })
+  if (session.agentId)
+    throw new Error(`please logout first`)
+
+  if (password && !isPassword(password))
+    throw new InvalidArgumentError('password')
+
   if (email && !isEmail(email))
     throw new InvalidArgumentError('email', email)
-  // if (!isPassword(password)) throw new InvalidArgumentError('password', password)
 
-  console.log('signup', { password, email }, { session })
-  if (session.agentId){
-    throw new Error(`please logout first`)
-  }
   const agent = await createAgent({ email, password })
   await session.setAgentId(agent.id)
-  console.log('CREATED', { agent })
   return { did: agent.did }
 }
 

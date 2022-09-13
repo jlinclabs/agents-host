@@ -56,7 +56,7 @@ function AddContactForm({ reloadContacts, ...props }){
     component="form"
     onSubmit={event => {
       event.preventDefault()
-      addContact({ did })
+      addContact.call({ did })
     }}
   >
     <Stack flexDirection="row" alignItems="center">
