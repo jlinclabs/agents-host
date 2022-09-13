@@ -21,51 +21,69 @@ export async function signup({ password, email }, { session }){
     throw new InvalidArgumentError('email', email)
 
   const { agent, didSecret, vaultKey } = await Agent.create()
-  console.log('CREATED AGENT', { agent, didSecret, vaultKey })
-  const data = {
-    vaultKey,
-    did: agent.did,
-    didSecret: didSecret.toString('hex'),
-  }
-  if (password){
-    data.passwordHash = await bcrypt.hash(password, 10)
-  }
-  console.log('CREATING USER', {data})
-  const { id, createdAt } = await prisma.agent.create({
-    data,
-    select: { id: true, createdAt: true }
+  console.log('CREATED AGENT', { agent })
+  const { id } = await prisma.agent.create({
+    data: {
+      vaultKey,
+      did: agent.did,
+      didSecret: didSecret.toString('hex'),
+      email,
+      passwordHash: password && await hashPassword(password),
+    },
+    select: {
+      id: true,
+    }
   })
   await session.setAgentId(id)
   return { did: agent.did }
 }
 
-export async function login({ did, email, password }, { session }){
-  const record = await prisma.agent.findUnique({
-    where: { email },
-    select: {
-      id: true,
-      createdAt: true,
-      did: true,
-      didSecret: true,
-      vaultKey: true,
-    }
-  })
-  if (record){
-    record.didSecret = Buffer.from(record.didSecret, 'hex')
-  }
-  return record
+export async function login({ email, password }, { session }){
+  const agentRecord = await findAgentByEmail(email)
+  console.log({ agentRecord })
+  const goodPassword = agentRecord &&
+    await checkPassword(password, agentRecord.passwordHash)
 
-  // let agent
-  // if (email && password){
-  //   agent = await agents.queries.findByEmailAndPassword(email)
-  //   if (!agent){ throw new Error(`invalid password`)}
-  // }
-  const agent = await Agent.find({ did, email, password })
-  await session.setAgentId(agent.id)
+  console.log({ goodPassword })
+
+  if (!agentRecord || !goodPassword){
+    throw new InvalidArgumentError(`bad email or password`)
+  }
+  const { did, didSecret, vaultKey } = agentRecord
+  const agent = await Agent.open({ did, didSecret, vaultKey })
+  await session.setAgentId(agentRecord.id)
   return { did: agent.did }
 }
 
 export async function logout({}, { session }){
   await session.delete()
   return null
+}
+
+
+async function findAgentByEmail(email){
+  const record = await prisma.agent.findUnique({
+    where: { email },
+    select: {
+      id: true,
+      createdAt: true,
+      passwordHash: true,
+      did: true,
+      didSecret: true,
+      vaultKey: true,
+
+    }
+  })
+  console.log('findAgentByEmail?', record)
+  if (record){
+    record.didSecret = Buffer.from(record.didSecret, 'hex')
+  }
+  return record
+}
+
+async function hashPassword(password){
+  return await bcrypt.hash(password, 10)
+}
+async function checkPassword(password, passwordHash){
+  return await bcrypt.compare(password, passwordHash)
 }

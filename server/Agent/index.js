@@ -24,16 +24,10 @@ export default class Agent {
     return { agent, didSecret, vaultKey }
   }
 
-  static async find(did){
-    const record = await agentsResource.queries.findByDid(did)
-    if (!record) throw new Error(`agent not hosted here`)
-    return await Agent.open(record)
-  }
-
-  static async open({ id, did, didSecret, createdAt, vaultKey }){
+  static async open({ did, didSecret, vaultKey }){
     const jlinx = await JlinxClient.open(did, didSecret)
     const vault = await openVault(`agent-${id}`, vaultKey)
-    return new Agent({ id, did, createdAt, jlinx, vault })
+    return new Agent({ did, jlinx, vault })
   }
 
   constructor({ did, jlinx, vault }){
