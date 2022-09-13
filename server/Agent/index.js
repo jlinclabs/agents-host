@@ -1,11 +1,28 @@
 import { openVault, generateVaultKey } from '../vaults.js'
 import { JlinxClient } from '../jlinx.js'
-import agentsResource from '../resources/agentsResource.js'
+import { createDid } from '../ceramic.js'
 import Dids from './dids.js'
 import Agreements from './agreements.js'
 import Contacts from './contacts.js'
 
 export default class Agent {
+
+  static generateVaultKey() {
+    return generateVaultKey()
+  }
+
+  static async create() {
+    const vaultKey = await generateVaultKey()
+    const { did, secretSeed: didSecret } = await createDid()
+    const agent = await Agent.open({
+      did: did.id,
+      didSecret,
+      vaultKey,
+    })
+    agent.vault.set('did', did.id, 'string')
+    agent.vault.set('didSecret', didSecret, 'raw')
+    return { agent, didSecret, vaultKey }
+  }
 
   static async find(did){
     const record = await agentsResource.queries.findByDid(did)
@@ -19,10 +36,8 @@ export default class Agent {
     return new Agent({ id, did, createdAt, jlinx, vault })
   }
 
-  constructor({ id, did, createdAt, jlinx, vault }){
-    this.id = id
+  constructor({ did, jlinx, vault }){
     this.did = did
-    this.createdAt = createdAt
     this.jlinx = jlinx
     this.vault = vault
     this.dids = new Dids(this)

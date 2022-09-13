@@ -1,4 +1,6 @@
-import createAgent from '../../Agent/create.js'
+import bcrypt from 'bcrypt'
+import prisma from '../../../prisma/client.js'
+import Agent from '../../Agent/index.js'
 import { isEmail, isPassword } from '../../lib/validators.js'
 import { InvalidArgumentError } from '../../errors.js'
 
@@ -18,17 +20,47 @@ export async function signup({ password, email }, { session }){
   if (email && !isEmail(email))
     throw new InvalidArgumentError('email', email)
 
-  const agent = await createAgent({ email, password })
-  await session.setAgentId(agent.id)
+  const { agent, didSecret, vaultKey } = await Agent.create()
+  console.log('CREATED AGENT', { agent, didSecret, vaultKey })
+  const data = {
+    vaultKey,
+    did: agent.did,
+    didSecret: didSecret.toString('hex'),
+  }
+  if (password){
+    data.passwordHash = await bcrypt.hash(password, 10)
+  }
+  console.log('CREATING USER', {data})
+  const { id, createdAt } = await prisma.agent.create({
+    data,
+    select: { id: true, createdAt: true }
+  })
+  await session.setAgentId(id)
   return { did: agent.did }
 }
 
-export async function login({ email, password }, { session }){
-  let agent
-  if (email && password){
-    agent = await agents.queries.findByEmailAndPassword(email)
-    if (!agent){ throw new Error(`invalid password`)}
+export async function login({ did, email, password }, { session }){
+  const record = await prisma.agent.findUnique({
+    where: { email },
+    select: {
+      id: true,
+      createdAt: true,
+      did: true,
+      didSecret: true,
+      vaultKey: true,
+    }
+  })
+  if (record){
+    record.didSecret = Buffer.from(record.didSecret, 'hex')
   }
+  return record
+
+  // let agent
+  // if (email && password){
+  //   agent = await agents.queries.findByEmailAndPassword(email)
+  //   if (!agent){ throw new Error(`invalid password`)}
+  // }
+  const agent = await Agent.find({ did, email, password })
   await session.setAgentId(agent.id)
   return { did: agent.did }
 }

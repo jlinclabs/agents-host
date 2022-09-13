@@ -55,7 +55,6 @@ export default function SignupForm({
       onSubmit,
     }}>
       <ErrorMessage error={signup.error}/>
-
       <TextField
         label="email"
         autoComplete="email"
@@ -67,8 +66,6 @@ export default function SignupForm({
         value={email}
         onChange={e => { setEmail(e.target.value) }}
       />
-
-
       <TextField
         label="password"
         autoComplete="email"
@@ -80,7 +77,6 @@ export default function SignupForm({
         value={password}
         onChange={e => { setPassword(e.target.value) }}
       />
-
       <Stack spacing={2} direction="row-reverse" alignItems="center" mt={2}>
         <Button
           disabled={disabled || !submittable}

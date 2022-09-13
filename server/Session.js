@@ -1,8 +1,7 @@
 import Debug from 'debug'
 import Cookies from 'cookies'
-import sessionResource from './resources/sessionResource.js'
+import prisma from '../prisma/client.js'
 import Agent from './Agent/index.js'
-import { openVault } from './vaults.js'
 const COOKIE_NAME = 'session-id'
 
 const debug = Debug('session')
@@ -30,7 +29,14 @@ export default class Session {
 
   async create(){
     debug('create')
-    const record = await sessionResource.commands.create()
+    const record = await createSession({
+      data: {},
+      select: {
+        id: true,
+        createdAt: true,
+        lastSeenAt: true,
+      }
+    })
     debug('created', record.id)
     this._cookies.set(COOKIE_NAME, record.id, { httpOnly: true })
     this._id = record.id
@@ -40,7 +46,7 @@ export default class Session {
 
   async load(){
     debug('load', this.id)
-    const record = await sessionResource.commands.touch(this.id)
+    const record = await touchSession(this.id)
     if (!record) return await this.create()
     debug('loaded', record)
     this._createdAt = record.createdAt
@@ -55,13 +61,13 @@ export default class Session {
 
   async delete(){
     debug('delete', this.id)
-    await sessionResource.commands.delete(this.id)
+    await deleteSession(this.id)
     this._cookies.set(COOKIE_NAME, undefined)
   }
 
   async setAgentId(agentId){
     if (this.agentId){ throw new Error(`please logout first`) }
-    await sessionResource.commands.setAgentId(this.id, agentId)
+    await setSessionAgentId(this.id, agentId)
     await this.load()
   }
 
@@ -83,3 +89,68 @@ export default class Session {
 
 }
 
+async function createSession(){
+  return await prisma.session.create({
+    data: {},
+    select: {
+      id: true,
+      createdAt: true,
+      lastSeenAt: true,
+    }
+  })
+}
+
+async function touchSession(id){
+  const record = await prisma.session.update({
+    where: { id },
+    data: { lastSeenAt: new Date },
+    select: {
+      id: true,
+      createdAt: true,
+      lastSeenAt: true,
+      agent: {
+        select: {
+          id: true,
+          did: true,
+          didSecret: true,
+          createdAt: true,
+          vaultKey: true,
+        }
+      },
+    }
+  }).catch(error => {
+    if (
+      error instanceof prisma.Error &&
+      error.code === 'P2025'
+    ) return null
+    throw error
+  })
+  if (record && record.agent){
+    record.agent.didSecret = Buffer.from(record.agent.didSecret, 'hex')
+  }
+  return record
+}
+
+async function setSessionAgentId(id, agentId){
+  console.log('setSessionAgentId', {id, agentId})
+  await prisma.session.update({
+    where: { id },
+    data: { agentId }
+  })
+}
+
+async function deleteSession(id){
+  console.log('deleteSession', {id})
+  try{
+    await prisma.session.delete({
+      where: { id }
+    })
+  }catch(error){
+    console.error('failed to delete session', error)
+    if (
+      error instanceof prisma.Error &&
+      error.code === 'P2025'
+    ) return null
+    throw error
+  }
+}

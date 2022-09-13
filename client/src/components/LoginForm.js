@@ -11,20 +11,20 @@ import PassphraseInput from './PassphraseInput'
 import { useLogin } from '../resources/auth'
 
 export default function LoginForm(props){
-  const [secretKey, setSecretKey] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   const login = useLogin()
 
   const onSubmit = event => {
     event.preventDefault()
-    login({ secretKey })
+    login.call({ email, password })
   }
 
   const submitOnEnter = event => {
     if (event.key === 'Enter') onSubmit(event)
   }
-  const secretKeyIsValid = PassphraseInput.isValid(secretKey)
-  const submittable = secretKeyIsValid
+  const submittable = (email && password)
 
   const disabled = !!login.pending
   return <Box {...props}>
@@ -34,12 +34,29 @@ export default function LoginForm(props){
       onSubmit,
     }}>
       <ErrorMessage error={login.error}/>
-      <PassphraseInput
+      <TextField
+        label="email"
+        autoComplete="email"
         disabled={disabled}
-        value={secretKey}
-        onChange={e => { setSecretKey(e.target.value) }}
-        autoFocus
+        margin="normal"
+        fullWidth
+        name="email"
+        type="email"
+        value={email}
+        onChange={e => { setEmail(e.target.value) }}
       />
+      <TextField
+        label="password"
+        autoComplete="email"
+        disabled={disabled}
+        margin="normal"
+        fullWidth
+        name="password"
+        type="password"
+        value={password}
+        onChange={e => { setPassword(e.target.value) }}
+      />
+
       <Stack spacing={2} direction="row-reverse" alignItems="center" mt={2}>
         <Button
           type="submit"
