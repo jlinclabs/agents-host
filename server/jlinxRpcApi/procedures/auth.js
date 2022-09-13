@@ -47,7 +47,7 @@ export async function login({ email, password }, { session }){
   console.log({ goodPassword })
 
   if (!agentRecord || !goodPassword){
-    throw new InvalidArgumentError(`bad email or password`)
+    throw new InvalidArgumentError(`email or password`)
   }
   const { did, didSecret, vaultKey } = agentRecord
   const agent = await Agent.open({ did, didSecret, vaultKey })

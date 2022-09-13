@@ -5,6 +5,7 @@ import jayson from 'jayson/promise/index.js'
 import Router from 'express-promise-router'
 import readDirRecursive from 'recursive-readdir'
 import Session from '../Session.js'
+import { InvalidArgumentError } from '../errors.js'
 
 const procedures = {
   async __rpc_inspect (args, context) {
@@ -36,13 +37,18 @@ await (async () => {
       }
       return result
     }catch(error){
+      // https://www.jsonrpc.org/specification#error_object
+      let jsonRPCErrorCode = -32603
+      if (error instanceof InvalidArgumentError){
+        jsonRPCErrorCode = -32602
+      }
       console.error(`jlinx rpc error "${name}"`, error)
       const data = {}
       if (process.env.NODE_ENV === 'development'){
         data.message = error.message
         data.stack = error.stack
       }
-      throw server.error(-32603, 'Internal error', data)
+      throw server.error(jsonRPCErrorCode, 'Internal error', data)
     }
   }
 

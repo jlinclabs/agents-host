@@ -13,11 +13,26 @@ import { useLogin } from '../resources/auth'
 export default function LoginForm(props){
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState(null)
 
-  const login = useLogin()
+  const login = useLogin({
+    onSuccess(){
+      setError(null)
+    },
+    onFailure(error){
+      if (`${error}`.includes('email or password is invalid')){
+        setError({message: 'email or password is invalid'})
+      }else{
+        setError(error)
+      }
+      // console.error(error)
+      // debugger
+    }
+  })
 
   const onSubmit = event => {
     event.preventDefault()
+    setError(null)
     login.call({ email, password })
   }
 
@@ -33,8 +48,9 @@ export default function LoginForm(props){
       component: 'form',
       onSubmit,
     }}>
-      <ErrorMessage error={login.error}/>
+      <ErrorMessage error={error}/>
       <TextField
+        autoFocus
         label="email"
         autoComplete="email"
         disabled={disabled}
