@@ -17,18 +17,22 @@ import ErrorMessage from './ErrorMessage'
 import PassphraseInput from './PassphraseInput'
 import { useSignup } from '../resources/auth'
 
-export default function SignupForm(props){
+export default function SignupForm({
+  onSuccess,
+  onFailure,
+  ...props
+}){
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   const signup = useSignup({
-    onSuccess: props.onSuccess,
-    onFailure: props.onFailure,
+    onSuccess,
+    onFailure,
   })
 
   const onSubmit = event => {
     event.preventDefault()
-    signup({
+    signup.call({
       email: email || undefined,
       password: password || undefined,
     })

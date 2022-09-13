@@ -90,7 +90,7 @@ function ContactsList({ contacts, loading, error }){
         )
         : (
           contacts.length === 0
-            ? <Typography variant="h7" italic>{`You dont have any contacts`}</Typography>
+            ? <Typography variant="h7">{`You dont have any contacts`}</Typography>
             : [...contacts].sort(sorter).map(contact =>
               <ContactListMember key={contact.did} contact={contact}/>
             )

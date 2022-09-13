@@ -1,5 +1,5 @@
 import jaysonBrowserClient from 'jayson/promise/lib/client/browser'
-import { useState, useCallback } from 'react'
+import { useRef, useState, useCallback } from 'react'
 import useSWR, { useSWRConfig } from 'swr'
 
 async function callServer(body, tries = 0){
@@ -72,8 +72,10 @@ function validateViewName(name){
 
 export function useRemoteCommand(name, callbacks = {}){
   const [value, setValue] = useState(null)
-  const pending = value instanceof Promise
-  const call = (pending
+  const returnObjectRef = useRef({})
+  const ro = returnObjectRef.current
+  ro.pending = value instanceof Promise
+  ro.call = useCallback(ro.pending
     ? () => {
       console.trace(`already executing`, { name })
       throw new Error(`already executing name="${name}"`)
@@ -95,26 +97,12 @@ export function useRemoteCommand(name, callbacks = {}){
       )
       setValue(promise)
       return promise
-    }
+    },
+    [ro.pending, callbacks.onSuccess, callbacks.onFailure]
   )
-
-  // call.pending = pending
-  // call.failed = value instanceof Error
-  // call.success = !call.pending && !call.failed && !!value
-  // call.error = call.failed ? value : null
-  // call.result = call.success ? value : null
-  // return call
-
-  const failed = value instanceof Error
-  const success = !pending && !failed && !!value
-  const error = failed ? value : null
-  const result = success ? value : null
-  return {
-    call,
-    pending,
-    failed,
-    success,
-    error,
-    result,
-  }
+  ro.failed = value instanceof Error
+  ro.success = !ro.pending && !ro.failed && !!value
+  ro.error = ro.failed ? value : null
+  ro.result = ro.success ? value : null
+  return ro
 }
