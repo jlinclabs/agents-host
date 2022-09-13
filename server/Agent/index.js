@@ -26,7 +26,7 @@ export default class Agent {
 
   static async open({ did, didSecret, vaultKey }){
     const jlinx = await JlinxClient.open(did, didSecret)
-    const vault = await openVault(`agent-${id}`, vaultKey)
+    const vault = await openVault(`agent-${did.replace(/:/g, '-')}`, vaultKey)
     return new Agent({ did, jlinx, vault })
   }
 
