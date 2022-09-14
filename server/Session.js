@@ -52,9 +52,9 @@ export default class Session {
     this._createdAt = record.createdAt
     this._lastSeenAt = record.lastSeenAt
     if (record.agent){
-      const { id, did, didSecret, createdAt, vaultKey } = record.agent
+      const { did, didSecret, vaultKey } = record.agent
       this._agent = await Agent.open({
-        id, did, didSecret, createdAt, vaultKey
+        did, didSecret, vaultKey
       })
     }
   }
@@ -110,10 +110,9 @@ async function touchSession(id){
       lastSeenAt: true,
       agent: {
         select: {
-          id: true,
+          createdAt: true,
           did: true,
           didSecret: true,
-          createdAt: true,
           vaultKey: true,
         }
       },
