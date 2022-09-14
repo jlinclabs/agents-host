@@ -25,6 +25,7 @@ import DevCeramicPage from './pages/DevCeramicPage'
 
 export default function Routes() {
   const { currentAgent, loading, error } = useCurrentAgent()
+
   if (!currentAgent) return <AuthPage {...{loading, error}} />
   const props = { currentAgent }
   return <Layout {...{ currentAgent }}>

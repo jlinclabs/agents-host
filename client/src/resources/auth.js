@@ -1,11 +1,18 @@
 
 import { useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useViewerConnection } from '@self.id/react'
 import { useRemoteQuery, useRemoteCommand } from '../lib/rpc'
 import randomString from '../lib/randomString'
 
 export function generatePassword(){
   return randomString(128)
+}
+
+function useEthereumConnection(){
+  const [connection, connect, disconnect] = useViewerConnection()
+  console.log('ethereum', connection)
+  return [connection, connect, disconnect]
 }
 
 function logCurrentAgentIfChanged(agent){
