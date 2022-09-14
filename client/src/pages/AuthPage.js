@@ -16,6 +16,7 @@ import ErrorMessage from '../components/ErrorMessage'
 import Link from '../components/Link'
 import LoginForm from '../components/LoginForm'
 import SignupForm from '../components/SignupForm'
+import LoginWithEthereumButton from '../components/LoginWithEthereumButton'
 
 export default function AuthPage({ loading, error }) {
   return <Container
@@ -51,13 +52,18 @@ export default function AuthPage({ loading, error }) {
 }
 
 function Main(){
-  return <Stack>
+  return <Stack
+    divider={<Divider sx={{my: 3}}>OR</Divider>}
+  >
+    {window.ethereum &&
+      <LoginWithEthereumButton variant="contained" />
+    }
     <Button
       variant="contained"
       to="/login"
       component={Link}
     >Login</Button>
-    <Divider sx={{my: 3}}>OR</Divider>
+
     <Button
       variant="contained"
       to="/signup"
@@ -69,6 +75,15 @@ function Main(){
 function Login(){
   return <Paper>
     <LoginForm sx={{p:2}}/>
+  </Paper>
+}
+
+function LoginEth(){
+  const navigate = useNavigate()
+
+  return <Paper sx={{p:2}}>
+    <Typography variant="h4">Login with Ethereum</Typography>
+    <LoginWithEthereum onSuccess={() => { navigate('/') }} />
   </Paper>
 }
 

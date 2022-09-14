@@ -1,11 +1,15 @@
 import { ErrorBoundary } from 'react-error-boundary'
+import { Provider } from '@self.id/react'
+
 import Routes from './Routes'
 import AppError from './components/AppError'
 
 export default function App() {
   return (
     <ErrorBoundary FallbackComponent={AppError}>
-      <Routes/>
+      <Provider client={{ ceramic: 'testnet-clay' }}>
+        <Routes/>
+      </Provider>
     </ErrorBoundary>
   )
 }

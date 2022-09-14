@@ -2,6 +2,7 @@ import env from '../environment.js'
 import Path from 'path'
 import express from 'express'
 import bodyParser from 'body-parser'
+import proxy from 'express-http-proxy'
 
 import uploads from './uploads.js'
 import ceramicRestApi from './ceramicRestApi.js'
@@ -29,6 +30,9 @@ app.use(uploads)
 app.use(bodyParser.json({
   limit: 102400 * 10,
 }))
+
+app.post('/api/v0/streams', proxy(env.CERAMIC_API_URL))
+
 app.use('/api/ceramic', ceramicRestApi)
 app.use('/api/ceramic', jlinxRestApi)
 app.use('/api/jlinx/v0/rpc', jlinxRpcApi)
