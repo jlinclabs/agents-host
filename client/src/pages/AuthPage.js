@@ -16,7 +16,7 @@ import ErrorMessage from '../components/ErrorMessage'
 import Link from '../components/Link'
 import LoginForm from '../components/LoginForm'
 import SignupForm from '../components/SignupForm'
-import LoginWithEthereumButton from '../components/LoginWithEthereumButton'
+import LoginWithEthereum from '../components/LoginWithEthereum'
 
 export default function AuthPage({ loading, error }) {
   return <Container
@@ -39,6 +39,7 @@ export default function AuthPage({ loading, error }) {
         loading ? <CircularProgress/> :
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/login/eth" element={<LoginEth />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signup/password" element={<SignupWithPassword />} />
@@ -56,7 +57,11 @@ function Main(){
     divider={<Divider sx={{my: 3}}>OR</Divider>}
   >
     {window.ethereum &&
-      <LoginWithEthereumButton variant="contained" />
+      <Button
+        variant="contained"
+        to="/login/eth"
+        component={Link}
+      >Login with Ethereum</Button>
     }
     <Button
       variant="contained"
@@ -82,8 +87,8 @@ function LoginEth(){
   const navigate = useNavigate()
 
   return <Paper sx={{p:2}}>
-    <Typography variant="h4">Login with Ethereum</Typography>
-    <LoginWithEthereum onSuccess={() => { navigate('/') }} />
+    <Typography variant="h5">Logging in with Ethereum…</Typography>
+    <LoginWithEthereum _onConnect={() => { navigate('/') }} />
   </Paper>
 }
 
