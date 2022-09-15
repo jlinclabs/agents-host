@@ -87,3 +87,8 @@ async function hashPassword(password){
 async function checkPassword(password, passwordHash){
   return await bcrypt.compare(password, passwordHash)
 }
+
+// auth idea
+// export const foobar = requireAgent((agent, options, context) => {
+
+// })
