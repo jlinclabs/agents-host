@@ -14,6 +14,8 @@
 - [x] multiparty text agreements
 - [x] change apis to JSON RPC
 - [ ] IDX ID:3 auth
+  - NEXT !!!
+    - use the `selfID.get` and `set` to store a jlinx agent RPC endpoint
 - [ ] encrypted agreements 
 - [ ] did@origin 
   - `did:3:kjzl6cwe1jw147mtuuzu92zngrnnt2ewnfcvze4cx8u2s4v3e27vjxo38a0ps8r@agents.jlinx.test`
