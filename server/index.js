@@ -90,8 +90,8 @@ app.use('/api/jlinx/v0', jlinxRestApi)
 // })
 
 if (env.NODE_ENV === 'production') {
-  router.use(express.static('client/build'))
-  router.get('/*', function (req, res) {
+  app.use(express.static('client/build'))
+  app.get('/*', function (req, res) {
     res.sendFile(Path.join(env.BUILD_PATH, 'index.html'));
   })
 }
