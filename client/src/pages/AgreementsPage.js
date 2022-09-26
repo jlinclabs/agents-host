@@ -24,6 +24,9 @@ import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
 import Chip from '@mui/material/Chip'
+import Tabs from '@mui/material/Tabs'
+import Tab from '@mui/material/Tab'
+import ToggleButton from '@mui/material/ToggleButton'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
@@ -43,6 +46,7 @@ import LinkToCerscan from '../components/LinkToCerscan'
 import CeramicStreamEvents from '../components/CeramicStreamEvents'
 import ButtonRow from '../components/ButtonRow'
 import TermsTextField from '../components/TermsTextField'
+import TermsUploadField from '../components/TermsUploadField'
 import AgreementPartiesInput from '../components/AgreementPartiesInput'
 import InspectObject from '../components/InspectObject'
 
@@ -166,6 +170,7 @@ function AgreementForm({
   error,
   onSubmit,
 }){
+  const [termsTab, setTermsTab] = useState('text')
 
   const submittable = (
     agreement &&
@@ -191,14 +196,36 @@ function AgreementForm({
       onChange={parties => patchAgreement({ parties })}
     />
 
+
     <FormControl fullWidth>
-      <FormLabel required>Terms</FormLabel>
-      <TermsTextField
-        label=""
-        value={agreement.terms}
-        onChange={e => patchAgreement({ terms: e.target.value })}
-      />
+      <FormLabel required sx={{mb:1}}>Terms ({termsTab})</FormLabel>
+      <Tabs
+        value={termsTab}
+        onChange={(e,v) => { setTermsTab(v) }}
+        sx={{mb:1}}
+      >
+        <Tab label="TEXT" value="text"/>
+        <Tab label="UPLOAD" value="upload"/>
+      </Tabs>
+      {
+        termsTab === 'text' ?
+          <TermsTextField
+            label=""
+            value={agreement.terms}
+            onChange={e => patchAgreement({ terms: e.target.value })}
+          /> :
+        termsTab === 'upload' ?
+          <TermsUploadField
+            label=""
+            value={agreement.terms}
+            onChange={e => patchAgreement({ terms: e.target.value })}
+          />
+          :
+        null
+      }
     </FormControl>
+
+
 
     <ButtonRow mt={2}>
       <Button
@@ -302,6 +329,7 @@ function Agreement({ currentAgent, agreement, ...props }){
         value={agreement.terms}
       />
     </FormControl>
+
 
     <Typography variant="h6" mt={2}>Parties:</Typography>
     <Stack spacing={2}>

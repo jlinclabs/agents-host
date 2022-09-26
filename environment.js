@@ -15,6 +15,7 @@ for (const prop of [
   'SESSION_SECRET',
   'VAULTS_PATH',
   'DATABASE_URL',
+  'IPFS_API_URL',
   'CERAMIC_API_URL',
   'CERAMIC_NODE_SECRET',
 ]){
@@ -35,6 +36,7 @@ const env = {
   SESSION_SECRET: process.env.SESSION_SECRET,
   VAULTS_PATH: process.env.VAULTS_PATH,
   DATABASE_URL: process.env.DATABASE_URL,
+  IPFS_API_URL: process.env.IPFS_API_URL,
   CERAMIC_API_URL: process.env.CERAMIC_API_URL,
   CERAMIC_NODE_SECRET: process.env.CERAMIC_NODE_SECRET,
 }
