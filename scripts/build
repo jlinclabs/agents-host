@@ -5,4 +5,4 @@ set -x
 
 cd client
 npm i
-../node_modules/.bin/dotenv -e ../.env npm run build
+DISABLE_ESLINT_PLUGIN=true ../node_modules/.bin/dotenv -e ../.env npm run build
