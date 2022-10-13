@@ -31,3 +31,6 @@ yarn-error.log*
 /tmp
 /uploads
 /vaults
+.proxyrc
+client-build
+.parcel-cache
