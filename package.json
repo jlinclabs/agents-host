@@ -52,6 +52,7 @@
     "multiformats": "^9.8.1",
     "node-fetch": "^3.2.10",
     "node-jose": "^2.1.1",
+    "preact": "^10.11.0",
     "tmp-promise": "^3.0.3",
     "uuid": "^9.0.0"
   },

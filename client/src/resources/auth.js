@@ -20,6 +20,7 @@ function logCurrentAgentIfChanged(agent){
   logCurrentAgentIfChanged.last = agent
   console.log(`currentAgent => ${JSON.stringify(agent)}`)
 }
+
 export function useCurrentAgent({
   redirectToIfFound,
   redirectToIfNotFound,
