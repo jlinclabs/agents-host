@@ -22,6 +22,7 @@ import HomeIcon from '@mui/icons-material/Home'
 import LockIcon from '@mui/icons-material/Lock'
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
 
+import LogoutButton from 'app-shared/client/components/LogoutButton'
 // import { useCurrentAgent } from './resources/auth'
 import Link from './components/Link'
 import AppError from './components/AppError'
@@ -148,8 +149,6 @@ function SideNav({ loading, currentUser }) {
         component: NavButton,
         icon: <LogoutOutlinedIcon/>,
         text: 'Logout',
-        // to: '/logout',
-        // onClick: logout,
       }}/>
     </> :
     <>
@@ -214,9 +213,10 @@ function SideNav({ loading, currentUser }) {
   </Box>
 }
 
-function NavButton({ text, to, icon }){
+function NavButton({ text, icon, ...props }){
+  if (props.to) props.component ??= Link
   return <ListItem key={text} disablePadding>
-    <ListItemButton component={Link} to={to}>
+    <ListItemButton {...props}>
       <ListItemIcon sx={{minWidth: '30px'}}>
         {icon}
       </ListItemIcon>

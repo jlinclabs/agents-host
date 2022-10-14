@@ -6,10 +6,10 @@ export default createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: colors.purple[700],
+      main: colors.purple[600],
     },
     secondary: {
-      main: colors.blue[500],
+      main: colors.blue[400],
     },
   },
   components: {

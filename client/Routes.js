@@ -33,6 +33,7 @@ export default function Routes() {
   return <Layout {...{ currentUser }}>
      <_Routes>
        <Route path="/debug/*" element={<DebugPage {...{...props, appName: 'Agents'}}/>}/>
+       <Route path="*" element={<NotFoundPage {...props} />} />
      </_Routes>
   </Layout>
   // if (loading) return <CircularProgress/>
