@@ -22,14 +22,14 @@ import HomeIcon from '@mui/icons-material/Home'
 import LockIcon from '@mui/icons-material/Lock'
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
 
-import { useCurrentAgent } from './resources/auth'
+// import { useCurrentAgent } from './resources/auth'
 import Link from './components/Link'
 import AppError from './components/AppError'
 
 export default function Layout(props) {
   const {
     children,
-    currentAgent,
+    currentUser,
     // title = 'JLINX Demo',
     // description = 'JLINX Demo',
     // favicon = '/favicon.ico',
@@ -51,7 +51,7 @@ export default function Layout(props) {
         minHeight: '100vh',
         minWidth: '100vw',
       }}>
-        <SideNav {...{ currentAgent }}/>
+        <SideNav {...{ currentUser }}/>
         <Box sx={{
           flex: '1 1'
         }}>
@@ -68,14 +68,14 @@ export default function Layout(props) {
 }
 
 
-function SideNav({ loading, currentAgent }) {
+function SideNav({ loading, currentUser }) {
   const navButtons = (
     loading ? (
       Array(3).fill().map((_, i) =>
         <Skeleton key={i} animation="wave" height="100px" />
       )
     ) :
-    currentAgent ? <>
+    currentUser ? <>
       {/* <NavButton {...{
         icon: <AccountBoxOutlinedIcon/>,
         text: 'Identifiers',
@@ -133,7 +133,7 @@ function SideNav({ loading, currentAgent }) {
         <ListItemButton component={Link} to="/settings">
           <ListItemText {...{
             primary: (
-              <ShortDid did={currentAgent.did}/>
+              <span>{currentUser.email || currentUser.id}</span>
             ),
             primaryTypographyProps: {
               sx: {

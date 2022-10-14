@@ -27,6 +27,8 @@ import DevCeramicPage from './pages/DevCeramicPage'
 
 export default function Routes() {
   const { currentUser, loading, error } = useCurrentUser()
+  if (loading) return <CircularProgress/>
+  if (error) return <AppError {...{error}}/>
   const props = { currentUser }
   return <Layout {...{ currentUser }}>
      <_Routes>
