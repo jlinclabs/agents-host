@@ -35,6 +35,7 @@
     "@mui/icons-material": "^5.10.6",
     "@mui/material": "^5.10.7",
     "@prisma/client": "^4.3.1",
+    "@self.id/react": "^0.4.0",
     "app-shared": "github:jlinclabs/app-shared#ed897bafecf120e9a7df4bc92e0919944a5bd5e4",
     "b4a": "^1.6.0",
     "bcrypt": "^5.0.1",
@@ -74,6 +75,8 @@
     "zustand": "^4.1.2"
   },
   "devDependencies": {
+    "@parcel/packager-raw-url": "^2.7.0",
+    "@parcel/transformer-webmanifest": "^2.7.0",
     "brittle": "^3.1.0",
     "standard": "^17.0.0"
   }
