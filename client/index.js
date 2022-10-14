@@ -1,8 +1,11 @@
-import React from 'react'
+import React from 'react'from 'react'
+import React2 from 'app-shared/client/react'
 import { render } from 'app-shared/client/render.js'
 import Routes from './Routes'
 import theme from './theme'
-console.log({ React })
+
+console.log(React === React2, { React, React2 })
+
 render({
   React,
   Routes,

@@ -144,10 +144,12 @@ function SideNav({ loading, currentUser }) {
           }}/>
         </ListItemButton>
       </ListItem>
-      <NavButton {...{
+      <LogoutButton {...{
+        component: NavButton,
         icon: <LogoutOutlinedIcon/>,
         text: 'Logout',
-        to: '/logout',
+        // to: '/logout',
+        // onClick: logout,
       }}/>
     </> :
     <>
@@ -155,6 +157,11 @@ function SideNav({ loading, currentUser }) {
         icon: <HomeIcon/>,
         text: 'Home',
         to: '/',
+      }}/>
+      <NavButton {...{
+        icon: <HomeIcon/>,
+        text: 'Debug',
+        to: '/debug',
       }}/>
     </>
   )
