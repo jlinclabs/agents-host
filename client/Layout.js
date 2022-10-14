@@ -159,7 +159,7 @@ function SideNav({ loading, currentAgent }) {
     </>
   )
   return <Box sx={{
-    display: 'flex',
+    display: 'flex',git s
     flexDirection: 'column',
     backgroundColor: 'primary.dark',
     minWidth: `max(10vw, 175px)`,
