@@ -5,21 +5,22 @@ import Typography from '@mui/material/Typography'
 import { useCurrentAgent } from '../resources/auth'
 import LinkToDid from '../components/LinkToDid'
 import CopyButton from '../components/CopyButton'
+import InspectObject from 'app-shared/client/components/InspectObject'
 
-export default function HomePage() {
-  const { currentAgent } = useCurrentAgent()
+export default function IDPage({ currentUser }) {
   return <Box p={2}>
-    {currentAgent &&
-      <AgentDescription agent={currentAgent}/>}
+    <InspectObject object={{ currentUser }}/>
+    {/*{currentAgent &&*/}
+    {/*  <AgentDescription agent={currentAgent}/>}*/}
   </Box>
 }
-
-function AgentDescription({ agent }){
-  return <>
-    <Typography variant="h3">Jlinx Agent</Typography>
-    <Typography variant="h6" sx={{mt: 2}}>
-      <LinkToDid did={agent.did}/>
-      <CopyButton variant="icon" value={agent.did} />
-    </Typography>
-  </>
-}
+//
+// function AgentDescription({ agent }){
+//   return <>
+//     <Typography variant="h3">Jlinx Agent</Typography>
+//     <Typography variant="h6" sx={{mt: 2}}>
+//       <LinkToDid did={agent.did}/>
+//       <CopyButton variant="icon" value={agent.did} />
+//     </Typography>
+//   </>
+// }

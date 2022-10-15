@@ -4,8 +4,7 @@ import Layout from '../Layout'
 import ErrorMessage from '../components/ErrorMessage'
 import { useCurrentAgent, useLogout } from '../resources/auth'
 
-export default function SettingsPage() {
-  const { currentAgent } = useCurrentAgent({ redirectToIfNotFound: '/' })
+export default function SettingsPage({ currentUser }) {
   return <Container maxWidth="sm" sx={{p: 2}}>
     <span>SettingsPage</span>
   </Container>

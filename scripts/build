@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-set -e
-set -x
-
-cd client
-npm i
-DISABLE_ESLINT_PLUGIN=true ../node_modules/.bin/dotenv -e ../.env npm run build

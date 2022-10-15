@@ -1,12 +1,12 @@
 import * as React from 'react'
 import { Routes as _Routes, Route } from 'react-router-dom'
-import CircularProgress from '@mui/material/CircularProgress'
 import { useCurrentUser } from 'app-shared/client/hooks/auth'
 import AppError from 'app-shared/client/components/AppError'
 import AuthPage from 'app-shared/client/pages/AuthPage'
 import DebugPage from 'app-shared/client/pages/DebugPage'
 import RedirectPage from 'app-shared/client/pages/RedirectPage'
 import NotFoundPage from 'app-shared/client/pages/NotFoundPage'
+import FullPageLoading from './components/FullPageLoading'
 
 // import HomePage from './pages/HomePage'
 import Layout from './Layout'
@@ -26,16 +26,48 @@ import DevCeramicPage from './pages/DevCeramicPage'
 // import ContractsPage from './pages/ContractsPage'
 
 export default function Routes() {
-  const { currentUser, loading, error } = useCurrentUser()
-  if (loading) return <CircularProgress/>
+  const {currentUser, loading, error} = useCurrentUser()
+  console.log({currentUser, loading, error})
+  if (loading) return <FullPageLoading/>
   if (error) return <AppError {...{error}}/>
-  const props = { currentUser }
-  return <Layout {...{ currentUser }}>
-     <_Routes>
-       <Route path="/debug/*" element={<DebugPage {...{...props, appName: 'Agents'}}/>}/>
-       <Route path="*" element={<NotFoundPage {...props} />} />
-     </_Routes>
+  if (currentUser) return <LoggedInRoutes {...{currentUser}}/>
+  return <LoggedOutRoutes />
+}
+
+function LoggedOutRoutes() {
+  return <_Routes>
+    {defaultRoutes({})}
+  </_Routes>
+}
+
+function LoggedInRoutes(props) {
+  return <Layout {...props}>
+    <_Routes>
+      <Route path="/" element={<RedirectPage to="/id" />} />
+      <Route path="/id" element={<IDPage {...props} />} />
+      <Route path="/settings" element={<SettingsPage {...props} />} />
+      {/*<Route path="/vault" element={<VaultPage {...props} />} />*/}
+      {/*<Route path="/dids/*" element={<DidsPage {...props} />} />*/}
+      {/*<Route path="/contacts/*" element={<ContactsPage {...props} />} />*/}
+      {/*<Route path="/agreements/*" element={<AgreementsPage {...props} />} />*/}
+      {/*<Route path="/data-sharing/*" element={<DataSharingPage {...props} />} />*/}
+      {/*<Route path="/dev/ceramic/*" element={<DevCeramicPage {...props} />} />*/}
+      {/*<Route path="/profiles/*" element={<ProfilesPage {...props} />} />*/}
+      {/*<Route path="/identifiers/*" element={<IdentifiersPage {...props} />} />*/}
+      {/*<Route path="/contracts/*" element={<ContractsPage {...props} />} />*/}
+      {defaultRoutes(props)}
+    </_Routes>
   </Layout>
+}
+
+function defaultRoutes({ currentUser }) { // not a react component
+  return <>
+    {/*<Route path="*" element={<AuthPage {...props}/>} />*/}
+    {AuthPage.routes({ currentUser })}
+    <Route path="/debug/*" element={<DebugPage appName="Agents"/>}/>}/>
+    <Route path="*" element={<NotFoundPage/>}/>
+  </>
+}
   // if (loading) return <CircularProgress/>
   // if (error) return <AppError {...{error}}/>
   // if (!currentUser) return <AuthPage {...{loading, error}} />
@@ -45,24 +77,9 @@ export default function Routes() {
   //     <Route path="/debug/*" element={<DebugPage {...{...props, appName: 'Agents'}}/>}/>
   //     <Route path="*" element={<AuthPage {...props}/>} />
   //     {/*{currentUser && <>*/}
-  //     {/*  <Route path="/" element={<RedirectPage to="/id" />} />*/}
-  //     {/*  <Route path="/login/*" element={<RedirectPage to="/"/>} />*/}
-  //     {/*  <Route path="/forgot-password/*" element={<RedirectPage to="/"/>} />*/}
-  //     {/*  <Route path="/signup/*" element={<RedirectPage to="/"/>} />*/}
-  //     {/*  <Route path="/logout" element={<LogoutPage {...props} />} />*/}
-  //     {/*  <Route path="/settings" element={<SettingsPage {...props} />} />*/}
-  //     {/*  <Route path="/vault" element={<VaultPage {...props} />} />*/}
-  //     {/*  <Route path="/dids/*" element={<DidsPage {...props} />} />*/}
-  //     {/*  <Route path="/id" element={<IDPage {...props} />} />*/}
-  //     {/*  <Route path="/contacts/*" element={<ContactsPage {...props} />} />*/}
-  //     {/*  <Route path="/agreements/*" element={<AgreementsPage {...props} />} />*/}
-  //     {/*  <Route path="/data-sharing/*" element={<DataSharingPage {...props} />} />*/}
-  //     {/*  <Route path="/dev/ceramic/*" element={<DevCeramicPage {...props} />} />*/}
-  //     {/*  /!* <Route path="/profiles/*" element={<ProfilesPage {...props} />} />*/}
-  //     {/*  <Route path="/identifiers/*" element={<IdentifiersPage {...props} />} />*/}
-  //     {/*  <Route path="/contracts/*" element={<ContractsPage {...props} />} /> *!/*/}
+
   //     {/*</>}*/}
   //     <Route path="*" element={<NotFoundPage {...props} />} />
   //   </_Routes>
   // </Layout>
-}
+// }
