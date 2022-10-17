@@ -21,7 +21,7 @@ export default class Agent {
     })
     agent.vault.set('did', did.id, 'string')
     agent.vault.set('didSecret', didSecret, 'raw')
-    return { agent, didSecret, vaultKey }
+    return { agent, did: agent.did, didSecret, vaultKey }
   }
 
   static async open({ did, didSecret, vaultKey }){
