@@ -6,14 +6,15 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 import { useCurrentAgent } from '../resources/auth'
 import { useRemoteQuery } from '../lib/rpc'
+import { useQuery, useCommand } from 'app-shared/client/hooks/cqrpc'
 
 import Layout from '../Layout'
 import ErrorMessage from '../components/ErrorMessage'
 import InspectObject from '../components/InspectObject'
 
 export default function VaultPage() {
-  const { currentAgent } = useCurrentAgent({ redirectToIfNotFound: '/' })
-  const { view: vaultDump, loading, error } = useRemoteQuery(`vault.getDump`)
+  // const { currentAgent } = useCurrentAgent({ redirectToIfNotFound: '/' })
+  const { result: vaultDump, loading, error } = useQuery(`vault.getDump`)
   return <Container sx={{p: 2}}>
     <Typography variant="h3">VaultPage</Typography>
     <Alert severity="warning" sx={{my:2}}>
