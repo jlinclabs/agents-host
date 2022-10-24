@@ -17,4 +17,4 @@ export async function signup({ email, password }, context){
     context
   )
   return { id }
-}gtit 
+}

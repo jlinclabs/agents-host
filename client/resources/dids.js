@@ -1,6 +1,6 @@
-import { useRemoteQuery, useRemoteCommand } from '../lib/rpc'
+import { useQuery, useCommand } from 'app-shared/client/hooks/cqrpc'
 
 export function useDidDocument(did){
-  const { view: didDocument, ...state } = useRemoteQuery(`dids.getDidDocument`, {did})
+  const { result: didDocument, ...state } = useQuery(`dids.getDidDocument`, {did})
   return [didDocument, state]
 }

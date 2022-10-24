@@ -47,7 +47,7 @@ function LoggedInRoutes(props) {
       <Route path="/id" element={<IDPage {...props} />} />
       <Route path="/settings" element={<SettingsPage {...props} />} />
       <Route path="/vault" element={<VaultPage {...props} />} />
-      {/*<Route path="/dids/*" element={<DidsPage {...props} />} />*/}
+      <Route path="/dids/*" element={<DidsPage {...props} />} />
       {/*<Route path="/contacts/*" element={<ContactsPage {...props} />} />*/}
       {/*<Route path="/agreements/*" element={<AgreementsPage {...props} />} />*/}
       {/*<Route path="/data-sharing/*" element={<DataSharingPage {...props} />} />*/}

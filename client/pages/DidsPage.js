@@ -20,7 +20,6 @@ import Avatar from '@mui/material/Avatar'
 import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
-import { useCurrentAgent } from '../resources/auth'
 import { useDidDocument } from '../resources/dids'
 
 import Link from '../components/Link'
@@ -30,22 +29,22 @@ import LinkToCeramicApi from '../components/LinkToCeramicApi'
 import LinkToCerscan from '../components/LinkToCerscan'
 import InspectObject from '../components/InspectObject'
 
-export default function DidsPage() {
+export default function DidsPage(props) {
   return <Container p={4}>
     <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="/:did" element={<Show />} />
+      <Route path="/" element={<Index {...props}/>} />
+      <Route path="/:did" element={<Show {...props}/>} />
     </Routes>
   </Container>
 }
 
-function Index(){
+function Index({ currentUser }){
   return <>
     <Typography my={2} variant="h3">DIDs</Typography>
     <Typography my={2} variant="h6">Decentralized Identifiers</Typography>
     <Typography my={2} variant="h6">Resolve a DID:</Typography>
     <ResolveDidForm/>
-    <MyAgentsDidsList/>
+    <MyAgentsDidsList {...{ currentUser }}/>
   </>
 }
 
@@ -96,13 +95,12 @@ function ResolveDidForm({ disabled, ...props }){
   </Box>
 }
 
-function MyAgentsDidsList(props){
-  const { currentAgent } = useCurrentAgent()
+function MyAgentsDidsList({ currentUser, ...props }){
   return <Box {...props}>
     <Typography my={2} variant="h6">Your Agent's DIDs:</Typography>
 
     <Link
-      to={`/dids/${currentAgent.did}`}
-    >{currentAgent.did}</Link>
+      to={`/dids/${currentUser.did}`}
+    >{currentUser.did}</Link>
   </Box>
 }
