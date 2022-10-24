@@ -2,6 +2,6 @@ import { Context as ContextBase } from 'app-shared/server/Context.js'
 
 export class Context extends ContextBase {
   getAgent() {
-    return this.queries.agents._getAgent()
+    return this._agent ??= this.queries.agents._getAgent()
   }
 }

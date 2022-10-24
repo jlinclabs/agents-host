@@ -16,6 +16,7 @@ import LogoutPage from './pages/LogoutPage'
 import SettingsPage from './pages/SettingsPage'
 import VaultPage from './pages/VaultPage'
 import DidsPage from './pages/DidsPage'
+import ProfilePage from './pages/ProfilePage'
 import IDPage from './pages/IDPage'
 import ContactsPage from './pages/ContactsPage'
 import AgreementsPage from './pages/AgreementsPage'
@@ -44,7 +45,8 @@ function LoggedInRoutes(props) {
   return <Layout {...props}>
     <_Routes>
       <Route path="/" element={<RedirectPage to="/id" />} />
-      <Route path="/id" element={<IDPage {...props} />} />
+      {/*<Route path="/id" element={<IDPage {...props} />} />*/}
+      <Route path="/profile" element={<ProfilePage {...props} />} />
       <Route path="/settings" element={<SettingsPage {...props} />} />
       <Route path="/vault" element={<VaultPage {...props} />} />
       <Route path="/dids/*" element={<DidsPage {...props} />} />
