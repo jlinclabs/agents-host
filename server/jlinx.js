@@ -18,15 +18,19 @@ export class JlinxClient {
     return new JlinxClient(did)
   }
 
-  constructor(did){
+  constructor({ did, secretSeed }){
     debug('new JlinxClient', { did })
+    // this.readOnly = !did
     this.did = did
-    this.readOnly = !did
+    this.getDID = async () => {
+      return this._DID ??= await getDid(did, secretSeed)
+    }
     this.dids = new JlinxDids(this)
   }
 
   async createJWS(signable){
-    return await this.did.createJWS(signable)
+    const did = await this.getDID()
+    return await did.createJWS(signable)
   }
 
   async get(id, opts = {}){
@@ -46,7 +50,7 @@ export class JlinxClient {
         ...metadata
       },
       {
-        asDID: this.did,
+        asDID: await this.getDID(),
         ...opts
       }
     )
@@ -78,7 +82,7 @@ class JlinxDocument {
 
   async update(content, metadata, opts = {}) {
     await this.doc.update(content, metadata, {
-      asDID: this.did, ...opts
+      asDID: await this.getDID(), ...opts
     })
     await this.sync()
     // TODO consider this.doc.requestAnchor()
