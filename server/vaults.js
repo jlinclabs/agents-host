@@ -7,10 +7,16 @@ export async function generateVaultKey(){
   return JlinxVault.generateKey().toString('hex')
 }
 
-export async function openVault(did, vaultKey){
+export function getVault(did, vaultKey) {
   const name = `agent-${did.replace(/:/g, '-')}`
-  const path = Path.resolve(env.VAULTS_PATH, `${name}.vault`)
-  const vault = new JlinxVault({ path, key: Buffer.from(vaultKey, 'hex') })
+  return new JlinxVault({
+    path: Path.resolve(env.VAULTS_PATH, `${name}.vault`),
+    key: Buffer.from(vaultKey, 'hex')
+  })
+}
+
+export async function openVault(did, vaultKey){
+  const vault = getVault(did, vaultKey)
   await vault.ready()
   return vault
 }

@@ -2,6 +2,9 @@ import b4a from 'b4a'
 import { openVault } from '../vaults.js'
 
 export async function getDump({}, context){
+  const agent = await context.getAgent()
+  return await vaultToJson(agent.vault)
+
   const record = await context.prisma.user.findUnique({
     where: { id: context.userId },
     select: {
