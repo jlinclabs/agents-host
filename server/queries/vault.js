@@ -1,24 +1,18 @@
 import b4a from 'b4a'
-import Agent from '../Agent/index.js'
+import { openVault } from '../vaults.js'
 
 export async function getDump({}, context){
   const record = await context.prisma.user.findUnique({
     where: { id: context.userId },
     select: {
       did: true,
-      didSecret: true,
       vaultKey: true,
     }
   })
   if (!record) throw new Error(`user now found`)
-
-  console.log({ record })
-  const agent = await Agent.open({
-    did: record.did,
-    didSecret: b4a.from(record.didSecret, 'hex'),
-    vaultKey: record.vaultKey,
-  })
-  return await vaultToJson(agent.vault)
+  const { did, vaultKey } = record
+  const vault = await openVault(did, vaultKey)
+  return await vaultToJson(vault)
 }
 
 const SKIPPED_KEYS = new Set([

@@ -7,7 +7,8 @@ export default createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: colors.purple[600],
+      // main: colors.purple[600],
+      main: 'rgb(66, 165, 245)',
     },
     secondary: {
       main: colors.blue[400],
