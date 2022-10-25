@@ -6,9 +6,9 @@ import Stack from '@mui/material/Stack'
 import Avatar from '@mui/material/Avatar'
 
 import { useProfile } from '../resources/profiles'
-import Link from '../components/Link'
+/*import Link from 'app-shared/client/components/Link'*/
 import LinkToCeramicApi from '../components/LinkToCeramicApi'
-import ErrorMessage from '../components/ErrorMessage'
+import ErrorMessage from 'app-shared/client/components/ErrorMessage'
 
 export default function Profile({ id, ...props }){
   const [profile, { loading, error }] = useProfile(id)

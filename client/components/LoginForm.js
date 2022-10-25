@@ -5,8 +5,8 @@ import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 
-import Link from './Link'
-import ErrorMessage from './ErrorMessage'
+import ErrorMessage from 'app-shared/client/components/ErrorMessage'
+import Link from 'app-shared/client/components/Link'
 import PassphraseInput from './PassphraseInput'
 import { useLogin } from '../resources/auth'
 

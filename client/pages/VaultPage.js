@@ -9,8 +9,8 @@ import { useRemoteQuery } from '../lib/rpc'
 import { useQuery, useCommand } from 'app-shared/client/hooks/cqrpc'
 
 import Layout from '../Layout'
-import ErrorMessage from '../components/ErrorMessage'
-import InspectObject from '../components/InspectObject'
+import ErrorMessage from 'app-shared/client/components/ErrorMessage'
+import InspectObject from 'app-shared/client/components/InspectObject'
 
 export default function VaultPage() {
   // const { currentAgent } = useCurrentAgent({ redirectToIfNotFound: '/' })

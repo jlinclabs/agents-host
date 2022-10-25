@@ -22,12 +22,12 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 import { useDidDocument } from '../resources/dids'
 
-import Link from '../components/Link'
-import ErrorMessage from '../components/ErrorMessage'
+import Link from 'app-shared/client/components/Link'
+import ErrorMessage from 'app-shared/client/components/ErrorMessage'
 import CopyButton from '../components/CopyButton'
 import LinkToCeramicApi from '../components/LinkToCeramicApi'
 import LinkToCerscan from '../components/LinkToCerscan'
-import InspectObject from '../components/InspectObject'
+import InspectObject from 'app-shared/client/components/InspectObject'
 
 export default function DidsPage(props) {
   return <Container p={4}>

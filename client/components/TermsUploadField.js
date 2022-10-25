@@ -3,7 +3,7 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 
 // import { uploadFile } from '../lib/ipfs'
-import InspectObject from './InspectObject'
+import InspectObject from 'app-shared/client/components/InspectObject'
 
 export default function TermsUploadField({
   value,

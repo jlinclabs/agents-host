@@ -19,10 +19,10 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { useCurrentAgent } from '../resources/auth'
 import { useRemoteQuery, useRemoteCommand } from '../lib/rpc'
 import Layout from '../Layout'
-import ErrorMessage from '../components/ErrorMessage'
-import Link from '../components/Link'
-import Timestamp from '../components/Timestamp'
-import InspectObject from '../components/InspectObject'
+import ErrorMessage from 'app-shared/client/components/ErrorMessage'
+import Link from 'app-shared/client/components/Link'
+import Timestamp from 'app-shared/client/components/Timestamp'
+import InspectObject from 'app-shared/client/components/InspectObject'
 
 export default function ContactsPage() {
   const {

@@ -25,15 +25,15 @@ import {
 } from '../resources/contracts'
 
 import { useMyIdentifiers } from '../resources/identifiers'
-import Link from '../components/Link'
+import Link from 'app-shared/client/components/Link'
 import LinkToCeramicApi from '../components/LinkToCeramicApi'
-import Timestamp from '../components/Timestamp'
-import ErrorMessage from '../components/ErrorMessage'
+import Timestamp from 'app-shared/client/components/Timestamp'
+import ErrorMessage from 'app-shared/client/components/ErrorMessage'
 import IdentifierProfile from '../components/IdentifierProfile'
 import IdentifierSelectInput from '../components/IdentifierSelectInput'
 import LinkToDid from '../components/LinkToDid'
 import CeramicStreamEvents from '../components/CeramicStreamEvents'
-import InspectObject from '../components/InspectObject'
+import InspectObject from 'app-shared/client/components/InspectObject'
 
 export default function Contracts() {
   return <Container maxwidth="lg">

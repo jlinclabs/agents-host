@@ -12,8 +12,8 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 import RedirectPage from './RedirectPage'
 import { useSignup } from '../resources/auth'
-import ErrorMessage from '../components/ErrorMessage'
-import Link from '../components/Link'
+import ErrorMessage from 'app-shared/client/components/ErrorMessage'
+import Link from 'app-shared/client/components/Link'
 import LoginForm from '../components/LoginForm'
 
 export default function AuthPage({ loading, error }) {

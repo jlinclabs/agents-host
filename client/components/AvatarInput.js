@@ -13,7 +13,7 @@ import RotateRightIcon from '@mui/icons-material/RotateRight'
 
 import ModalWindow from '../components/ModalWindow'
 import ButtonRow from '../components/ButtonRow'
-import { useToggle } from '../lib/reactStateHelpers.js'
+import useToggle from 'app-shared/client/hooks/useToggle.js'
 
 const width = 250
 const height = 250

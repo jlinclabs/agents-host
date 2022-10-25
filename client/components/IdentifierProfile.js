@@ -4,9 +4,9 @@ import Typography from '@mui/material/Typography'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { useIdentifier } from '../resources/identifiers'
-import Link from './Link'
+import Link from 'app-shared/client/components/Link'
 import LinkToCeramicApi from '../components/LinkToCeramicApi'
-import ErrorMessage from './ErrorMessage'
+import ErrorMessage from 'app-shared/client/components/ErrorMessage'
 import Profile from './Profile'
 
 export default function IdentifierProfile({ identifierId, sx, ...props }){

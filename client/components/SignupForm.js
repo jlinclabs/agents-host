@@ -12,8 +12,8 @@ import Checkbox from '@mui/material/Checkbox'
 import AutorenewIcon from '@mui/icons-material/Autorenew'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 
-import Link from './Link'
-import ErrorMessage from './ErrorMessage'
+import Link from 'app-shared/client/components/Link'
+import ErrorMessage from 'app-shared/client/components/ErrorMessage'
 import PassphraseInput from './PassphraseInput'
 import { useSignup } from '../resources/auth'
 

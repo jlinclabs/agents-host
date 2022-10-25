@@ -3,7 +3,7 @@ import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 
 import LinkToDid from '../components/LinkToDid'
-import InspectObject from '../components/InspectObject'
+import InspectObject from 'app-shared/client/components/InspectObject'
 import CopyBox from '../components/CopyBox'
 
 export default function DashboardPage({ currentUser }) {

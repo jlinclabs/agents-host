@@ -24,8 +24,8 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
 
 import LogoutButton from 'app-shared/client/components/LogoutButton'
 // import { useCurrentAgent } from './resources/auth'
-import Link from './components/Link'
-import AppError from './components/AppError'
+/*import Link from 'app-shared/client/components/Link'*/
+import AppError from 'app-shared/client/components/AppError'
 import SideNav from './components/SideNav'
 
 export default function Layout(props) {

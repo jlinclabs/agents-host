@@ -8,9 +8,9 @@ import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import FormHelperText from '@mui/material/FormHelperText'
 
+import ErrorMessage from 'app-shared/client/components/ErrorMessage'
 import { useMyProfiles } from '../resources/profiles'
 import { useMyIdentifiers } from '../resources/identifiers'
-import ErrorMessage from './ErrorMessage'
 
 export default function IdentifierSelectInput({
   value,

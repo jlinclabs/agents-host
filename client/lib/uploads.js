@@ -1,4 +1,4 @@
-import useAsync from './useAsync.js'
+import useAsync from 'app-shared/client/hooks/useAsync.js'
 
 const MAX_FILE_SIZE_IN_MB = 200
 const MAX_FILE_SIZE = MAX_FILE_SIZE_IN_MB * 1000000

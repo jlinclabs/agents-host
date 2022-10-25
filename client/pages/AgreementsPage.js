@@ -31,14 +31,14 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 
-import { useStateObject } from '../lib/reactStateHelpers'
+import useStateObject from 'app-shared/client/hooks/useStateObject.js'
 import { useRemoteQuery, useRemoteCommand } from '../lib/rpc'
 import { useCurrentAgent } from '../resources/auth'
 
-import Link from '../components/Link'
+import Link from 'app-shared/client/components/Link'
 import LinkToCeramicApi from '../components/LinkToCeramicApi'
-import Timestamp from '../components/Timestamp'
-import ErrorMessage from '../components/ErrorMessage'
+/*import Timestamp from 'app-shared/client/components/Timestamp'*/
+import ErrorMessage from 'app-shared/client/components/ErrorMessage'
 import IdentifierProfile from '../components/IdentifierProfile'
 import IdentifierSelectInput from '../components/IdentifierSelectInput'
 import LinkToDid from '../components/LinkToDid'
@@ -48,7 +48,9 @@ import ButtonRow from '../components/ButtonRow'
 import TermsTextField from '../components/TermsTextField'
 import TermsUploadField from '../components/TermsUploadField'
 import AgreementPartiesInput from '../components/AgreementPartiesInput'
-import InspectObject from '../components/InspectObject'
+/*
+import InspectObject from 'app-shared/client/components/InspectObject'
+*/
 
 const useAgreement = id => useRemoteQuery(id ? 'agreements.get' : null, {id})
 

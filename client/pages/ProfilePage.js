@@ -6,11 +6,12 @@ import Stack from '@mui/material/Stack'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { useQuery, useCommand } from 'app-shared/client/hooks/cqrpc'
-import { useStateObject } from '../lib/reactStateHelpers.js'
+import useStateObject from 'app-shared/client/hooks/useStateObject.js'
+
 import ButtonRow from 'app-shared/client/components/ButtonRow'
 import Form from 'app-shared/client/components/Form'
 import AvatarInput from '../components/AvatarInput'
-import ErrorMessage from '../components/ErrorMessage'
+import ErrorMessage from 'app-shared/client/components/ErrorMessage'
 
 export default function ProfilePage() {
   const { result: profile, loading, error, mutate } = useQuery(`profile.get`)
