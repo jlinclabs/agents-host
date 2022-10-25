@@ -15,18 +15,17 @@ import SettingsPage from './pages/SettingsPage'
 import VaultPage from './pages/VaultPage'
 import DidsPage from './pages/DidsPage'
 import ProfilePage from './pages/ProfilePage'
-import IDPage from './pages/IDPage'
-import ContactsPage from './pages/ContactsPage'
-import AgreementsPage from './pages/AgreementsPage'
-import DataSharingPage from './pages/DataSharingPage'
-import DevCeramicPage from './pages/DevCeramicPage'
+// import IDPage from './pages/IDPage'
+// import ContactsPage from './pages/ContactsPage'
+// import AgreementsPage from './pages/AgreementsPage'
+// import DataSharingPage from './pages/DataSharingPage'
+// import DevCeramicPage from './pages/DevCeramicPage'
 // import ProfilesPage from './pages/ProfilesPage'
 // import IdentifiersPage from './pages/IdentifiersPage'
 // import ContractsPage from './pages/ContractsPage'
 
 export default function Routes() {
   const {currentUser, loading, error} = useCurrentUser()
-  console.log({currentUser, loading, error})
   if (loading) return <FullPageLoading/>
   if (error) return <AppError {...{error}}/>
   if (currentUser) return <LoggedInRoutes {...{currentUser}}/>

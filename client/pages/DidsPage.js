@@ -4,30 +4,20 @@ import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemText from '@mui/material/ListItemText'
-import ListItemAvatar from '@mui/material/ListItemAvatar'
-import Skeleton from '@mui/material/Skeleton'
 import Box from '@mui/material/Box'
-import FormControl from '@mui/material/FormControl'
 import TextField from '@mui/material/TextField'
-import InputLabel from '@mui/material/InputLabel'
-import Select from '@mui/material/Select'
-import MenuItem from '@mui/material/MenuItem'
-import Avatar from '@mui/material/Avatar'
-import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
-
-import { useDidDocument } from '../resources/dids'
 
 import Link from 'app-shared/client/components/Link'
 import ErrorMessage from 'app-shared/client/components/ErrorMessage'
-import CopyButton from '../components/CopyButton'
-import LinkToCeramicApi from '../components/LinkToCeramicApi'
+import CopyButton from 'app-shared/client/components/CopyButton'
 import LinkToCerscan from '../components/LinkToCerscan'
 import InspectObject from 'app-shared/client/components/InspectObject'
+
+function useDidDocument(){
+  const { result: didDocument, ...state } = useQuery('dids.getDidDocument')
+  return { ...state, didDocument }
+}
 
 export default function DidsPage(props) {
   return <Container p={4}>

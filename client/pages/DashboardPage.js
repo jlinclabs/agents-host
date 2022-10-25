@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography'
 
 import LinkToDid from '../components/LinkToDid'
 import InspectObject from 'app-shared/client/components/InspectObject'
-import CopyBox from '../components/CopyBox'
+import CopyBox from 'app-shared/client/components/CopyBox'
 
 export default function DashboardPage({ currentUser }) {
   return <Box p={2}>

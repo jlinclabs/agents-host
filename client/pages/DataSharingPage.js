@@ -24,7 +24,7 @@ import Switch from '@mui/material/Switch'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 
 import useStateObject from 'app-shared/client/hooks/useStateObject.js'
-import { useRemoteQuery, useRemoteCommand } from '../lib/rpc'
+import { useQuery, useCommand } from 'app-shared/client/hooks/cqrpc'
 
 import Link from 'app-shared/client/components/Link'
 import LinkToCeramicApi from '../components/LinkToCeramicApi'

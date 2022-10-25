@@ -32,7 +32,7 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 
 import useStateObject from 'app-shared/client/hooks/useStateObject.js'
-import { useRemoteQuery, useRemoteCommand } from '../lib/rpc'
+import { useQuery, useCommand } from 'app-shared/client/hooks/cqrpc'
 import { useCurrentAgent } from '../resources/auth'
 
 import Link from 'app-shared/client/components/Link'
