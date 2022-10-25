@@ -4,9 +4,9 @@ import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import SupportAgentIcon from '@mui/icons-material/SupportAgent'
-import backgroundVideo from 'raw:../media/pexels-ehab-el-gapry-6238188.mp4'
 
-console.log('backgroundVideo', backgroundVideo)
+import Link from 'app-shared/client/components/Link'
+import backgroundVideo from 'raw:../media/pexels-ehab-el-gapry-6238188.mp4'
 
 export default function HomePage() {
   return <Box sx={{
@@ -24,6 +24,7 @@ export default function HomePage() {
       top: 0,
       bottom: 0,
       zIndex: -1,
+      opacity: 0.3,
     }}>
       <source src={backgroundVideo} type="video/mp4"/>
     </Box>
@@ -50,10 +51,31 @@ export default function HomePage() {
           variant="h6"
           component="h2"
           sx={{my: 2}}
-        >Brought to you by Jlinc Labs</Typography>
-        <Button {...{
-          variant: 'contained',
-        }}>Activate Your Agent</Button>
+        >
+          <span>Brought to you by </span>
+          <a href="https://jlinc.com" target="_blank">Jlinc Labs</a>
+        </Typography>
+        <Box>
+          <Button {...{
+            variant: 'contained',
+            component: Link,
+            to: '/signup',
+          }}>Activate Your Agent</Button>
+        </Box>
+        <Box>
+          <Button {...{
+            variant: 'text',
+            component: Link,
+            to: '/login',
+            sx: {
+              fontSize: 'smaller',
+              color: 'white',
+              textTransform: 'lowercase',
+              p: 0,
+              minWidth: 'auto',
+            },
+          }}>login</Button>
+        </Box>
       </Box>
     </Stack>
   </Box>
