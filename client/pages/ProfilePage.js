@@ -1,23 +1,15 @@
-import { useEffect } from 'react'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
-import FormGroup from '@mui/material/FormGroup'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Avatar from '@mui/material/Avatar'
-import Alert from '@mui/material/Alert'
-import CircularProgress from '@mui/material/CircularProgress'
 
 import { useQuery, useCommand } from 'app-shared/client/hooks/cqrpc'
 import { useStateObject } from '../lib/reactStateHelpers.js'
-import Link from 'app-shared/client/components/Link'
 import ButtonRow from 'app-shared/client/components/ButtonRow'
 import Form from 'app-shared/client/components/Form'
 import AvatarInput from '../components/AvatarInput'
 import ErrorMessage from '../components/ErrorMessage'
-import InspectObject from '../components/InspectObject'
 
 export default function ProfilePage() {
   const { result: profile, loading, error, mutate } = useQuery(`profile.get`)
@@ -29,22 +21,21 @@ export default function ProfilePage() {
       loadingError: error,
       mutate,
     }}/>
-    <InspectObject object={{ profile, loading, error }}/>
   </Container>
 }
 
 function ProfileForm({ profile, loading, loadingError, mutate }){
   const [changes, setChanges] = useStateObject({})
+  const reset = () => { setChanges(undefined) }
   const updateProfile = useCommand('profile.update', {
     onSuccess(profile){
-      setChanges(undefined)
+      reset()
       mutate(profile)
     }
   })
   const merged = {...profile, ...changes}
   const disabled = !!(loading || updateProfile.pending)
   const submittable = true
-
   return <Form {...{
     maxWidth: 'sm',
     disabled,
@@ -80,8 +71,8 @@ function ProfileForm({ profile, loading, loadingError, mutate }){
       <Button
         variant="text"
         disabled={disabled}
+        onClick={reset}
       >reset</Button>
     </ButtonRow>
-    <InspectObject object={{ profile, changes }}/>
   </Form>
 }

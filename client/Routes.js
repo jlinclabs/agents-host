@@ -8,11 +8,9 @@ import RedirectPage from 'app-shared/client/pages/RedirectPage'
 import NotFoundPage from 'app-shared/client/pages/NotFoundPage'
 import FullPageLoading from './components/FullPageLoading'
 
-// import HomePage from './pages/HomePage'
 import Layout from './Layout'
-// import SignupPage from './pages/SignupPage'
-// import LoginPage from './pages/LoginPage'
-import LogoutPage from './pages/LogoutPage'
+import HomePage from './pages/HomePage'
+import DashboardPage from './pages/DashboardPage'
 import SettingsPage from './pages/SettingsPage'
 import VaultPage from './pages/VaultPage'
 import DidsPage from './pages/DidsPage'
@@ -44,7 +42,7 @@ function LoggedOutRoutes() {
 function LoggedInRoutes(props) {
   return <Layout {...props}>
     <_Routes>
-      <Route path="/" element={<RedirectPage to="/id" />} />
+      <Route path="/" element={<DashboardPage {...props} />} />
       {/*<Route path="/id" element={<IDPage {...props} />} />*/}
       <Route path="/profile" element={<ProfilePage {...props} />} />
       <Route path="/settings" element={<SettingsPage {...props} />} />
@@ -65,6 +63,7 @@ function LoggedInRoutes(props) {
 function defaultRoutes({ currentUser }) { // not a react component
   return <>
     {/*<Route path="*" element={<AuthPage {...props}/>} />*/}
+    <Route path="/" element={<HomePage />} />
     {AuthPage.routes({ currentUser })}
     <Route path="/debug/*" element={<DebugPage appName="Agents"/>}/>}/>
     <Route path="*" element={<NotFoundPage/>}/>

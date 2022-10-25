@@ -63,8 +63,9 @@ function Editor({ image, hideModal, onChange }){
     <Stack direction="column" alignItems="center">
       <Box
         sx={{
+          display: 'flex',
           border: '1px dashed rgba(255,255,255,0.5)',
-          m: 2
+          m: 2,
         }}
       >
         <AvatarEditor {...{ref, height, width, image, scale, rotate}}/>
@@ -99,7 +100,7 @@ function Editor({ image, hideModal, onChange }){
       <Button
         variant="text"
         onClick={hideModal}
-      >cancel {rotate}</Button>
+      >cancel</Button>
     </ButtonRow>
   </Box>
 }
