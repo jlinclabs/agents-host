@@ -2,9 +2,11 @@ import b4a from 'b4a'
 export * from 'app-shared/server/queries/auth.js'
 
 export async function getCurrentUser({}, context){
-  return await context.queries.auth._selectCurrentUser({
+  const currentUser = await context.queries.auth._selectCurrentUser({
     did: true,
   })
+  currentUser.publicKey = currentUser.did.split(':')[2]
+  return currentUser
 }
 
 export async function _getSecrets({}, context){
