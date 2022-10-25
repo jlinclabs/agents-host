@@ -18,12 +18,13 @@ import { useToggle } from '../lib/reactStateHelpers.js'
 const width = 250
 const height = 250
 export default function AvatarInput({
-  height = 75, width = 75, value, onChange
+  disabled, height = 75, width = 75, value, onChange
 }){
   const [showingModal, showModal, hideModal] = useToggle()
   const [image, setImage] = useState('http://example.com/initialimage.jpg')
   return <>
     <Dropzone
+      disabled={disabled}
       onDrop={(dropped) => { setImage(dropped[0]); showModal() }}
       // noClick
       noKeyboard
@@ -72,8 +73,8 @@ function Editor({ image, hideModal, onChange }){
       </Box>
     </Stack>
     <Stack direction="row">
-      <IconButton><RotateLeftIcon onClick={rotateCallback(false)}/></IconButton>
-      <IconButton><RotateRightIcon onClick={rotateCallback(true)}/></IconButton>
+      <IconButton onClick={rotateCallback(false)}><RotateLeftIcon /></IconButton>
+      <IconButton onClick={rotateCallback(true)}><RotateRightIcon /></IconButton>
       <Slider
         sx={{flex: '1 1'}}
         valueLabelDisplay="off"
@@ -93,7 +94,8 @@ function Editor({ image, hideModal, onChange }){
         variant="contained"
         onClick={() => {
           const editor = ref.current
-          onChange(editor.getImage().toDataURL())
+          onChange(getImageURL(editor))
+          // onChange(editor.getImageScaledToCanvas().toDataURL())
           hideModal()
         }}
       >Update Avatar</Button>
@@ -103,4 +105,13 @@ function Editor({ image, hideModal, onChange }){
       >cancel</Button>
     </ButtonRow>
   </Box>
+}
+
+function getImageURL(editor){
+  const canvas = document.createElement('canvas')
+  canvas.width = width
+  canvas.height = height
+  // don't paint a border here, as it is the resulting image
+  editor.paintImage(canvas.getContext('2d'), editor.state.image, 0, 1)
+  return canvas.toDataURL()
 }

@@ -3,6 +3,7 @@ import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import { useQuery, useCommand } from 'app-shared/client/hooks/cqrpc'
 import { useStateObject } from '../lib/reactStateHelpers.js'
@@ -15,12 +16,15 @@ export default function ProfilePage() {
   const { result: profile, loading, error, mutate } = useQuery(`profile.get`)
   return <Container sx={{p: 2}}>
     <Typography variant="h3">ProfilePage</Typography>
-    <ProfileForm {...{
-      profile,
-      loading,
-      loadingError: error,
-      mutate,
-    }}/>
+    {loading
+      ? <CircularProgress/>
+      : <ProfileForm {...{
+        profile,
+        loading,
+        loadingError: error,
+        mutate,
+      }}/>
+    }
   </Container>
 }
 
@@ -46,6 +50,7 @@ function ProfileForm({ profile, loading, loadingError, mutate }){
     <ErrorMessage error={loadingError || updateProfile.error}/>
     <Stack direction="row" spacing={2} alignItems="center" sx={{my: 2}}>
       <AvatarInput {...{
+        disabled,
         value: merged.avatar,
         onChange(avatar){ setChanges({ avatar }) }
       }}/>
