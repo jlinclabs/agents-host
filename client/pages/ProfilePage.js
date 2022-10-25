@@ -3,6 +3,10 @@ import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
+import Stack from '@mui/material/Stack'
+import FormGroup from '@mui/material/FormGroup'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Avatar from '@mui/material/Avatar'
 import Alert from '@mui/material/Alert'
 import CircularProgress from '@mui/material/CircularProgress'
 
@@ -11,6 +15,7 @@ import { useStateObject } from '../lib/reactStateHelpers.js'
 import Link from 'app-shared/client/components/Link'
 import ButtonRow from 'app-shared/client/components/ButtonRow'
 import Form from 'app-shared/client/components/Form'
+import AvatarInput from '../components/AvatarInput'
 import ErrorMessage from '../components/ErrorMessage'
 import InspectObject from '../components/InspectObject'
 
@@ -39,25 +44,33 @@ function ProfileForm({ profile, loading, loadingError, mutate }){
   const merged = {...profile, ...changes}
   const disabled = !!(loading || updateProfile.pending)
   const submittable = true
+
   return <Form {...{
+    maxWidth: 'sm',
     disabled,
     onSubmit(){
       updateProfile.call(changes)
     },
   }}>
     <ErrorMessage error={loadingError || updateProfile.error}/>
-    <TextField
-      autoFocus
-      label="Public Display Name"
-      autoComplete="name"
-      disabled={disabled}
-      margin="normal"
-      fullWidth
-      name="name"
-      type="text"
-      value={merged.publicDisplayName || ''}
-      onChange={e => { setChanges({ publicDisplayName: e.target.value || null }) }}
-    />
+    <Stack direction="row" spacing={2} alignItems="center" sx={{my: 2}}>
+      <AvatarInput {...{
+        value: merged.avatar,
+        onChange(avatar){ setChanges({ avatar }) }
+      }}/>
+      <TextField
+        autoFocus
+        label="Public Display Name"
+        autoComplete="name"
+        disabled={disabled}
+        margin="normal"
+        fullWidth
+        name="name"
+        type="text"
+        value={merged.displayName || ''}
+        onChange={e => { setChanges({ displayName: e.target.value || null }) }}
+      />
+    </Stack>
     <ButtonRow>
       <Button
         type="submit"
@@ -69,5 +82,6 @@ function ProfileForm({ profile, loading, loadingError, mutate }){
         disabled={disabled}
       >reset</Button>
     </ButtonRow>
+    <InspectObject object={{ profile, changes }}/>
   </Form>
 }
