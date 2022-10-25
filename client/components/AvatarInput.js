@@ -11,9 +11,9 @@ import IconButton from '@mui/material/IconButton'
 import RotateLeftIcon from '@mui/icons-material/RotateLeft'
 import RotateRightIcon from '@mui/icons-material/RotateRight'
 
-import ModalWindow from '../components/ModalWindow'
-import ButtonRow from '../components/ButtonRow'
 import useToggle from 'app-shared/client/hooks/useToggle.js'
+import ModalWindow from 'app-shared/client/components/ModalWindow'
+import ButtonRow from 'app-shared/client/components/ButtonRow'
 
 const width = 250
 const height = 250

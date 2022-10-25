@@ -37,20 +37,9 @@ import { useCurrentAgent } from '../resources/auth'
 
 import Link from 'app-shared/client/components/Link'
 import LinkToCeramicApi from '../components/LinkToCeramicApi'
-/*import Timestamp from 'app-shared/client/components/Timestamp'*/
 import ErrorMessage from 'app-shared/client/components/ErrorMessage'
-import IdentifierProfile from '../components/IdentifierProfile'
-import IdentifierSelectInput from '../components/IdentifierSelectInput'
+import ButtonRow from 'app-shared/client/components/ButtonRow'
 import LinkToDid from '../components/LinkToDid'
-import LinkToCerscan from '../components/LinkToCerscan'
-import CeramicStreamEvents from '../components/CeramicStreamEvents'
-import ButtonRow from '../components/ButtonRow'
-import TermsTextField from '../components/TermsTextField'
-import TermsUploadField from '../components/TermsUploadField'
-import AgreementPartiesInput from '../components/AgreementPartiesInput'
-/*
-import InspectObject from 'app-shared/client/components/InspectObject'
-*/
 
 const useAgreement = id => useRemoteQuery(id ? 'agreements.get' : null, {id})
 

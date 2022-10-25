@@ -17,7 +17,7 @@ import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
 
-import useStateObject from '../lib/useStateObject'
+import useStateObject from 'app-shared/client/hooks/useStateObject'
 import { useUploadFile } from '../lib/uploads'
 import {
   useProfile,
