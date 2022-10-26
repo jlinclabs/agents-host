@@ -45,6 +45,8 @@ export async function createDid(){
     async getPermission(request){ return request.payload.paths },
   })
 
+  console.log({ threeID })
+
   console.log('[ceramic] creating did using threeID provider')
   const did = new DID({
     provider: threeID.getDidProvider(),

@@ -4,7 +4,7 @@ import { useCurrentUser } from 'app-shared/client/hooks/auth'
 import AppError from 'app-shared/client/components/AppError'
 import AuthPage from 'app-shared/client/pages/AuthPage'
 import DebugPage from 'app-shared/client/pages/DebugPage'
-import RedirectPage from 'app-shared/client/pages/RedirectPage'
+// import RedirectPage from 'app-shared/client/pages/RedirectPage'
 import NotFoundPage from 'app-shared/client/pages/NotFoundPage'
 import FullPageLoading from './components/FullPageLoading'
 
