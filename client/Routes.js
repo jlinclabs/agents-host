@@ -12,6 +12,7 @@ import Layout from './Layout'
 import HomePage from './pages/HomePage'
 import DashboardPage from './pages/DashboardPage'
 import SettingsPage from './pages/SettingsPage'
+import NotificationsPage from './pages/NotificationsPage'
 import VaultPage from './pages/VaultPage'
 import DidsPage from './pages/DidsPage'
 import ProfilePage from './pages/ProfilePage'
@@ -45,6 +46,7 @@ function LoggedInRoutes(props) {
       {/*<Route path="/id" element={<IDPage {...props} />} />*/}
       <Route path="/profile" element={<ProfilePage {...props} />} />
       <Route path="/settings" element={<SettingsPage {...props} />} />
+      <Route path="/notifications" element={<NotificationsPage {...props} />} />
       <Route path="/vault" element={<VaultPage {...props} />} />
       <Route path="/dids/*" element={<DidsPage {...props} />} />
       {/*<Route path="/contacts/*" element={<ContactsPage {...props} />} />*/}
