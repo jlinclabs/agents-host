@@ -5,6 +5,7 @@ export async function getCurrentUser({}, context){
   const currentUser = await context.queries.auth._selectCurrentUser({
     did: true,
   })
+  if (!currentUser) return
   currentUser.publicKey = currentUser.did.split(':')[2]
   return currentUser
 }
