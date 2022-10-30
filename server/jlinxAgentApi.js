@@ -67,7 +67,19 @@ router.get('/login/:id', async (req, res) => {
 })
 
 
-
+router.get('/profile/:did', async (req, res) => {
+  const { did } = req.params
+  const host = await getHostFromReferer(req)
+  const context = await getAgentContext({ did })
+  const agent = await context.getAgent()
+  const appDid = await getAppDid(agent,host)
+  const profile = await context.queries.profile.get()
+  const jwe = await agent.encrypt(
+    {...profile, did},
+    [appDid]
+  )
+  res.json({ jwe })
+})
 
 
 router.use((req, res, next) => {

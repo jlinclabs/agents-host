@@ -1,0 +1,71 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = "native"
+  output        = env("PRISMA_BUILD")
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  createdAt     DateTime  @default(now())
+  email         String?   @unique
+  passwordSalt  String?
+  passwordHash  String?
+  did           String    @unique
+  didSecret     String
+  vaultKey      String
+  sessions      Session[]
+  notifications Notification[]
+  loginAttempts LoginAttempt[]
+  documents     Document[]
+}
+
+model Session {
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  lastSeenAt DateTime @default(now())
+  user       User?    @relation(fields: [userId], references: [id])
+  userId     Int?
+}
+
+model Notification {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  type       String
+  payload    Json
+}
+
+model LoginAttempt {
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  host       String
+  accepted   Boolean  @default(false)
+  resolved   Boolean  @default(false)
+}
+
+model DocumentEvent {
+  id          Int      @id @default(autoincrement())
+  occuredAt   DateTime @default(now())
+  documentId  String
+  userId      Int
+  value       Json
+}
+
+model Document {
+  id         String   @id @default(uuid())
+  version    Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime?
+  deletedAt  DateTime?
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  value      Json
+}

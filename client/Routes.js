@@ -17,6 +17,7 @@ import VaultPage from './pages/VaultPage'
 import DidsPage from './pages/DidsPage'
 import ProfilePage from './pages/ProfilePage'
 import LoginAttemptPage from './pages/LoginAttemptPage'
+import DocsPage from './pages/DocsPage'
 // import IDPage from './pages/IDPage'
 // import ContactsPage from './pages/ContactsPage'
 // import AgreementsPage from './pages/AgreementsPage'
@@ -51,6 +52,7 @@ function LoggedInRoutes(props) {
       <Route path="/login-attempts/:id" element={<LoginAttemptPage {...props} />} />
       <Route path="/vault" element={<VaultPage {...props} />} />
       <Route path="/dids/*" element={<DidsPage {...props} />} />
+      <Route path="/docs/*" element={<DocsPage {...props} />} />
       {/*<Route path="/contacts/*" element={<ContactsPage {...props} />} />*/}
       {/*<Route path="/agreements/*" element={<AgreementsPage {...props} />} />*/}
       {/*<Route path="/data-sharing/*" element={<DataSharingPage {...props} />} />*/}

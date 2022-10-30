@@ -1,21 +1,8 @@
-import { Observable } from 'rxjs'
-import { useEffect } from 'react'
-import createState from 'zustand'
-
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import Paper from '@mui/material/Paper'
-import Box from '@mui/material/Box'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
-import Skeleton from '@mui/material/Skeleton'
 import IconButton from '@mui/material/IconButton'
-import Button from '@mui/material/Button'
-import SupportAgentIcon from '@mui/icons-material/SupportAgent'
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
@@ -23,7 +10,8 @@ import { useQuery, useCommand } from 'app-shared/client/hooks/cqrpc'
 import Link from 'app-shared/client/components/Link'
 import ErrorMessage from 'app-shared/client/components/ErrorMessage'
 import Timestamp from 'app-shared/client/components/Timestamp'
-import InspectObject from 'app-shared/client/components/InspectObject'
+import LoadingList from '../components/LoadingList'
+
 
 export default function NotificationsPage() {
   const query = useQuery('notifications.all')
@@ -50,6 +38,19 @@ export default function NotificationsPage() {
 
 
 function NotificationsList({ loading, notifications }){
+
+  return <LoadingList {...{
+    loading,
+    emptyMessage: `you dont have any notifications`,
+    members: notifications && notifications.map(n => ({
+      key: n.id,
+      href: `/login-attempts/${n.loginAttemptId}`,
+      icon: <NotificationsActiveIcon />,
+      text: `Attempt to login to ${n.host}`,
+      subtext: <Timestamp at={n.createdAt}/>,
+    }))
+  }}/>
+
   console.log({ notifications })
   const members = notifications
     ? notifications.length === 0

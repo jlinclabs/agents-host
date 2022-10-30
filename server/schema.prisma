@@ -21,6 +21,7 @@ model User {
   sessions      Session[]
   notifications Notification[]
   loginAttempts LoginAttempt[]
+  documents     Document[]
 }
 
 model Session {
@@ -32,7 +33,7 @@ model Session {
 }
 
 model Notification {
-  id         String   @id @default(uuid())
+  id         Int      @id @default(autoincrement())
   createdAt  DateTime @default(now())
   user       User     @relation(fields: [userId], references: [id])
   userId     Int
@@ -48,4 +49,23 @@ model LoginAttempt {
   host       String
   accepted   Boolean  @default(false)
   resolved   Boolean  @default(false)
+}
+
+model DocumentEvent {
+  id          Int      @id @default(autoincrement())
+  occuredAt   DateTime @default(now())
+  documentId  String
+  userId      Int
+  value       Json
+}
+
+model Document {
+  id         String   @id @default(uuid())
+  version    Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime?
+  deletedAt  DateTime?
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  value      Json
 }

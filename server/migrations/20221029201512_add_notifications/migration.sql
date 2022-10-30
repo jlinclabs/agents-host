@@ -11,16 +11,3 @@ CREATE TABLE "Notification" (
 
 -- AddForeignKey
 ALTER TABLE "Notification" ADD CONSTRAINT "Notification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- CreateTrigger
-CREATE FUNCTION notify_trigger() RETURNS trigger AS $$
-DECLARE
-BEGIN
-  PERFORM pg_notify('notifications', NEW.id);
-  RETURN new;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER "newNotification"
-AFTER INSERT ON "Notification"
-FOR EACH ROW EXECUTE PROCEDURE "notify_trigger"();
