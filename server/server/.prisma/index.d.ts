@@ -43,7 +43,7 @@ export type Session = {
  * 
  */
 export type Notification = {
-  id: number
+  id: string
   createdAt: Date
   userId: number
   type: string
@@ -69,7 +69,7 @@ export type LoginAttempt = {
  */
 export type DocumentEvent = {
   id: number
-  occuredAt: Date
+  occurredAt: Date
   documentId: string
   userId: number
   value: Prisma.JsonValue
@@ -2955,24 +2955,22 @@ export namespace Prisma {
   }
 
   export type NotificationAvgAggregateOutputType = {
-    id: number | null
     userId: number | null
   }
 
   export type NotificationSumAggregateOutputType = {
-    id: number | null
     userId: number | null
   }
 
   export type NotificationMinAggregateOutputType = {
-    id: number | null
+    id: string | null
     createdAt: Date | null
     userId: number | null
     type: string | null
   }
 
   export type NotificationMaxAggregateOutputType = {
-    id: number | null
+    id: string | null
     createdAt: Date | null
     userId: number | null
     type: string | null
@@ -2989,12 +2987,10 @@ export namespace Prisma {
 
 
   export type NotificationAvgAggregateInputType = {
-    id?: true
     userId?: true
   }
 
   export type NotificationSumAggregateInputType = {
-    id?: true
     userId?: true
   }
 
@@ -3114,7 +3110,7 @@ export namespace Prisma {
 
 
   export type NotificationGroupByOutputType = {
-    id: number
+    id: string
     createdAt: Date
     userId: number
     type: string
@@ -4892,21 +4888,21 @@ export namespace Prisma {
 
   export type DocumentEventMinAggregateOutputType = {
     id: number | null
-    occuredAt: Date | null
+    occurredAt: Date | null
     documentId: string | null
     userId: number | null
   }
 
   export type DocumentEventMaxAggregateOutputType = {
     id: number | null
-    occuredAt: Date | null
+    occurredAt: Date | null
     documentId: string | null
     userId: number | null
   }
 
   export type DocumentEventCountAggregateOutputType = {
     id: number
-    occuredAt: number
+    occurredAt: number
     documentId: number
     userId: number
     value: number
@@ -4926,21 +4922,21 @@ export namespace Prisma {
 
   export type DocumentEventMinAggregateInputType = {
     id?: true
-    occuredAt?: true
+    occurredAt?: true
     documentId?: true
     userId?: true
   }
 
   export type DocumentEventMaxAggregateInputType = {
     id?: true
-    occuredAt?: true
+    occurredAt?: true
     documentId?: true
     userId?: true
   }
 
   export type DocumentEventCountAggregateInputType = {
     id?: true
-    occuredAt?: true
+    occurredAt?: true
     documentId?: true
     userId?: true
     value?: true
@@ -5041,7 +5037,7 @@ export namespace Prisma {
 
   export type DocumentEventGroupByOutputType = {
     id: number
-    occuredAt: Date
+    occurredAt: Date
     documentId: string
     userId: number
     value: JsonValue
@@ -5068,7 +5064,7 @@ export namespace Prisma {
 
   export type DocumentEventSelect = {
     id?: boolean
-    occuredAt?: boolean
+    occurredAt?: boolean
     documentId?: boolean
     userId?: boolean
     value?: boolean
@@ -6761,7 +6757,7 @@ export namespace Prisma {
 
   export const DocumentEventScalarFieldEnum: {
     id: 'id',
-    occuredAt: 'occuredAt',
+    occurredAt: 'occurredAt',
     documentId: 'documentId',
     userId: 'userId',
     value: 'value'
@@ -6995,7 +6991,7 @@ export namespace Prisma {
     AND?: Enumerable<NotificationWhereInput>
     OR?: Enumerable<NotificationWhereInput>
     NOT?: Enumerable<NotificationWhereInput>
-    id?: IntFilter | number
+    id?: StringFilter | string
     createdAt?: DateTimeFilter | Date | string
     user?: XOR<UserRelationFilter, UserWhereInput>
     userId?: IntFilter | number
@@ -7013,7 +7009,7 @@ export namespace Prisma {
   }
 
   export type NotificationWhereUniqueInput = {
-    id?: number
+    id?: string
   }
 
   export type NotificationOrderByWithAggregationInput = {
@@ -7033,7 +7029,7 @@ export namespace Prisma {
     AND?: Enumerable<NotificationScalarWhereWithAggregatesInput>
     OR?: Enumerable<NotificationScalarWhereWithAggregatesInput>
     NOT?: Enumerable<NotificationScalarWhereWithAggregatesInput>
-    id?: IntWithAggregatesFilter | number
+    id?: StringWithAggregatesFilter | string
     createdAt?: DateTimeWithAggregatesFilter | Date | string
     userId?: IntWithAggregatesFilter | number
     type?: StringWithAggregatesFilter | string
@@ -7098,7 +7094,7 @@ export namespace Prisma {
     OR?: Enumerable<DocumentEventWhereInput>
     NOT?: Enumerable<DocumentEventWhereInput>
     id?: IntFilter | number
-    occuredAt?: DateTimeFilter | Date | string
+    occurredAt?: DateTimeFilter | Date | string
     documentId?: StringFilter | string
     userId?: IntFilter | number
     value?: JsonFilter
@@ -7106,7 +7102,7 @@ export namespace Prisma {
 
   export type DocumentEventOrderByWithRelationInput = {
     id?: SortOrder
-    occuredAt?: SortOrder
+    occurredAt?: SortOrder
     documentId?: SortOrder
     userId?: SortOrder
     value?: SortOrder
@@ -7118,7 +7114,7 @@ export namespace Prisma {
 
   export type DocumentEventOrderByWithAggregationInput = {
     id?: SortOrder
-    occuredAt?: SortOrder
+    occurredAt?: SortOrder
     documentId?: SortOrder
     userId?: SortOrder
     value?: SortOrder
@@ -7134,7 +7130,7 @@ export namespace Prisma {
     OR?: Enumerable<DocumentEventScalarWhereWithAggregatesInput>
     NOT?: Enumerable<DocumentEventScalarWhereWithAggregatesInput>
     id?: IntWithAggregatesFilter | number
-    occuredAt?: DateTimeWithAggregatesFilter | Date | string
+    occurredAt?: DateTimeWithAggregatesFilter | Date | string
     documentId?: StringWithAggregatesFilter | string
     userId?: IntWithAggregatesFilter | number
     value?: JsonWithAggregatesFilter
@@ -7336,6 +7332,7 @@ export namespace Prisma {
   }
 
   export type NotificationCreateInput = {
+    id?: string
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutNotificationsInput
     type: string
@@ -7343,7 +7340,7 @@ export namespace Prisma {
   }
 
   export type NotificationUncheckedCreateInput = {
-    id?: number
+    id?: string
     createdAt?: Date | string
     userId: number
     type: string
@@ -7351,6 +7348,7 @@ export namespace Prisma {
   }
 
   export type NotificationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutNotificationsNestedInput
     type?: StringFieldUpdateOperationsInput | string
@@ -7358,7 +7356,7 @@ export namespace Prisma {
   }
 
   export type NotificationUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
+    id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: IntFieldUpdateOperationsInput | number
     type?: StringFieldUpdateOperationsInput | string
@@ -7366,7 +7364,7 @@ export namespace Prisma {
   }
 
   export type NotificationCreateManyInput = {
-    id?: number
+    id?: string
     createdAt?: Date | string
     userId: number
     type: string
@@ -7374,13 +7372,14 @@ export namespace Prisma {
   }
 
   export type NotificationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: StringFieldUpdateOperationsInput | string
     payload?: JsonNullValueInput | InputJsonValue
   }
 
   export type NotificationUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
+    id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: IntFieldUpdateOperationsInput | number
     type?: StringFieldUpdateOperationsInput | string
@@ -7450,7 +7449,7 @@ export namespace Prisma {
   }
 
   export type DocumentEventCreateInput = {
-    occuredAt?: Date | string
+    occurredAt?: Date | string
     documentId: string
     userId: number
     value: JsonNullValueInput | InputJsonValue
@@ -7458,14 +7457,14 @@ export namespace Prisma {
 
   export type DocumentEventUncheckedCreateInput = {
     id?: number
-    occuredAt?: Date | string
+    occurredAt?: Date | string
     documentId: string
     userId: number
     value: JsonNullValueInput | InputJsonValue
   }
 
   export type DocumentEventUpdateInput = {
-    occuredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    occurredAt?: DateTimeFieldUpdateOperationsInput | Date | string
     documentId?: StringFieldUpdateOperationsInput | string
     userId?: IntFieldUpdateOperationsInput | number
     value?: JsonNullValueInput | InputJsonValue
@@ -7473,7 +7472,7 @@ export namespace Prisma {
 
   export type DocumentEventUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    occuredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    occurredAt?: DateTimeFieldUpdateOperationsInput | Date | string
     documentId?: StringFieldUpdateOperationsInput | string
     userId?: IntFieldUpdateOperationsInput | number
     value?: JsonNullValueInput | InputJsonValue
@@ -7481,14 +7480,14 @@ export namespace Prisma {
 
   export type DocumentEventCreateManyInput = {
     id?: number
-    occuredAt?: Date | string
+    occurredAt?: Date | string
     documentId: string
     userId: number
     value: JsonNullValueInput | InputJsonValue
   }
 
   export type DocumentEventUpdateManyMutationInput = {
-    occuredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    occurredAt?: DateTimeFieldUpdateOperationsInput | Date | string
     documentId?: StringFieldUpdateOperationsInput | string
     userId?: IntFieldUpdateOperationsInput | number
     value?: JsonNullValueInput | InputJsonValue
@@ -7496,7 +7495,7 @@ export namespace Prisma {
 
   export type DocumentEventUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    occuredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    occurredAt?: DateTimeFieldUpdateOperationsInput | Date | string
     documentId?: StringFieldUpdateOperationsInput | string
     userId?: IntFieldUpdateOperationsInput | number
     value?: JsonNullValueInput | InputJsonValue
@@ -7862,7 +7861,6 @@ export namespace Prisma {
   }
 
   export type NotificationAvgOrderByAggregateInput = {
-    id?: SortOrder
     userId?: SortOrder
   }
 
@@ -7881,7 +7879,6 @@ export namespace Prisma {
   }
 
   export type NotificationSumOrderByAggregateInput = {
-    id?: SortOrder
     userId?: SortOrder
   }
   export type JsonWithAggregatesFilter = 
@@ -7960,7 +7957,7 @@ export namespace Prisma {
 
   export type DocumentEventCountOrderByAggregateInput = {
     id?: SortOrder
-    occuredAt?: SortOrder
+    occurredAt?: SortOrder
     documentId?: SortOrder
     userId?: SortOrder
     value?: SortOrder
@@ -7973,14 +7970,14 @@ export namespace Prisma {
 
   export type DocumentEventMaxOrderByAggregateInput = {
     id?: SortOrder
-    occuredAt?: SortOrder
+    occurredAt?: SortOrder
     documentId?: SortOrder
     userId?: SortOrder
   }
 
   export type DocumentEventMinOrderByAggregateInput = {
     id?: SortOrder
-    occuredAt?: SortOrder
+    occurredAt?: SortOrder
     documentId?: SortOrder
     userId?: SortOrder
   }
@@ -8561,13 +8558,14 @@ export namespace Prisma {
   }
 
   export type NotificationCreateWithoutUserInput = {
+    id?: string
     createdAt?: Date | string
     type: string
     payload: JsonNullValueInput | InputJsonValue
   }
 
   export type NotificationUncheckedCreateWithoutUserInput = {
-    id?: number
+    id?: string
     createdAt?: Date | string
     type: string
     payload: JsonNullValueInput | InputJsonValue
@@ -8683,7 +8681,7 @@ export namespace Prisma {
     AND?: Enumerable<NotificationScalarWhereInput>
     OR?: Enumerable<NotificationScalarWhereInput>
     NOT?: Enumerable<NotificationScalarWhereInput>
-    id?: IntFilter | number
+    id?: StringFilter | string
     createdAt?: DateTimeFilter | Date | string
     userId?: IntFilter | number
     type?: StringFilter | string
@@ -9010,7 +9008,7 @@ export namespace Prisma {
   }
 
   export type NotificationCreateManyUserInput = {
-    id?: number
+    id?: string
     createdAt?: Date | string
     type: string
     payload: JsonNullValueInput | InputJsonValue
@@ -9052,20 +9050,21 @@ export namespace Prisma {
   }
 
   export type NotificationUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: StringFieldUpdateOperationsInput | string
     payload?: JsonNullValueInput | InputJsonValue
   }
 
   export type NotificationUncheckedUpdateWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
+    id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: StringFieldUpdateOperationsInput | string
     payload?: JsonNullValueInput | InputJsonValue
   }
 
   export type NotificationUncheckedUpdateManyWithoutNotificationsInput = {
-    id?: IntFieldUpdateOperationsInput | number
+    id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: StringFieldUpdateOperationsInput | string
     payload?: JsonNullValueInput | InputJsonValue

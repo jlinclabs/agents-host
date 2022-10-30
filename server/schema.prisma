@@ -33,7 +33,7 @@ model Session {
 }
 
 model Notification {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(uuid())
   createdAt  DateTime @default(now())
   user       User     @relation(fields: [userId], references: [id])
   userId     Int
@@ -53,7 +53,7 @@ model LoginAttempt {
 
 model DocumentEvent {
   id          Int      @id @default(autoincrement())
-  occuredAt   DateTime @default(now())
+  occurredAt  DateTime @default(now())
   documentId  String
   userId      Int
   value       Json

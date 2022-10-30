@@ -90,7 +90,7 @@ function makeEnum(x) { return x; }
 
 exports.Prisma.DocumentEventScalarFieldEnum = makeEnum({
   id: 'id',
-  occuredAt: 'occuredAt',
+  occurredAt: 'occurredAt',
   documentId: 'documentId',
   userId: 'userId',
   value: 'value'
