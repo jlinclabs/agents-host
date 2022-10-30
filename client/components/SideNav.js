@@ -21,6 +21,8 @@ import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove'
 import HomeIcon from '@mui/icons-material/Home'
 import LockIcon from '@mui/icons-material/Lock'
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+
 
 import LogoutButton from 'app-shared/client/components/LogoutButton'
 // import { useCurrentAgent } from './resources/auth'
@@ -38,6 +40,11 @@ export default function SideNav({ loading, currentUser }) {
         icon: <PersonIcon/>,
         text: 'Profile',
         to: '/profile',
+      }}/>
+      <NavButton {...{
+        icon: <NotificationsActiveIcon/>,
+        text: 'Notifications',
+        to: '/notifications',
       }}/>
       <NavButton {...{
         icon: <FingerprintIcon/>,

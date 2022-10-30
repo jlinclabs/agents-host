@@ -24,9 +24,11 @@ router.post('/login', async (req, res) => {
     userId: context.userId,
     host,
   })
+  const profile = await context.queries.profile.get()
   const jwe = await agent.encrypt({
     loginAttemptId,
-    checkStatusAt: `${process.env.APP_ORIGIN}/api/jlinx/v1/login/${loginAttemptId}`
+    checkStatusAt: `${process.env.APP_ORIGIN}/api/jlinx/v1/login/${loginAttemptId}`,
+    profile,
   }, [appDid])
   res.json({ jwe })
 })
@@ -48,12 +50,15 @@ router.get('/login/:id', async (req, res) => {
   const context = await getAgentContext({
     userId: loginAttempt.userId
   })
-  const profile = await context.queries.profile.get()
   const agent = await context.getAgent()
   const appDid = await getAppDid(agent,host)
+  const profile = await context.queries.profile.get()
+
   const jwe = await agent.encrypt(
     {
+      // host: jlinxApp.host,
       accepted: loginAttempt.accepted,
+      did: agent.did,
       profile,
     },
     [appDid]

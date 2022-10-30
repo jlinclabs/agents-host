@@ -1,5 +1,5 @@
 export async function create({ type, ...payload }, context){
-  return await context.prisma.notification.create({
+  return context.prisma.notification.create({
     data: {
       userId: context.userId,
       type,
@@ -8,5 +8,11 @@ export async function create({ type, ...payload }, context){
     select: {
       id: true
     }
+  })
+}
+
+export async function deleteAll({}, context){
+  return context.prisma.notification.deleteMany({
+    where: { userId: context.userId },
   })
 }
