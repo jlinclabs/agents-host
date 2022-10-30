@@ -46,4 +46,6 @@ model LoginAttempt {
   user       User     @relation(fields: [userId], references: [id])
   userId     Int
   host       String
+  accepted   Boolean  @default(false)
+  resolved   Boolean  @default(false)
 }

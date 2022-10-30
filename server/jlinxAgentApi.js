@@ -32,11 +32,11 @@ router.post('/login', async (req, res) => {
   const appDid = didDocument.id
 
   console.log('context', context)
-  const loginAttempt = await context.commands.loginAttempts.create({
+  const loginAttemptId = await context.commands.loginAttempts.create({
     userId: context.userId,
     host,
   })
-  console.log({ loginAttempt })
+  console.log({ loginAttemptId })
 
 
 
@@ -47,8 +47,8 @@ router.post('/login', async (req, res) => {
   // getAppDid()
 
   const jwe = await agent.encrypt({
-    loginAttemptId: loginAttempt.id,
-    checkStatusAt: `${process.env.APP_ORIGIN}/api/jlinx/v1/login/${loginAttempt.id}`
+    loginAttemptId,
+    checkStatusAt: `${process.env.APP_ORIGIN}/api/jlinx/v1/login/${loginAttemptId}`
     // successSoFar: ':D',
     // appHost: host,
     // appDidDocument: didDocument,
@@ -62,9 +62,9 @@ router.post('/login', async (req, res) => {
   res.json({ jwe })
 })
 
-router.post('/login/:loginAttemptId', async (req, res) => {
-  const { loginAttemptId } = req.params
-  const loginAttempt = await context.queries.loginAttempts.getById(loginAttemptId)
+router.post('/login/:id', async (req, res) => {
+  const { id } = req.params
+  const loginAttempt = await context.queries.loginAttempts.waitFor({ id })
   console.log({ loginAttempt })
   res.json(loginAttempt)
 })
