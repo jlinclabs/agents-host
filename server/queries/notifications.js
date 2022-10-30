@@ -1,8 +1,13 @@
-export async function get({}, context){
+export async function all({}, context){
   const records = await context.prisma.notification.findMany({
     where: {
       userId: context.userId,
     },
+    orderBy: {
+      createdAt: 'desc'
+    }
   })
-  return records.map(({payload, ...record}) => ({...payload, ...record}))
+  return {
+    notifications: records.map(({payload, ...record}) => ({...payload, ...record}))
+  }
 }

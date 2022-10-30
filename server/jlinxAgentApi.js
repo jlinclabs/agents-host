@@ -2,72 +2,68 @@ import Debug from 'debug'
 import { URL } from 'node:url'
 import fetch from 'node-fetch'
 import Router from 'express-promise-router'
+import wait from 'app-shared/shared/wait.js'
 import prisma from 'app-shared/server/prisma.js'
 import jlinxApp from './jlinxApp.js'
 import { Context } from './Context.js'
-
 
 const debug = Debug('jlinx.api')
 const router = Router()
 export default router
 
+// TODO stop giving app's cookies
+
 router.post('/login', async (req, res) => {
-  console.log('JLINC LOGIN', {
-    headers: req.headers,
-    body: req.body,
-  })
-  const host = new URL(req.headers.referer).host
-  // console.log('refererHost', refererHost)
-  console.log('host', host)
+  const host = await getHostFromReferer(req)
   const { jws } = req.body
-  console.log({ jws })
-
   const { did: agentDid } = await jlinxApp.verifySignature(jws)
-  console.log({ agentDid })
-
-  const context = await getAgentContext(agentDid)
+  const context = await getAgentContext({did: agentDid})
   const agent = await context.getAgent()
-
-  const { didDocument } = await agent.resolveDID(`did:web:${host}`)
-  const appDid = didDocument.id
-
-  console.log('context', context)
+  const appDid = await getAppDid(agent,host)
   const loginAttemptId = await context.commands.loginAttempts.create({
     userId: context.userId,
     host,
   })
-  console.log({ loginAttemptId })
-
-
-
-  // ask the user if they want to login
-  // insert a loginAttempt record with a uuid and return that to the app
-  // the app should hit another route to wait for login response
-
-  // getAppDid()
-
   const jwe = await agent.encrypt({
     loginAttemptId,
     checkStatusAt: `${process.env.APP_ORIGIN}/api/jlinx/v1/login/${loginAttemptId}`
-    // successSoFar: ':D',
-    // appHost: host,
-    // appDidDocument: didDocument,
-    // appDid,
-    // // payload,
-    // // hostDidDocument,
   }, [appDid])
-
-  console.log('jwe', jwe)
-
   res.json({ jwe })
 })
 
-router.post('/login/:id', async (req, res) => {
+router.get('/login/:id', async (req, res) => {
   const { id } = req.params
-  const loginAttempt = await context.queries.loginAttempts.waitFor({ id })
-  console.log({ loginAttempt })
-  res.json(loginAttempt)
+  const host = await getHostFromReferer(req)
+
+  let closed = false
+  req.on('close', function(){ closed = true })
+  let loginAttempt
+  while (loginAttempt?.resolved !== true) {
+    if (closed) return
+    loginAttempt = await req.context.queries.loginAttempts.getById({id})
+    console.log({loginAttempt})
+    if (!loginAttempt.resolved) await wait(200)
+  }
+  if (closed) return
+  const context = await getAgentContext({
+    userId: loginAttempt.userId
+  })
+  const profile = await context.queries.profile.get()
+  const agent = await context.getAgent()
+  const appDid = await getAppDid(agent,host)
+  const jwe = await agent.encrypt(
+    {
+      accepted: loginAttempt.accepted,
+      profile,
+    },
+    [appDid]
+  )
+  res.json({ jwe })
 })
+
+
+
+
 
 router.use((req, res, next) => {
   res.status(404).json({})
@@ -85,9 +81,26 @@ router.use(async (error, req, res, next) => {
   })
 })
 
-async function getAgentContext(did){
+
+// HELPERS
+
+async function getHostFromReferer(req) {
+  return new URL(req.headers.referer).host
+}
+
+async function getAppDidDocument(agent, host) {
+  const { didDocument } = await agent.resolveDID(`did:web:${host}`)
+  return didDocument
+}
+
+async function getAppDid(agent, host){
+  const didDocument = await getAppDidDocument(agent, host)
+  return didDocument.id
+}
+
+async function getAgentContext({did, userId}){
   const record = await prisma.user.findUnique({
-    where: { did },
+    where: did ? { did } : { id: userId },
     select: {
       id: true,
       didSecret: true,
@@ -102,23 +115,23 @@ async function getAgentContext(did){
   // return await Agent.open({ did, didSecret, vaultKey })
 }
 
-
-async function getAppDid(host){
-  const res = await fetch(
-    `https://${host}/.well-known/did.json`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-    }
-  )
-  if (!res .ok){
-    console.log(res )
-    throw new Error(`failed to get id of requesting app`)
-  }
-  const { didDocument } = await res.json()
-  console.log({ didDocument })
-  return didDocument
-}
+//
+// async function getAppDid(host){
+//   const res = await fetch(
+//     `https://${host}/.well-known/did.json`,
+//     {
+//       method: 'GET',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Accept': 'application/json',
+//       },
+//     }
+//   )
+//   if (!res .ok){
+//     console.log(res )
+//     throw new Error(`failed to get id of requesting app`)
+//   }
+//   const { didDocument } = await res.json()
+//   console.log({ didDocument })
+//   return didDocument
+// }

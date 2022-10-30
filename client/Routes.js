@@ -16,6 +16,7 @@ import NotificationsPage from './pages/NotificationsPage'
 import VaultPage from './pages/VaultPage'
 import DidsPage from './pages/DidsPage'
 import ProfilePage from './pages/ProfilePage'
+import LoginAttemptPage from './pages/LoginAttemptPage'
 // import IDPage from './pages/IDPage'
 // import ContactsPage from './pages/ContactsPage'
 // import AgreementsPage from './pages/AgreementsPage'
@@ -47,6 +48,7 @@ function LoggedInRoutes(props) {
       <Route path="/profile" element={<ProfilePage {...props} />} />
       <Route path="/settings" element={<SettingsPage {...props} />} />
       <Route path="/notifications" element={<NotificationsPage {...props} />} />
+      <Route path="/login-attempts/:id" element={<LoginAttemptPage {...props} />} />
       <Route path="/vault" element={<VaultPage {...props} />} />
       <Route path="/dids/*" element={<DidsPage {...props} />} />
       {/*<Route path="/contacts/*" element={<ContactsPage {...props} />} />*/}

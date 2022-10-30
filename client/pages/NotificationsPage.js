@@ -5,78 +5,61 @@ import createState from 'zustand'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
+import Paper from '@mui/material/Paper'
 import Box from '@mui/material/Box'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import Skeleton from '@mui/material/Skeleton'
 import Button from '@mui/material/Button'
 import SupportAgentIcon from '@mui/icons-material/SupportAgent'
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+
+import { useQuery, useCommand } from 'app-shared/client/hooks/cqrpc'
 
 import Link from 'app-shared/client/components/Link'
+import ErrorMessage from 'app-shared/client/components/ErrorMessage'
+import Timestamp from 'app-shared/client/components/Timestamp'
 import InspectObject from 'app-shared/client/components/InspectObject'
-import backgroundVideo from 'raw:../media/pexels-ehab-el-gapry-6238188.mp4'
-
-let eventSource
-let subscriptionsCount = 0
-function subscribe() {
-  if (!eventSource){
-    console.log('CONNECTING TO NOTIFICATIONS')
-    eventSource = new EventSource('/api/notifications')
-    // eventSource.addEventListener('message', (message: MessageEvent) => {
-    //   this.events.push(message.data);
-    //   console.log(message);
-    // });
-    //
-    // eventSource.addEventListener('streamEnd', (message: MessageEvent) => {
-    //   this.events.push(`${message.data} (it was the last one)`);
-    //   eventSource.close();
-    // });
-    //
-    // eventSource.addEventListener('hello', (message: MessageEvent) => {
-    //   this.events.push(`Hello Message => ${message.data}`);
-    // });
-    //
-    // eventSource.addEventListener('open', (open: Event) => {
-    //   console.log(open);
-    // });
-    //
-    // eventSource.addEventListener('error', (error: Event) => {
-    //   console.log(error);
-    // });
-    eventSource.onmessage = event => {
-      console.log(event)
-      useNotificationsStore.setState(state => ({
-        ...state,
-        notifications: [...state.notifications, event.data]
-      }))
-    }
-    eventSource.onerror = error => {
-      console.error('notifications event source error', errir)
-    }
-
-  }
-  subscriptionsCount++
-  return () => {
-    subscriptionsCount--
-    if (subscriptionsCount === 0 && eventSource){
-      // TODO: schedule shutdown debounced for 100ms
-      console.log('DISCONNECTING FROM NOTIFICATIONS')
-      eventSource.close()
-      eventSource = undefined
-    }
-  }
-}
-
-const useNotificationsStore = createState(set => ({
-  notifications: [],
-}))
-
-const useNotifications = () => {
-  useEffect(subscribe)
-  return useNotificationsStore(x => x.notifications)
-}
-
 
 export default function NotificationsPage() {
-  const notifications = useNotifications()
-  return <Box sx={{}}>
-    <InspectObject object={{notifications}}/>
-  </Box>
+  const query = useQuery('notifications.all')
+  return <Container sx={{p: 2}} maxWidth="sm">
+    <Typography variant="h4">Notifications</Typography>
+    <Paper elevation={2}>
+      <ErrorMessage error={query.error} />
+      <NotificationsList {...{
+        loading: query.loading,
+        ...query.result,
+      }}/>
+    </Paper>
+  </Container>
+}
+
+
+function NotificationsList({ loading, notifications }){
+  console.log({ notifications })
+  const members = notifications
+    ? notifications.map(n =>
+      <ListItem key={n.id} disablePadding>
+        <ListItemButton
+          component={Link}
+          to={`/login-attempts/${n.loginAttemptId}`}
+        >
+          <ListItemIcon>
+            <NotificationsActiveIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={`Attempt to login to ${n.host}`}
+            secondary={<Timestamp at={n.createdAt}/>}
+          />
+        </ListItemButton>
+      </ListItem>
+    )
+    : Array(6).fill().map((_, i) =>
+      <Skeleton key={i} variant="rounded" width="auto" height={118} />
+    )
+  return <List>{members}</List>
 }
