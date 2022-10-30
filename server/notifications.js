@@ -16,10 +16,9 @@ pg.query("LISTEN notifications", [], (error, x) => {
 })
 
 
-export async function subscribe({ userId }, context){
+export async function subscribeToNotificationsForUser({ userId }, context){
   // const result = await context.prisma.$queryRaw`SELECT * FROM User`
-
-  const stream = new Observable((subscriber) => {
+  const observable = new Observable((subscriber) => {
     console.log('observer create')
     // subscriber.next(1);
     // subscriber.next(2);
@@ -33,7 +32,7 @@ export async function subscribe({ userId }, context){
       console.log('observer teardown')
     }
   })
-  return stream
+  return observable
 }
 
 

@@ -2,6 +2,7 @@ import uploads from 'app-shared/server/uploads.js'
 import ceramicRestApi from './ceramicRestApi.js'
 import jlinxAgentApi from './jlinxAgentApi.js'
 import jlinxApp from './jlinxApp.js'
+import { subscribeToNotificationsForUser } from './notifications.js'
 
 export default router => {
   router.get('/.well-known/did.json', async (req, res) => {
@@ -14,9 +15,9 @@ export default router => {
   router.use('/api/jlinx/v1', jlinxAgentApi)
   router.use('/api/ceramic', ceramicRestApi)
 
-  router.get('/api/notifications', (req, res) => {
-    subscribeToNotifications(req, res)
-
+  router.get('/api/notifications', async (req, res) => {
+    const observable = await subscribeToNotificationsForUser(req.context.userId, req.context)
+    streamServerSentEvents(req, res, observable)
   })
 }
 
@@ -32,8 +33,16 @@ function streamServerSentEvents(req, res, observable){
     if (subscription) subscription.unsubscribe();
   }
 
+  req.on('end', () => {
+    console.log('🚒 http request end')
+  })
   req.on('close', () => {
     console.log('🚒 http request closed')
+    close()
+  })
+  res.socket.on('close', function () {
+    // res.on('close', () => {
+    console.log('🚒 res.socket closed')
     close()
   })
 
@@ -44,14 +53,21 @@ function streamServerSentEvents(req, res, observable){
   })
   res.flushHeaders()
   try{
+    setInterval( // keep alice
+      () => {
+        res.write(`: keepalive\n\n`)
+      },
+      1000
+    )
     subscription = observable.subscribe({
       next(event) {
         console.error('🚒 sse event', event)
-        event = JSON.stringify(event, null, 2)
-        res.write(event + '\n\n')
+        // console.log('CLOSED?', [res.socket])
+        res.write(`data: ${JSON.stringify(event)}\n\n`)
       },
       error(error) {
         console.error('🚒 sse observer error', error)
+        // console.log('CLOSED?', [res.socket])
         close()
       },
       complete() {

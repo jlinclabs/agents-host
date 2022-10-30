@@ -40,11 +40,11 @@ export default class Agent extends JlinxAgent {
 
   constructor({ did, vault }){
     super({ did })
-    console.log('Agent constructor', { did, vault })
-    console.log('Agent._did', this._did)
-    console.log('agent', this)
-    console.log('agent.did', this.did)
-    console.log('agent.__inspectFields', this.__inspectFields)
+    // console.log('Agent constructor', { did, vault })
+    // console.log('Agent._did', this._did)
+    // console.log('agent', this)
+    // console.log('agent.did', this.did)
+    // console.log('agent.__inspectFields', this.__inspectFields)
     this.vault = vault
     this.dids = new Dids(this)
     // this.contacts = new Contacts(this)

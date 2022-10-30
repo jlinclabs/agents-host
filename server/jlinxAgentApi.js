@@ -16,8 +16,9 @@ router.post('/login', async (req, res) => {
     headers: req.headers,
     body: req.body,
   })
-  const host = new URL(req.headers.referer).host // TODO strip pathname
-  console.log({ refererHost: host })
+  const host = new URL(req.headers.referer).host
+  // console.log('refererHost', refererHost)
+  console.log('host', host)
   const { jws } = req.body
   console.log({ jws })
 
@@ -27,12 +28,16 @@ router.post('/login', async (req, res) => {
   const context = await getAgentContext(agentDid)
   const agent = await context.getAgent()
 
-  await context.commands.loginAttempts.create({
-
-  })
-
   const { didDocument } = await agent.resolveDID(`did:web:${host}`)
   const appDid = didDocument.id
+
+  console.log('context', context)
+  const loginAttempt = await context.commands.loginAttempts.create({
+    userId: context.userId,
+    host,
+  })
+  console.log({ loginAttempt })
+
 
 
   // ask the user if they want to login
@@ -42,17 +47,26 @@ router.post('/login', async (req, res) => {
   // getAppDid()
 
   const jwe = await agent.encrypt({
-    successSoFar: ':D',
-    appHost: host,
-    appDidDocument: didDocument,
-    appDid,
-    // payload,
-    // hostDidDocument,
+    loginAttemptId: loginAttempt.id,
+    checkStatusAt: `${process.env.APP_ORIGIN}/api/jlinx/v1/login/${loginAttempt.id}`
+    // successSoFar: ':D',
+    // appHost: host,
+    // appDidDocument: didDocument,
+    // appDid,
+    // // payload,
+    // // hostDidDocument,
   }, [appDid])
 
   console.log('jwe', jwe)
 
   res.json({ jwe })
+})
+
+router.post('/login/:loginAttemptId', async (req, res) => {
+  const { loginAttemptId } = req.params
+  const loginAttempt = await context.queries.loginAttempts.getById(loginAttemptId)
+  console.log({ loginAttempt })
+  res.json(loginAttempt)
 })
 
 router.use((req, res, next) => {

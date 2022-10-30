@@ -1,6 +1,6 @@
-export async function create({ userId }, context){
+export async function create({ userId, host }, context){
   const { id } = await context.prisma.loginAttempt.create({
-    data: {},
+    data: { userId, host },
     select: { id: true }
   })
   await context.commands.notifications.create({
