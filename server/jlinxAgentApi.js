@@ -103,6 +103,20 @@ router.post('/documents', async (req, res) => {
   res.json({ jwe })
 })
 
+router.post('/documents/:id', async (req, res) => {
+  const host = await getHostFromReferer(req)
+  const { did, name, value } = req.body
+  const context = await getAgentContext({ did })
+  const agent = await context.getAgent()
+  const appDid = await getAppDid(agent,host)
+
+  // TODO ensure access control here
+  const doc = await context.commands.documents.update({ id, name, value })
+  console.log('UPDATED DOC', doc)
+  const jwe = await agent.encrypt(doc, [appDid])
+  res.json({ jwe })
+})
+
 
 
 

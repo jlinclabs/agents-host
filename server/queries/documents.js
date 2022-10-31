@@ -1,3 +1,13 @@
+export const allFields = Object.freeze({
+  id: true,
+  version: true,
+  createdAt: true,
+  updatedAt: true,
+  deletedAt: true,
+  name: true,
+  value: true,
+})
+
 export async function getAll({}, context) {
   const documents = await context.prisma.document.findMany({
     where: {
@@ -10,14 +20,7 @@ export async function getAll({}, context) {
 export async function getOne({ id }, context) {
   return await context.prisma.document.findUnique({
     where: { id },
-    select: {
-      id: true,
-      version: true,
-      createdAt: true,
-      updatedAt: true,
-      deletedAt: true,
-      value: true,
-    }
+    select: allFields,
   })
 }
 
@@ -31,14 +34,7 @@ export async function getVersion({ id, version }, context) {
       occurredAt: 'asc',
       offset: version,
     },
-    select: {
-      id: true,
-      version: true,
-      createdAt: true,
-      updatedAt: true,
-      deletedAt: true,
-      value: true,
-    }
+    select: allFields,
   })
 }
 

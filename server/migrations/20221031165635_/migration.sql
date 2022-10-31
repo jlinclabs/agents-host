@@ -51,6 +51,7 @@ CREATE TABLE "DocumentEvent" (
     "occurredAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "documentId" TEXT NOT NULL,
     "userId" INTEGER NOT NULL,
+    "fileName" TEXT NOT NULL,
     "value" JSONB NOT NULL,
 
     CONSTRAINT "DocumentEvent_pkey" PRIMARY KEY ("id")
@@ -64,6 +65,7 @@ CREATE TABLE "Document" (
     "updatedAt" TIMESTAMP(3),
     "deletedAt" TIMESTAMP(3),
     "userId" INTEGER NOT NULL,
+    "fileName" TEXT NOT NULL,
     "value" JSONB NOT NULL,
 
     CONSTRAINT "Document_pkey" PRIMARY KEY ("id")
@@ -87,7 +89,6 @@ ALTER TABLE "LoginAttempt" ADD CONSTRAINT "LoginAttempt_userId_fkey" FOREIGN KEY
 -- AddForeignKey
 ALTER TABLE "Document" ADD CONSTRAINT "Document_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
-
 -- process DocumentEvent into Document
 CREATE FUNCTION process_document_event()
 RETURNS TRIGGER
@@ -95,20 +96,24 @@ LANGUAGE PLPGSQL
 AS $$
 BEGIN
   INSERT INTO "Document" (
+    "version",
+    "createdAt",
+    "updatedAt",
+    "deletedAt",
     "id",
     "userId",
-    "version",
-    "value",
-    "fileName",
-    "deletedAt"
+    "name",
+    "value"
   )
   VALUES (
-    NEW."documentId",
-    NEW."userId",
     0,
-    NEW."value",
-    NEW."fileName",
-    CASE when NEW."value" IS NULL THEN NOW() ELSE null END
+    NOW(),
+    NOW(),
+    CASE when NEW."value" IS NULL THEN NOW() ELSE null END,
+    NEW."id",
+    NEW."userId",
+    NEW."name",
+    NEW."value"
   )
   ON CONFLICT (id) DO UPDATE SET
     "version"="Document"."version" + 1,
@@ -123,3 +128,7 @@ $$;
 CREATE TRIGGER document_event_inserted
 AFTER INSERT ON "DocumentEvent"
 FOR EACH ROW EXECUTE PROCEDURE process_document_event();
+
+
+
+
