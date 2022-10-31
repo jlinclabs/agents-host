@@ -49,7 +49,7 @@ function MyDocumentsList(){
       key: doc.id,
       href: `/docs/${doc.id}`,
       icon: <InsertDriveFileIcon/>,
-      text: doc.id,
+      text: doc.name || doc.id,
       subtext: <>
         created: <Timestamp at={doc.createdAt}/><br/>
         updated: <Timestamp at={doc.updatedAt}/>

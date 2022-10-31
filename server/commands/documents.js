@@ -11,11 +11,14 @@ export async function update({ id, name, value }, context){
   if (!id) throw new MissingArgumentError('id', id)
   if (typeof value === 'undefined')
     throw new MissingArgumentError('value', value)
+  const doc = await context.queries.documents.getOne({ id })
+  if (!doc) throw new Error(`unable to find doc id="${id}"`)
+  console.log('UPDATRING', doc)
   // todo enforce userId permissions
   await context.prisma.documentEvent.create({
     data: {
       documentId: id,
-      name,
+      name: doc.name,
       value,
       userId: context.userId,
     },
