@@ -105,9 +105,9 @@ router.post('/documents', async (req, res) => {
 
 router.post('/documents/:id', async (req, res) => {
   const { id } = req.params
-  console.log('UPDATING DOC', { id })
-  const host = await getHostFromReferer(req)
   const { did, name, value } = req.body
+  console.log('UPDATING DOC', { id, did, name, value })
+  const host = await getHostFromReferer(req)
   const context = await getAgentContext({ did })
   const agent = await context.getAgent()
   const appDid = await getAppDid(agent,host)
