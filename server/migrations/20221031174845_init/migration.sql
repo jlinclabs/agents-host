@@ -96,21 +96,21 @@ LANGUAGE PLPGSQL
 AS $$
 BEGIN
   INSERT INTO "Document" (
+    "id",
     "version",
     "createdAt",
     "updatedAt",
     "deletedAt",
-    "id",
     "userId",
     "name",
     "value"
   )
   VALUES (
+    NEW."documentId",
     0,
     NOW(),
     NOW(),
     CASE when NEW."value" IS NULL THEN NOW() ELSE null END,
-    NEW."id",
     NEW."userId",
     NEW."name",
     NEW."value"
