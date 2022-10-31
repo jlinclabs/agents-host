@@ -88,3 +88,43 @@ ALTER TABLE "LoginAttempt" ADD CONSTRAINT "LoginAttempt_userId_fkey" FOREIGN KEY
 
 -- AddForeignKey
 ALTER TABLE "Document" ADD CONSTRAINT "Document_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- process DocumentEvent into Document
+CREATE FUNCTION process_document_event()
+RETURNS TRIGGER
+LANGUAGE PLPGSQL
+AS $$
+BEGIN
+  INSERT INTO "Document" (
+    "version",
+    "createdAt",
+    "updatedAt",
+    "deletedAt",
+    "id",
+    "userId",
+    "name",
+    "value"
+  )
+  VALUES (
+    0,
+    NOW(),
+    NOW(),
+    CASE when NEW."value" IS NULL THEN NOW() ELSE null END,
+    NEW."id",
+    NEW."userId",
+    NEW."name",
+    NEW."value"
+  )
+  ON CONFLICT (id) DO UPDATE SET
+    "version"="Document"."version" + 1,
+    "updatedAt"=NOW(),
+    "deletedAt"=EXCLUDED."deletedAt",
+    "value"=EXCLUDED."value"
+  WHERE "Document"."id"=EXCLUDED."id";
+  RETURN NULL;
+END
+$$;
+
+CREATE TRIGGER document_event_inserted
+AFTER INSERT ON "DocumentEvent"
+FOR EACH ROW EXECUTE PROCEDURE process_document_event();
