@@ -1,34 +1,20 @@
 import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-
-import { Observable } from 'rxjs'
-import { useEffect } from 'react'
-import createState from 'zustand'
-
+import { useParams } from 'react-router-dom'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import Paper from '@mui/material/Paper'
 import Box from '@mui/material/Box'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
-import Skeleton from '@mui/material/Skeleton'
 import CircularProgress from '@mui/material/CircularProgress'
 import Button from '@mui/material/Button'
-import SupportAgentIcon from '@mui/icons-material/SupportAgent'
-import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 
 import { useQuery, useCommand } from 'app-shared/client/hooks/cqrpc'
-import useToggle from 'app-shared/client/hooks/useToggle'
+import useCountdown from 'app-shared/client/hooks/useCountdown'
 
 import Link from 'app-shared/client/components/Link'
 import ButtonRow from 'app-shared/client/components/ButtonRow'
 import ErrorMessage from 'app-shared/client/components/ErrorMessage'
 import Timestamp from 'app-shared/client/components/Timestamp'
-import InspectObject from 'app-shared/client/components/InspectObject'
 
 export default function LoginAttemptPage() {
   const { id } = useParams()
@@ -67,21 +53,16 @@ function LoginAttempt({
 }
 
 
+
 function Controls({ id, reload }) {
-  const [unlocked, unlock] = useToggle()
+  const secondsUntilUnlocked = useCountdown(3000)
   const resolveCmd = useCommand('loginAttempts.resolve', {
     onSuccess(){
       reload()
     }
   })
-  const disabled = !unlocked || resolveCmd.pending
-  useEffect( // TODO make useDelayedEffect hook
-    () => {
-      const id = setTimeout(unlock, 2000)
-      return () => clearTimeout(id)
-    },
-    []
-  )
+  const disabled = secondsUntilUnlocked > 0 || resolveCmd.pending
+
   const makeHandler = accepted =>
     () => { resolveCmd.call({id, accepted}) }
 
@@ -92,7 +73,10 @@ function Controls({ id, reload }) {
         disabled={disabled}
         variant="contained"
         onClick={makeHandler(true)}
-      >Accept</Button>
+      >{secondsUntilUnlocked > 0
+        ? `wait ${secondsUntilUnlocked}`
+        : 'Accept'
+      }</Button>
       <Button
         disabled={disabled}
         variant="text"

@@ -40,6 +40,7 @@ router.get('/login/:id', async (req, res) => {
   let closed = false
   req.on('close', function(){ closed = true })
   let loginAttempt
+  // TODO ensure this doesnt loop forever
   while (loginAttempt?.resolved !== true) {
     if (closed) return
     loginAttempt = await req.context.queries.loginAttempts.getById({id})
@@ -66,7 +67,6 @@ router.get('/login/:id', async (req, res) => {
   res.json({ jwe })
 })
 
-
 router.get('/profile/:did', async (req, res) => {
   const { did } = req.params
   const host = await getHostFromReferer(req)
@@ -80,6 +80,32 @@ router.get('/profile/:did', async (req, res) => {
   )
   res.json({ jwe })
 })
+
+
+
+router.get('/documents/:id', async (req, res) => {
+  const host = await getHostFromReferer(req)
+  // const context = await getAgentContext({ did })
+  // const agent = await context.getAgent()
+})
+
+router.post('/documents', async (req, res) => {
+  const host = await getHostFromReferer(req)
+  const { did, name, value } = req.body
+  const context = await getAgentContext({ did })
+  const agent = await context.getAgent()
+  const appDid = await getAppDid(agent,host)
+
+  // TODO ensure access control here
+  const doc = await context.commands.documents.create({ name, value })
+  console.log('CREATED DOC', doc)
+  const jwe = await agent.encrypt(doc, [appDid])
+  res.json({ jwe })
+})
+
+
+
+
 
 
 router.use((req, res, next) => {

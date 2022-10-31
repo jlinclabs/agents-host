@@ -1,15 +1,48 @@
-export async function all({}, context) {
-  return {
-    keys: Object.keys(context.prisma),
-  }
-  const records = await context.prisma.document.findMany({
+export async function getAll({}, context) {
+  const documents = await context.prisma.document.findMany({
     where: {
       userId: context.userId
     },
   })
-  console.log({ records })
-  return records
+  return { documents }
 }
+
+export async function getOne({ id }, context) {
+  return await context.prisma.document.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      version: true,
+      createdAt: true,
+      updatedAt: true,
+      deletedAt: true,
+      value: true,
+    }
+  })
+}
+
+
+export async function getVersion({ id, version }, context) {
+  return await context.prisma.documentEvent.findFirst({
+    where: {
+      documentId: id,
+    },
+    orderBy: {
+      occurredAt: 'asc',
+      offset: version,
+    },
+    select: {
+      id: true,
+      version: true,
+      createdAt: true,
+      updatedAt: true,
+      deletedAt: true,
+      value: true,
+    }
+  })
+}
+
+
 // export async function select({ logger, client, userId, userIds, type, uid }){
 //   logger = logger.ctx('Documents.queries.select');
 //   if (userId) userIds = [userId];

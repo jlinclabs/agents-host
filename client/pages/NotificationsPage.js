@@ -3,14 +3,14 @@ import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import Paper from '@mui/material/Paper'
 import IconButton from '@mui/material/IconButton'
-import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 
 import { useQuery, useCommand } from 'app-shared/client/hooks/cqrpc'
 import Link from 'app-shared/client/components/Link'
 import ErrorMessage from 'app-shared/client/components/ErrorMessage'
 import Timestamp from 'app-shared/client/components/Timestamp'
-import LoadingList from '../components/LoadingList'
+import LoadingList from 'app-shared/client/components/LoadingList'
 
 
 export default function NotificationsPage() {

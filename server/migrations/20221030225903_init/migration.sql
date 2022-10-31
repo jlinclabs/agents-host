@@ -95,28 +95,26 @@ LANGUAGE PLPGSQL
 AS $$
 BEGIN
   INSERT INTO "Document" (
-    "version",
-    "createdAt",
-    "updatedAt",
-    "deletedAt",
     "id",
     "userId",
-    "value"
+    "version",
+    "value",
+    "fileName",
+    "deletedAt"
   )
   VALUES (
-    0,
-    NEW."occuredAt",
-    null,
-    CASE when NEW."value" IS NULL THEN NEW."occuredAt" ELSE null END,
-    NEW."id",
+    NEW."documentId",
     NEW."userId",
-    NEW."value"
+    0,
+    NEW."value",
+    NEW."fileName",
+    CASE when NEW."value" IS NULL THEN NOW() ELSE null END
   )
-  ON CONFLICT (uid) DO UPDATE SET
-    version="Document"."version" + 1,
-    updated_at=NEW."occuredAt",
-    deleted_at=EXCLUDED."deletedAt",
-    value=EXCLUDED."value"
+  ON CONFLICT (id) DO UPDATE SET
+    "version"="Document"."version" + 1,
+    "updatedAt"=NOW(),
+    "deletedAt"=EXCLUDED."deletedAt",
+    "value"=EXCLUDED."value"
   WHERE "Document"."id"=EXCLUDED."id";
   RETURN NULL;
 END
