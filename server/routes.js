@@ -1,5 +1,5 @@
 import uploads from 'app-shared/server/uploads.js'
-import ceramicRestApi from './ceramicRestApi.js'
+// import ceramicRestApi from './ceramicRestApi.js'
 import jlinxAgentApi from './jlinxAgentApi.js'
 import jlinxApp from './jlinxApp.js'
 // import { subscribeToNotificationsForUser } from './notifications.js'
@@ -13,7 +13,7 @@ export default router => {
     storagePath: process.env.UPLOADS_PATH
   }))
   router.use('/api/jlinx/v1', jlinxAgentApi)
-  router.use('/api/ceramic', ceramicRestApi)
+  // router.use('/api/ceramic', ceramicRestApi)
 
   // router.get('/api/notifications', async (req, res) => {
   //   const observable = await subscribeToNotificationsForUser(req.context.userId, req.context)
