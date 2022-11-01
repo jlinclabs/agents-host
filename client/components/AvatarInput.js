@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import AvatarEditor from 'react-avatar-editor'
 import Dropzone from 'react-dropzone'
+import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
@@ -10,11 +11,13 @@ import Slider from '@mui/material/Slider'
 import IconButton from '@mui/material/IconButton'
 import RotateLeftIcon from '@mui/icons-material/RotateLeft'
 import RotateRightIcon from '@mui/icons-material/RotateRight'
+import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 
 import { useUploadFile } from 'app-shared/client/hooks/useUploadFile.js'
 import { dataURItoFile } from 'app-shared/client/lib/imageHelpers.js'
 import useToggle from 'app-shared/client/hooks/useToggle.js'
 import ModalWindow from 'app-shared/client/components/ModalWindow'
+import ErrorMessage from 'app-shared/client/components/ErrorMessage'
 import ButtonRow from 'app-shared/client/components/ButtonRow'
 
 const width = 250
@@ -24,12 +27,6 @@ export default function AvatarInput({
 }){
   const [showingModal, showModal, hideModal] = useToggle()
   const [image, setImage] = useState('http://example.com/initialimage.jpg')
-  const upload = useUploadFile({
-    onSuccess(url){
-      debugger
-      onChange(url)
-    },
-  })
   return <>
     <Dropzone
       disabled={disabled}
@@ -67,6 +64,26 @@ function Editor({ image, hideModal, onChange }){
   const rotateCallback = left => () => {
     setRotate((rotate + (left ? 90 : -90)) % 360)
   }
+  const upload = useUploadFile({
+    onSuccess(url){
+      onChange(url)
+      hideModal()
+    },
+  })
+
+  if (upload.pending) return <Box sx={{textAlign: 'center'}}>
+    <CloudUploadIcon sx={{fontSize: 100}}/>
+    <Typography variant="h5">uploading…</Typography>
+  </Box>
+
+  if (upload.rejected) return <Box sx={{textAlign: 'center'}}>
+    <Typography variant="h5" mb={2}>Upload Failed</Typography>
+    <ErrorMessage error={upload.error || new Error('404 - network not found')}/>
+    <Button
+      variant="text"
+      onClick={hideModal}
+    >close</Button>
+  </Box>
 
   return <Box>
     <Stack direction="column" alignItems="center">
@@ -102,8 +119,9 @@ function Editor({ image, hideModal, onChange }){
         variant="contained"
         onClick={() => {
           const editor = ref.current
-          onChange(dataURItoFile(getImageURL(editor)))
-          hideModal()
+          const dataURI = getImageURL(editor)
+          const file = dataURItoFile(dataURI)
+          upload.call(file)
         }}
       >Update Avatar</Button>
       <Button
