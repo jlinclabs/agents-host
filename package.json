@@ -22,7 +22,7 @@
     "url": "https://github.com/jlinclabs/agents.jlinx.io/issues"
   },
   "homepage": "https://github.com/jlinclabs/agents.jlinx.io#readme",
-  "dependencies": {
+    "peerDependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@mui/icons-material": "^5.10.9",
@@ -35,13 +35,10 @@
     "@prisma/client": "^4.3.1",
     "@stablelib/ed25519": "^1.0.3",
     "@stablelib/x25519": "^1.0.3",
-    "app-shared": "github:jlinclabs/app-shared#c061087e91e70d958e7dfbbb2f7addecf276c19f",
     "did-resolver": "^4.0.1",
     "dids": "^3.4.0",
     "dotenv": "^16.0.2",
     "dotenv-cli": "^6.0.0",
-    "jlinx-util": "github:jlinclabs/jlinx-util#475374260d65a681000eb7d0c8dfce8674029cbb",
-    "jlinx-vault": "github:jlinclabs/jlinx-vault#7cf353536477761fca0df8e5ec59d15e73e93ef5",
     "key-did-provider-ed25519": "^2.0.1",
     "key-did-resolver": "^2.3.0",
     "multer": "^1.4.5-lts.1",
@@ -50,9 +47,7 @@
     "parcel": "^2.7.0",
     "prisma": "^4.5.0",
     "react": "^18.2.0",
-    "react-avatar-editor": "^13.0.0",
     "react-dom": "^18.2.0",
-    "react-dropzone": "^14.2.3",
     "react-error-boundary": "^3.1.4",
     "react-error-overlay": "^6.0.11",
     "react-router": "^6.4.1",
@@ -64,6 +59,12 @@
     "uint8arrays": "^3.1.1",
     "web-did-resolver": "^2.0.21",
     "zustand": "^4.1.2"
+  },
+  "dependencies": {
+    "jlinx-util": "github:jlinclabs/jlinx-util#475374260d65a681000eb7d0c8dfce8674029cbb",
+    "jlinx-vault": "github:jlinclabs/jlinx-vault#7cf353536477761fca0df8e5ec59d15e73e93ef5",
+    "react-avatar-editor": "^13.0.0",
+    "react-dropzone": "^14.2.3"
   },
   "devDependencies": {
     "brittle": "^3.1.0",
