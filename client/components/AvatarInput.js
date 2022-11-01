@@ -11,6 +11,8 @@ import IconButton from '@mui/material/IconButton'
 import RotateLeftIcon from '@mui/icons-material/RotateLeft'
 import RotateRightIcon from '@mui/icons-material/RotateRight'
 
+import { useUploadFile } from 'app-shared/client/hooks/useUploadFile.js'
+import { dataURItoFile } from 'app-shared/client/lib/imageHelpers.js'
 import useToggle from 'app-shared/client/hooks/useToggle.js'
 import ModalWindow from 'app-shared/client/components/ModalWindow'
 import ButtonRow from 'app-shared/client/components/ButtonRow'
@@ -22,6 +24,12 @@ export default function AvatarInput({
 }){
   const [showingModal, showModal, hideModal] = useToggle()
   const [image, setImage] = useState('http://example.com/initialimage.jpg')
+  const upload = useUploadFile({
+    onSuccess(url){
+      debugger
+      onChange(url)
+    },
+  })
   return <>
     <Dropzone
       disabled={disabled}
@@ -94,8 +102,7 @@ function Editor({ image, hideModal, onChange }){
         variant="contained"
         onClick={() => {
           const editor = ref.current
-          onChange(getImageURL(editor))
-          // onChange(editor.getImageScaledToCanvas().toDataURL())
+          onChange(dataURItoFile(getImageURL(editor)))
           hideModal()
         }}
       >Update Avatar</Button>
