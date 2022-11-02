@@ -20,7 +20,9 @@ export async function update({ id, name, value }, context){
       userId: context.userId,
     },
   })
-  return context.queries.documents.getOne({ id })
+  const doc = await context.queries.documents.getOne({ id })
+  if (!doc) throw new Error(`failed to create new doc`)
+  return doc
 }
 
 export async function destroy({ id }, context){

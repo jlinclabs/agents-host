@@ -6,6 +6,7 @@ import wait from 'app-shared/shared/wait.js'
 import prisma from 'app-shared/server/prisma.js'
 import jlinxApp from './jlinxApp.js'
 import { Context } from './Context.js'
+import { MissingArgumentError } from './errors.js'
 
 const debug = Debug('jlinx.api')
 const router = Router()
@@ -105,6 +106,7 @@ router.post('/documents', async (req, res) => {
 
 router.post('/documents/:id', async (req, res) => {
   const { id } = req.params
+  if (!id) throw new MissingArgumentError('id', id)
   const { did, name, value } = req.body
   console.log('UPDATING DOC', { id, did, name, value })
   const host = await getHostFromReferer(req)
