@@ -61,7 +61,7 @@
     "zustand": "^4.1.4"
   },
   "dependencies": {
-    "app-shared": "github:jlinclabs/app-shared#2f251bad993fe50df66d32495c2f67d9f267f200",
+    "app-shared": "github:jlinclabs/app-shared#efe5cea897661d6ec94a3ac68479f424706cb16b",
     "jlinx-util": "github:jlinclabs/jlinx-util#475374260d65a681000eb7d0c8dfce8674029cbb",
     "jlinx-vault": "github:jlinclabs/jlinx-vault#7cf353536477761fca0df8e5ec59d15e73e93ef5",
     "react-avatar-editor": "^13.0.0",
