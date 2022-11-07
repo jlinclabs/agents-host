@@ -139,7 +139,7 @@ export default function SideNav({ loading, currentUser }) {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: 'primary.dark',
-    minWidth: `max(10vw, 175px)`,
+    minWidth: `max(10vw, 200px)`,
     maxWidth: `max(20vw, 400px)`,
     overflowX: 'auto',
   }}>
@@ -160,7 +160,6 @@ export default function SideNav({ loading, currentUser }) {
 
     <Link
       underline="none"
-      variant="h6"
       to="/"
       sx={{
         mt: 3,
@@ -172,7 +171,8 @@ export default function SideNav({ loading, currentUser }) {
         // color: 'black',
       }}
     >
-      JLINX Agent
+      <Typography variant="h6">JLINX Agent<br/></Typography>
+      <Typography variant="body2">{window.location.hostname}</Typography>
     </Link>
 
     <List sx={{

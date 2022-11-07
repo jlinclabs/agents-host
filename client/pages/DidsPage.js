@@ -60,7 +60,7 @@ function Show(){
 function ResolveDidForm({ disabled, ...props }){
   const navigate = useNavigate()
   const [did, setDid] = useState('')
-  const submittable = did && /did:(\w+):(\w+)$/.test(did)
+  const submittable = did && /did:(.+):(.+)$/.test(did)
   return <Box
     {...props}
     component="form"

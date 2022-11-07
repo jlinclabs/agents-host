@@ -16,7 +16,7 @@ import ErrorMessage from 'app-shared/client/components/ErrorMessage'
 export default function ProfilePage() {
   const { result: profile, loading, error, mutate } = useQuery(`profile.get`)
   return <Container sx={{p: 2}}>
-    <Typography variant="h3">ProfilePage</Typography>
+    <Typography variant="h4">Public Profile</Typography>
     {loading
       ? <CircularProgress/>
       : <ProfileForm {...{
@@ -40,7 +40,10 @@ function ProfileForm({ profile, loading, loadingError, mutate }){
   })
   const merged = {...profile, ...changes}
   const disabled = !!(loading || updateProfile.pending)
-  const submittable = true
+  const submittable = changes && (
+    merged.avatar !== profile.avatar ||
+    merged.displayName !== profile.displayName
+  )
   return <Form {...{
     maxWidth: 'sm',
     disabled,

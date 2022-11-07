@@ -24,7 +24,7 @@ import InspectObject from 'app-shared/client/components/InspectObject'
 
 
 export default function DocsPage(props) {
-  return <Container p={4}>
+  return <Container>
     <Routes>
       <Route path="/" element={<Index {...props}/>} />
       <Route path="/:id" element={<Show {...props}/>} />
