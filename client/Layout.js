@@ -1,30 +1,12 @@
-import * as React from 'react'
-import { useLocation } from 'react-router-dom'
-import { useMemo } from 'react'
+import { useState, useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { ErrorBoundary } from 'react-error-boundary'
 import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import List from '@mui/material/List'
-import Divider from '@mui/material/Divider'
-import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
-import Skeleton from '@mui/material/Skeleton'
-import PersonIcon from '@mui/icons-material/Person'
-import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined'
-import ContactPageIcon from '@mui/icons-material/ContactPage'
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
-import FingerprintIcon from '@mui/icons-material/Fingerprint'
-import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove'
-import HomeIcon from '@mui/icons-material/Home'
-import LockIcon from '@mui/icons-material/Lock'
-import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
+import createStore from 'zustand'
 
-import LogoutButton from 'app-shared/client/components/LogoutButton'
-// import { useCurrentAgent } from './resources/auth'
-/*import Link from 'app-shared/client/components/Link'*/
+import { fetchQuery, useQuery } from 'app-shared/client/hooks/cqrpc'
 import AppError from 'app-shared/client/components/AppError'
 import SideNav from './components/SideNav'
 
@@ -39,6 +21,8 @@ export default function Layout(props) {
     requireLoggedIn = false,
   } = props
   const location = useLocation()
+
+  useNewNotificationToast()
 
   return (
     <Container maxWidth={false} disableGutters>
@@ -69,3 +53,40 @@ export default function Layout(props) {
   )
 }
 
+// const useNotificationsStore = createStore(set => ({
+//   seenIds: new Set,
+//   all: [],
+//   refresh: async () => {
+//     const { notifications } = await fetchQuery('notifications.getAll')
+//     set({ all: notifications })
+//   }
+// }))
+
+function useNewNotificationToast(){
+  const navigate = useNavigate()
+  const [seen] = useState(new Set())
+  useEffect(
+    () => {
+      let timeoutId;
+      const refresh = async () => {
+        const { notifications } = await fetchQuery('notifications.getAll')
+        const newNotifications = notifications.filter(n => !seen.has(n.id))
+        if (seen.size > 0){
+          newNotifications.forEach(n => {
+            toast.success(`Attempt to login to ${n.host}`, {
+              onClick(){
+                navigate(`/login-attempts/${n.loginAttemptId}`)
+              }
+            })
+          })
+        }
+        newNotifications.forEach(n => seen.add(n.id))
+        console.log({ newNotifications })
+        timeoutId = setTimeout(refresh, 1000)
+      }
+      timeoutId = setTimeout(refresh, 10)
+      return () => { clearTimeout(timeoutId) }
+    },
+    []
+  )
+}

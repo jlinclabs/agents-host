@@ -20,7 +20,7 @@ export default function DashboardPage({ currentUser }) {
 
     <Typography variant="h5" mt={3}>Your Agent's DID</Typography>
     {[currentUser.did, didWeb].map(did =>
-      <p>
+      <p key={did}>
         <Link to={`/dids/${did}`} sx={{fontFamily: 'monospace'}}>{did}</Link>
         <CopyButton value={did}><ContentCopyIcon/></CopyButton>
       </p>

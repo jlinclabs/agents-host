@@ -1,4 +1,4 @@
-export async function all({}, context){
+export async function getAll({}, context){
   const records = await context.prisma.notification.findMany({
     where: {
       userId: context.userId,

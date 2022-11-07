@@ -12,9 +12,8 @@ import ErrorMessage from 'app-shared/client/components/ErrorMessage'
 import Timestamp from 'app-shared/client/components/Timestamp'
 import LoadingList from 'app-shared/client/components/LoadingList'
 
-
 export default function NotificationsPage() {
-  const query = useQuery('notifications.all')
+  const query = useQuery('notifications.getAll')
   const deleteAllCmd = useCommand('notifications.deleteAll', {
     onSuccess(){ query.reload() }
   })
@@ -38,7 +37,6 @@ export default function NotificationsPage() {
 
 
 function NotificationsList({ loading, notifications }){
-
   return <LoadingList {...{
     loading,
     emptyMessage: `you dont have any notifications`,
@@ -51,7 +49,6 @@ function NotificationsList({ loading, notifications }){
     }))
   }}/>
 
-  console.log({ notifications })
   const members = notifications
     ? notifications.length === 0
       ? <Typography sx={{
