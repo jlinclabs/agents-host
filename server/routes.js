@@ -11,7 +11,10 @@ export default router => {
 
   router.get('/agents/:publicKey/did.json', async (req, res) => {
     const { publicKey } = req.params
-    const { didDocument } = await jlinxApp.resolveDID(`did:key:${publicKey}`)
+    const did = `did:key:${publicKey}`
+    const record = await req.context.queries.agents.getDIDDocument({ did })
+    if (!record) res.status(404).json({})
+    const { didDocument } = record
     didDocument.id = `did:web:${req.host}:agents:${publicKey}`
     res.json(didDocument)
   })
@@ -22,27 +25,4 @@ export default router => {
   }))
 
   router.use('/api/jlinx/v1', jlinxAgentApi)
-  //
-  //
-  // router.get('/api/notifications/next', async (req, res) => {
-  //   const ids = new Set()
-  //   const getNew = async () => {
-  //     const { notifications } = await req.context.queries.notifications.getAll()
-  //     console.log({ notifications })
-  //     const newNotifications = notifications.filter(n => !ids.has(n.id))
-  //     newNotifications.forEach(n => ids.add(n.id))
-  //     console.log({ newNotifications })
-  //     return newNotifications
-  //   }
-  //   await getNew()
-  //   let newNotifications = []
-  //   while (newNotifications.length === 0) {
-  //     newNotifications = await getNew()
-  //     if (newNotifications.length > 0) {
-  //       res.json({ newNotifications })
-  //       break;
-  //     }
-  //     await wait(500)
-  //   }
-  // })
 }
