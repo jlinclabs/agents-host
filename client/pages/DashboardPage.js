@@ -19,14 +19,12 @@ export default function DashboardPage({ currentUser }) {
     </Typography>
 
     <Typography variant="h5" mt={3}>Your Agent's DID</Typography>
-    <p>
-      <Link to={`/dids/${currentUser.did}`}>{currentUser.did}</Link>
-      <CopyButton value={currentUser.did}><ContentCopyIcon/></CopyButton>
-    </p>
-    <p>
-      <Link to={`/dids/${didWeb}`}>{didWeb}</Link>
-      <CopyButton value={didWeb}><ContentCopyIcon/></CopyButton>
-    </p>
+    {[currentUser.did, didWeb].map(did =>
+      <p>
+        <Link to={`/dids/${did}`} sx={{fontFamily: 'monospace'}}>{did}</Link>
+        <CopyButton value={did}><ContentCopyIcon/></CopyButton>
+      </p>
+    )}
 
     {currentUser.publicKey && <>
       <Typography variant="h5" mt={3}>Login with your Agent</Typography>
@@ -35,7 +33,7 @@ export default function DashboardPage({ currentUser }) {
       </Typography>
       <CopyBox
         value={`${currentUser.publicKey}@${global.location.hostname}`}
-        sx={{my:2}}
+        sx={{my:2, 'input': { fontFamily: 'monospace' }}}
       />
     </>}
   </Box>
