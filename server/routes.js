@@ -8,6 +8,13 @@ export default router => {
   router.get('/.well-known/did.json', async (req, res) => {
     res.json(await jlinxApp.getDIDDocument())
   })
+  router.get('/agents/:publicKey/did.json', async (req, res) => {
+    const { publicKey } = req.params
+    const didDocument = await jlinxApp.resolveDID(`did:key:${publicKey}`)
+    didDocument.id = `did:web:${req.origin}:agents:${publicKey}`
+    res.json(didDocument)
+  })
+
   router.use(uploads({
     urlPathPrefix: '/api/uploads',
     storagePath: process.env.UPLOADS_PATH
