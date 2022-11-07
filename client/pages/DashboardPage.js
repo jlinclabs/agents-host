@@ -1,10 +1,13 @@
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
+import ContentCopyIcon from '@mui/icons-material/ContentCopy'
+import CopyAllIcon from '@mui/icons-material/CopyAll'
 
 import Link from 'app-shared/client/components/Link'
 import InspectObject from 'app-shared/client/components/InspectObject'
 import CopyBox from 'app-shared/client/components/CopyBox'
+import CopyButton from 'app-shared/client/components/CopyButton'
 
 export default function DashboardPage({ currentUser }) {
   const didWeb = `did:web:${global.location.hostname}:agents:${currentUser.publicKey}`
@@ -18,9 +21,11 @@ export default function DashboardPage({ currentUser }) {
     <Typography variant="h5" mt={3}>Your Agent's DID</Typography>
     <p>
       <Link to={`/dids/${currentUser.did}`}>{currentUser.did}</Link>
+      <CopyButton value={currentUser.did}><ContentCopyIcon/></CopyButton>
     </p>
     <p>
       <Link to={`/dids/${didWeb}`}>{didWeb}</Link>
+      <CopyButton value={didWeb}><ContentCopyIcon/></CopyButton>
     </p>
 
     {currentUser.publicKey && <>
