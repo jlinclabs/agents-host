@@ -63,7 +63,6 @@ function useNewNotificationToast(){
       const refresh = async () => {
         const { notifications } = await fetchQuery('notifications.getAll')
         requestCount++
-        console.log({ requestCount })
         const newNotifications = notifications.filter(n => !seen.has(n.id))
         if (requestCount > 1){
           newNotifications.forEach(n => {
