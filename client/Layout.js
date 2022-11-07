@@ -53,25 +53,19 @@ export default function Layout(props) {
   )
 }
 
-// const useNotificationsStore = createStore(set => ({
-//   seenIds: new Set,
-//   all: [],
-//   refresh: async () => {
-//     const { notifications } = await fetchQuery('notifications.getAll')
-//     set({ all: notifications })
-//   }
-// }))
-
 function useNewNotificationToast(){
   const navigate = useNavigate()
   const [seen] = useState(new Set())
   useEffect(
     () => {
       let timeoutId;
+      let requestCount = 0
       const refresh = async () => {
         const { notifications } = await fetchQuery('notifications.getAll')
+        requestCount++
+        console.log({ requestCount })
         const newNotifications = notifications.filter(n => !seen.has(n.id))
-        if (seen.size > 0){
+        if (requestCount > 1){
           newNotifications.forEach(n => {
             toast.success(`Attempt to login to ${n.host}`, {
               onClick(){
