@@ -26,7 +26,7 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.10.9",
-    "@mui/material": "^5.10.12",
+    "@mui/material": "^5.10.13",
     "@parcel/optimizer-data-url": "^2.7.0",
     "@parcel/packager-raw-url": "^2.7.0",
     "@parcel/transformer-inline-string": "^2.7.0",
@@ -61,7 +61,7 @@
     "zustand": "^4.1.4"
   },
   "dependencies": {
-    "app-shared": "github:jlinclabs/app-shared#76a2703aec660e91eaf73cc8eb17a235fa12071c",
+    "app-shared": "github:jlinclabs/app-shared#2f251bad993fe50df66d32495c2f67d9f267f200",
     "jlinx-util": "github:jlinclabs/jlinx-util#475374260d65a681000eb7d0c8dfce8674029cbb",
     "jlinx-vault": "github:jlinclabs/jlinx-vault#7cf353536477761fca0df8e5ec59d15e73e93ef5",
     "react-avatar-editor": "^13.0.0",

@@ -8,15 +8,16 @@ import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import CircularProgress from '@mui/material/CircularProgress'
 
+import { useQuery } from 'app-shared/client/hooks/cqrpc'
 import Link from 'app-shared/client/components/Link'
 import ErrorMessage from 'app-shared/client/components/ErrorMessage'
 import CopyButton from 'app-shared/client/components/CopyButton'
 import LinkToCerscan from '../components/LinkToCerscan'
 import InspectObject from 'app-shared/client/components/InspectObject'
 
-function useDidDocument(){
-  const { result: didDocument, ...state } = useQuery('dids.getDidDocument')
-  return { ...state, didDocument }
+function useDidDocument(did){
+  const { result: didDocument, ...state } = useQuery('dids.getDidDocument', { did })
+  return [didDocument, state]
 }
 
 export default function DidsPage(props) {
@@ -45,7 +46,9 @@ function Show(){
     <Typography variant="h5" sx={{my: 2}}>
       <span>{`DID: ${did}`}</span>
       <CopyButton variant="icon" value={did} />
-      <LinkToCerscan id={did.split(':')[2]}/>
+      {did && did.startsWith(`did:3:`) &&
+        <LinkToCerscan id={did.split(':')[2]}/>
+      }
     </Typography>
     <ErrorMessage {...{error}}/>
     {loading && <CircularProgress />}
