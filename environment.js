@@ -41,6 +41,8 @@ const env = {
   IPFS_API_URL: process.env.IPFS_API_URL,
   CERAMIC_API_URL: process.env.CERAMIC_API_URL,
   CERAMIC_NODE_SECRET: process.env.CERAMIC_NODE_SECRET,
+  COMPOSEDB_ADMIN_DID: process.env.COMPOSEDB_ADMIN_DID,
+  COMPOSEDB_PRIVATE_KEY: process.env.COMPOSEDB_PRIVATE_KEY,
 }
 
 console.log({ env })

@@ -8,31 +8,59 @@ import { getResolver as getDidKeyResolver } from 'key-did-resolver'
 import { ThreeIdProvider } from '@3id/did-provider'
 import { Resolver as DidResolver } from 'did-resolver'
 import { getResolver as getDid3IDResolver } from '@ceramicnetwork/3id-did-resolver'
+import { readEncodedComposite } from '@composedb/devtools-node'
+import { fromString } from 'uint8arrays/from-string'
 
-const API_URL = env.CERAMIC_API_URL
+// Hexadecimal-encoded private key for a DID having admin access to the target Ceramic node
+// Replace the example key here by your admin private key
+const privateKey = fromString(env.COMPOSEDB_PRIVATE_KEY, "base16")
 
-let ceramic
-export async function ready(){
-  if (ceramic) return
-  console.log('[ceramic] connecting', env.CERAMIC_API_URL)
-  ceramic = new CeramicClient(API_URL)
-  console.log('[ceramic] connected', env.CERAMIC_API_URL)
-
-  // // https://developers.ceramic.network/reference/accounts/3id-did/#3id-did-provider
-  // const app3id = await ThreeIdProvider.create({
-  //   ceramic,
-  //   authId: `jlinx-demo-app-${env.APP_NAME}`,
-  //   authSecret: Buffer.from(env.CERAMIC_NODE_SECRET, 'hex'),
-  //   async getPermission(request){ return request.payload.paths },
-  // })
-}
-
-ready().catch(error => {
-  console.error(error)
+const did = new DID({
+  resolver: getDidKeyResolver(),
+  provider: new Ed25519Provider(privateKey),
 })
+await did.authenticate()
+
+// Replace by the URL of the Ceramic node you want to deploy the Models to
+const ceramic = new CeramicClient(env.CERAMIC_API_URL)
+// An authenticated DID with admin access must be set on the Ceramic instance
+ceramic.did = did
+
+export { ceramic }
+//
+// // Replace by the path to the local encoded composite file
+// const composite = await readEncodedComposite(ceramic, 'my-first-composite.json')
+//
+// // Notify the Ceramic node to index the models present in the composite
+// await composite.startIndexingOn(ceramic)
+//
+//
+
+
+// const API_URL = env.CERAMIC_API_URL
+
+// let ceramic
+// export async function ready(){
+//   if (ceramic) return
+//   console.log('[ceramic] connecting', env.CERAMIC_API_URL)
+//   ceramic = new CeramicClient(API_URL)
+//   console.log('[ceramic] connected', env.CERAMIC_API_URL)
+//
+//   // // https://developers.ceramic.network/reference/accounts/3id-did/#3id-did-provider
+//   // const app3id = await ThreeIdProvider.create({
+//   //   ceramic,
+//   //   authId: `jlinx-demo-app-${env.APP_NAME}`,
+//   //   authSecret: Buffer.from(env.CERAMIC_NODE_SECRET, 'hex'),
+//   //   async getPermission(request){ return request.payload.paths },
+//   // })
+// }
+//
+// ready().catch(error => {
+//   console.error(error)
+// })
 
 export async function createDid(){
-  await ready()
+  // await ready()
   console.log('[ceramic] creating did')
   const secretSeed = Buffer.alloc(32)
   crypto.randomFillSync(secretSeed)
@@ -64,7 +92,7 @@ export async function createDid(){
 }
 
 export async function getDid(didString, secretSeed){
-  await ready()
+  // await ready()
   console.log('[ceramic] getting did', didString)
   // TODO fail fast on did ≠ secret mismatch
 
@@ -97,7 +125,7 @@ export async function getDid(didString, secretSeed){
 
 export async function resolveDidDocument(didString){
   if (!didString) throw new Error(`didString is required`)
-  await ready()
+  // await ready()
   console.log('[ceramic] resolving did document', didString)
 
   const didResolver = new DidResolver(
@@ -124,19 +152,19 @@ export async function resolveDidDocument(didString){
 }
 
 export async function createDocument(content, metadata, opts){
-  await ready()
+  // await ready()
   console.log('[ceramic] creating document', { content, metadata, opts })
   return await TileDocument.create(ceramic, content, metadata, opts)
 }
 
 export async function loadStream(streamId){
-  await ready()
+  // await ready()
   console.log('[ceramic] loading stream', streamId)
   return await ceramic.loadStream(streamId)
 }
 
 export async function loadDocument(streamId){
-  await ready()
+  // await ready()
   console.log('[ceramic] loading document', streamId)
   return await TileDocument.load(ceramic, streamId)
 }

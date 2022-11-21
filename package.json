@@ -61,6 +61,8 @@
     "zustand": "^4.1.4"
   },
   "dependencies": {
+    "@3id/did-provider": "^0.4.1",
+    "@ceramicnetwork/3id-did-resolver": "^2.6.0",
     "app-shared": "github:jlinclabs/app-shared#67585cf18bf4203f4d5ae5d10bb557611a5b7a3a",
     "jlinx-util": "github:jlinclabs/jlinx-util#475374260d65a681000eb7d0c8dfce8674029cbb",
     "jlinx-vault": "github:jlinclabs/jlinx-vault#7cf353536477761fca0df8e5ec59d15e73e93ef5",
@@ -73,6 +75,11 @@
     "@composedb/client": "^0.3.0",
     "@composedb/devtools": "^0.3.0",
     "@composedb/devtools-node": "^0.3.0",
+    "@datamodels/identity-accounts-crypto": "^0.2.0",
+    "@datamodels/identity-accounts-web": "^0.2.0",
+    "@datamodels/identity-profile-basic": "^0.2.0",
+    "@glazed/cli": "^0.2.2",
+    "@glazed/devtools": "^0.2.0",
     "brittle": "^3.1.0",
     "process": "^0.11.10",
     "standard": "^17.0.0"
