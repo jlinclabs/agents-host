@@ -69,6 +69,10 @@
     "react-toastify": "^9.1.1"
   },
   "devDependencies": {
+    "@composedb/cli": "^0.3.0",
+    "@composedb/client": "^0.3.0",
+    "@composedb/devtools": "^0.3.0",
+    "@composedb/devtools-node": "^0.3.0",
     "brittle": "^3.1.0",
     "process": "^0.11.10",
     "standard": "^17.0.0"
