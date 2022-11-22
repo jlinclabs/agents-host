@@ -1,0 +1,26 @@
+{
+  "schemas": {
+    "kjzl6cwe1jw1467h0pd1nz3gklqet38w9kxne4tmdl26cud6s8xr1k3el12lqol": {
+      "alias": "MySchema",
+      "commits": [
+        {
+          "jws": {
+            "payload": "AXESIA_TCWle8b0hXWZ3kqtB0atNfVb4jGqCCOQXB2Yvthk1",
+            "signatures": [
+              {
+                "signature": "46XZ22NrHrgYDxxO24Bt8b2QxOEOpUF0nAi2rMfMbHhhoKbetua-6SSpykU5RPMXHn21FEBogHeo_u9fhmkICA",
+                "protected": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa214RUgzdFBqbzQ3dEhqc1RGenloS1FVcDlMNU5QNXdzMTJXelNKNk1rNUVYI3o2TWtteEVIM3RQam80N3RIanNURnp5aEtRVXA5TDVOUDV3czEyV3pTSjZNazVFWCJ9"
+              }
+            ],
+            "link": "bafyreiap2mewsxxrxuqv2ztxskvudunljv6vn6emnkbarzaxa5tc7nqzgu"
+          },
+          "linkedBlock": "omRkYXRhp2R0eXBlZm9iamVjdGV0aXRsZXRWZXJpZmlhYmxlQ3JlZGVudGlhbGckc2NoZW1heCdodHRwOi8vanNvbi1zY2hlbWEub3JnL2RyYWZ0LTA3L3NjaGVtYSNocmVxdWlyZWSHaEBjb250ZXh0ZHR5cGViaWRmaXNzdWVycWNyZWRlbnRpYWxTdWJqZWN0cGNyZWRlbnRpYWxTY2hlbWFsaXNzdWFuY2VEYXRlanByb3BlcnRpZXOrYmlkomR0eXBlZnN0cmluZ2ltYXhMZW5ndGgY8GR0eXBlomR0eXBlZWFycmF5ZWl0ZW1zoWR0eXBlZnN0cmluZ2Vwcm9vZqNkdHlwZWZvYmplY3RocmVxdWlyZWSBZHR5cGVqcHJvcGVydGllc6dkdHlwZaFkdHlwZWZzdHJpbmdmZWlwNzEypGR0eXBlZm9iamVjdGhyZXF1aXJlZINmZG9tYWluZXR5cGVza3ByaW1hcnlUeXBlanByb3BlcnRpZXOjZXR5cGVzoWR0eXBlZm9iamVjdGZkb21haW6kZHR5cGVmb2JqZWN0aHJlcXVpcmVkg2djaGFpbklkZG5hbWVndmVyc2lvbmpwcm9wZXJ0aWVzpGRuYW1loWR0eXBlZnN0cmluZ2djaGFpbklkoWR0eXBlZ2ludGVnZXJndmVyc2lvbqFkdHlwZWZzdHJpbmdxdmVyaWZ5aW5nQ29udHJhY3ShZHR5cGVmc3RyaW5ndGFkZGl0aW9uYWxQcm9wZXJ0aWVz9GtwcmltYXJ5VHlwZaFkdHlwZWZzdHJpbmd0YWRkaXRpb25hbFByb3BlcnRpZXP0Z2NyZWF0ZWShZHR5cGVmc3RyaW5nanByb29mVmFsdWWhZHR5cGVmc3RyaW5nbHByb29mUHVycG9zZaFkdHlwZWZzdHJpbmdvZXRoZXJldW1BZGRyZXNzoWR0eXBlZnN0cmluZ3J2ZXJpZmljYXRpb25NZXRob2ShZHR5cGVmc3RyaW5nZmlzc3VlcqNkdHlwZWZvYmplY3RocmVxdWlyZWSBYmlkanByb3BlcnRpZXOiYmlkoWR0eXBlZnN0cmluZ29ldGhlcmV1bUFkZHJlc3OhZHR5cGVmc3RyaW5naEBjb250ZXh0omR0eXBlZWFycmF5ZWl0ZW1zoWR0eXBlZnN0cmluZ2hldmlkZW5jZaRkdHlwZWZvYmplY3RocmVxdWlyZWSBYmlkanByb3BlcnRpZXOmYmlkoWR0eXBlZnN0cmluZ2R0eXBlomR0eXBlZWFycmF5ZWl0ZW1zoWR0eXBlZnN0cmluZ2h2ZXJpZmllcqFkdHlwZWZzdHJpbmdvc3ViamVjdFByZXNlbmNloWR0eXBlZnN0cmluZ3Bkb2N1bWVudFByZXNlbmNloWR0eXBlZnN0cmluZ3BldmlkZW5jZURvY3VtZW50oWR0eXBlZnN0cmluZ3RhZGRpdGlvbmFsUHJvcGVydGllc/RsaXNzdWFuY2VEYXRloWR0eXBlZnN0cmluZ25leHBpcmF0aW9uRGF0ZaFkdHlwZWZzdHJpbmdwY3JlZGVudGlhbFNjaGVtYaRkdHlwZWZvYmplY3RocmVxdWlyZWSCYmlkZHR5cGVqcHJvcGVydGllc6JiaWShZHR5cGVmc3RyaW5nZHR5cGWhZHR5cGVmc3RyaW5ndGFkZGl0aW9uYWxQcm9wZXJ0aWVz9HBjcmVkZW50aWFsU3RhdHVzpGR0eXBlZm9iamVjdGhyZXF1aXJlZIJiaWRkdHlwZWpwcm9wZXJ0aWVzomJpZKFkdHlwZWZzdHJpbmdkdHlwZaFkdHlwZWZzdHJpbmd0YWRkaXRpb25hbFByb3BlcnRpZXP0cWNyZWRlbnRpYWxTdWJqZWN0pGR0eXBlZm9iamVjdGhyZXF1aXJlZIFiaWRqcHJvcGVydGllc6JiaWShZHR5cGVmc3RyaW5nb2V0aGVyZXVtQWRkcmVzc6FkdHlwZWZzdHJpbmd0YWRkaXRpb25hbFByb3BlcnRpZXP1a2Rlc2NyaXB0aW9ueGdBIFtbVmVyaWZpYWJsZUNyZWRlbnRpYWxdXSBpcyBmYWN0LWNoZWNraW5nIHJldmlldy9hdHRlc3RhdGlvbiBvZiBjbGFpbXMgbWFkZSBhYm91dCBhIGNyZWRlbnRpYWxTdWJqZWN0dGFkZGl0aW9uYWxQcm9wZXJ0aWVz9GZoZWFkZXKiZnVuaXF1ZXBiOFZoZGt2bVo5UjZNUkg1a2NvbnRyb2xsZXJzgXg4ZGlkOmtleTp6Nk1rbXhFSDN0UGpvNDd0SGpzVEZ6eWhLUVVwOUw1TlA1d3MxMld6U0o2TWs1RVg="
+        }
+      ],
+      "dependencies": {},
+      "version": "k3y52l7qbv1frxo5510cruhkluijtav39g4vacian4lrh7bxs8vk0b2w7pjmilqtc"
+    }
+  },
+  "definitions": {},
+  "tiles": {}
+}
