@@ -44,7 +44,7 @@ for (const server of servers){
 }
 
 await concurrently(processes, {
-  killOthers: ['failure', 'success'],
+  // killOthers: ['failure', 'success'],
   cwd: APP_PATH,
 })
 
