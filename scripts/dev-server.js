@@ -4,7 +4,7 @@ import childProcess from 'child-process-promise'
 
 process.env.NODE_ENV = "development"
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
-import '../environment.js'
+import '../env.js'
 
 await childProcess.spawn(
   'npx',
@@ -14,7 +14,7 @@ await childProcess.spawn(
     '-w', `./scripts/dev-server.js`,
     '-w', `./package.json`,
     '-w', `./pnpm-lock.yaml`,
-    '-w', `./environment.js`,
+    '-w', `./env.js`,
     '-w', `./lib`,
     '-w', `./server`,
     '--exec',

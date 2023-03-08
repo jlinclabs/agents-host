@@ -1,6 +1,6 @@
 import Path from 'node:path'
 import { readEncodedComposite } from '@composedb/devtools-node'
-import env from '../../environment.js'
+import env from '../../env.js'
 import { ceramic } from '../ceramic.js'
 
 

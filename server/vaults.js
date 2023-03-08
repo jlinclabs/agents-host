@@ -1,7 +1,7 @@
 import Path from 'node:path'
 // import jose from 'node-jose'
 import JlinxVault from 'jlinx-vault'
-import env from '../environment.js'
+import env from '../env.js'
 
 export async function generateVaultKey(){
   return JlinxVault.generateKey().toString('hex')

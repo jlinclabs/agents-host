@@ -3,7 +3,7 @@
 import { writeFile } from 'node:fs/promises'
 import childProcess from 'child-process-promise'
 
-import env from '../environment.js'
+import env from '../env.js'
 
 if (env.NODE_ENV && env.NODE_ENV !== "development")
   throw new Error('dev-client.js only works with NODE_ENV=development')

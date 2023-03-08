@@ -1,4 +1,4 @@
-import env from '../environment.js'
+import env from '../env.js'
 import { create, urlSource } from 'ipfs-http-client'
 
 const ipfs = create({

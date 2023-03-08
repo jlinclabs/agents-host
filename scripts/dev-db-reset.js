@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import childProcess from 'child-process-promise'
-import '../environment.js'
+import '../env.js'
 
 throw new Error('TBD')
 // import migrateSchemas from '../schema/migrate.js'

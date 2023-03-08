@@ -1,7 +1,7 @@
 import Path from 'node:path'
 import fs from 'node:fs/promises'
 import { ModelManager } from '@glazed/devtools'
-import env from '../../../../environment.js'
+import env from '../../../../env.js'
 import { ceramic } from '../ceramic.js'
 
 const managerJSONPath = Path.join(env.APP_ROOT, 'server/ceramic/models.json')

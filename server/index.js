@@ -7,7 +7,7 @@ import bodyParser from 'body-parser'
 import expressSession from 'express-session'
 // import pinoHTTP from 'pino-http'
 
-import env from '../environment.js'
+import env from '../env.js'
 import { renderErrorAsJSON } from './render.js'
 // import Session from './sessions/Session.js'
 // import sessionStore from './sessions/store.js'

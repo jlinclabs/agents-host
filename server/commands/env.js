@@ -1,4 +1,4 @@
-import env from '../../environment.js'
+import env from '../../env.js'
 
 export function getIPFSURL(){
   return {
