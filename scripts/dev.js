@@ -34,7 +34,7 @@ for (const server of servers){
   })
   processes.push({
     name: `${server.APP_NAME} prisma`,
-    command: `./scripts/prisma studio -p 5001`,
+    command: `./scripts/prisma studio`,
     env: {
       ...server,
       BROWSER: 'none',

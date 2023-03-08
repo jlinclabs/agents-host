@@ -10,17 +10,18 @@ await childProcess.spawn(
   'npx',
   [
     'nodemon',
-    '-w', `${process.env.APP_PATH}/scripts/start.js`,
-    '-w', `${process.env.APP_PATH}/scripts/dev-server.js`,
-    '-w', `${process.env.APP_PATH}/package.json`,
-    '-w', `${process.env.APP_PATH}/pnpm-lock.yaml`,
-    '-w', `${process.env.APP_PATH}/environment.js`,
-    '-w', `${process.env.APP_PATH}/lib`,
-    '-w', `${process.env.APP_PATH}/server`,
+    '-w', `./scripts/start.js`,
+    '-w', `./scripts/dev-server.js`,
+    '-w', `./package.json`,
+    '-w', `./pnpm-lock.yaml`,
+    '-w', `./environment.js`,
+    '-w', `./lib`,
+    '-w', `./server`,
     '--exec',
-    `${process.env.APP_PATH}/scripts/start.js`,
+    `./scripts/start.js`,
   ],
   {
+    cwd: process.env.APP_ROOT,
     stdio: ['ignore', 'inherit', 'inherit'],
   }
 )
