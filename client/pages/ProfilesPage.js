@@ -17,7 +17,7 @@ import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
 
-import useStateObject from 'app-shared/client/hooks/useStateObject'
+import useStateObject from '../hooks/useStateObject'
 import { useUploadFile } from '../lib/uploads'
 import {
   useProfile,
@@ -26,11 +26,11 @@ import {
   useUpdateProfile,
 } from '../resources/profiles'
 import { useMyIdentifiers } from '../resources/identifiers'
-import Link from 'app-shared/client/components/Link'
-import ErrorMessage from 'app-shared/client/components/ErrorMessage'
-import Timestamp from 'app-shared/client/components/Timestamp'
+import Link from '../components/Link'
+import ErrorMessage from '../components/ErrorMessage'
+import Timestamp from '../components/Timestamp'
 import Profile from '../components/Profile'
-import InspectObject from 'app-shared/client/components/InspectObject'
+import InspectObject from '../components/InspectObject'
 import LinkToCeramicApi from '../components/LinkToCeramicApi'
 import LinkToDid from '../components/LinkToDid'
 import CeramicStreamEvents from '../components/CeramicStreamEvents'

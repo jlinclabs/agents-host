@@ -28,15 +28,15 @@ import {
 } from '../resources/sisas'
 
 import { useMyIdentifiers } from '../resources/identifiers'
-import Link from 'app-shared/client/components/Link'
+import Link from '../components/Link'
 import LinkToCeramicApi from '../components/LinkToCeramicApi'
-import Timestamp from 'app-shared/client/components/Timestamp'
-import ErrorMessage from 'app-shared/client/components/ErrorMessage'
+import Timestamp from '../components/Timestamp'
+import ErrorMessage from '../components/ErrorMessage'
 import IdentifierProfile from '../components/IdentifierProfile'
 import IdentifierSelectInput from '../components/IdentifierSelectInput'
 import LinkToDid from '../components/LinkToDid'
 import CeramicStreamEvents from '../components/CeramicStreamEvents'
-import InspectObject from 'app-shared/client/components/InspectObject'
+import InspectObject from '../components/InspectObject'
 
 export default function Sisas() {
   return <Container maxwidth="lg">

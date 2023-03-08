@@ -24,9 +24,9 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive'
 import FolderIcon from '@mui/icons-material/Folder'
 
-import LogoutButton from 'app-shared/client/components/LogoutButton'
+import LogoutButton from '../components/LogoutButton'
 // import { useCurrentAgent } from './resources/auth'
-import Link from 'app-shared/client/components/Link'
+import Link from '../components/Link'
 
 export default function SideNav({ loading, currentUser }) {
   const navButtons = (

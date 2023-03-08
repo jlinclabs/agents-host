@@ -12,8 +12,8 @@
 //
 // import RedirectPage from './RedirectPage'
 // import { useSignup } from '../resources/auth'
-// import ErrorMessage from 'app-shared/client/components/ErrorMessage'
-// import Link from 'app-shared/client/components/Link'
+// import ErrorMessage from '../components/ErrorMessage'
+// import Link from '../components/Link'
 // import LoginForm from '../components/LoginForm'
 // import SignupForm from '../components/SignupForm'
 // import LoginWithEthereum from '../components/LoginWithEthereum'

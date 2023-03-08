@@ -2,7 +2,7 @@ import * as React from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import CircularProgress from '@mui/material/CircularProgress'
-import InspectObject from 'app-shared/client/components/InspectObject'
+import InspectObject from '../components/InspectObject'
 
 import { useDidDocument } from '../resources/dids'
 

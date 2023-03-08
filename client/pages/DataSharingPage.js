@@ -23,18 +23,18 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 
-import useStateObject from 'app-shared/client/hooks/useStateObject.js'
-import { useQuery, useCommand } from 'app-shared/client/hooks/cqrpc'
+import useStateObject from '../hooks/useStateObject.js'
+import { useQuery, useCommand } from '../hooks/cqrpc'
 
-import Link from 'app-shared/client/components/Link'
+import Link from '../components/Link'
 import LinkToCeramicApi from '../components/LinkToCeramicApi'
-import Timestamp from 'app-shared/client/components/Timestamp'
-import ErrorMessage from 'app-shared/client/components/ErrorMessage'
+import Timestamp from '../components/Timestamp'
+import ErrorMessage from '../components/ErrorMessage'
 import IdentifierProfile from '../components/IdentifierProfile'
 import IdentifierSelectInput from '../components/IdentifierSelectInput'
 import LinkToDid from '../components/LinkToDid'
 import CeramicStreamEvents from '../components/CeramicStreamEvents'
-import InspectObject from 'app-shared/client/components/InspectObject'
+import InspectObject from '../components/InspectObject'
 
 export default function Agreements() {
   return <Container maxwidth="lg">

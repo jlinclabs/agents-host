@@ -6,11 +6,11 @@ import IconButton from '@mui/material/IconButton'
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 
-import { useQuery, useCommand } from 'app-shared/client/hooks/cqrpc'
-import Link from 'app-shared/client/components/Link'
-import ErrorMessage from 'app-shared/client/components/ErrorMessage'
-import Timestamp from 'app-shared/client/components/Timestamp'
-import LoadingList from 'app-shared/client/components/LoadingList'
+import { useQuery, useCommand } from '../hooks/cqrpc'
+import Link from '../components/Link'
+import ErrorMessage from '../components/ErrorMessage'
+import Timestamp from '../components/Timestamp'
+import LoadingList from '../components/LoadingList'
 
 export default function NotificationsPage() {
   const query = useQuery('notifications.getAll')

@@ -31,14 +31,14 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 
-import useStateObject from 'app-shared/client/hooks/useStateObject.js'
-import { useQuery, useCommand } from 'app-shared/client/hooks/cqrpc'
+import useStateObject from '../hooks/useStateObject.js'
+import { useQuery, useCommand } from '../hooks/cqrpc'
 import { useCurrentAgent } from '../resources/auth'
 
-import Link from 'app-shared/client/components/Link'
+import Link from '../components/Link'
 import LinkToCeramicApi from '../components/LinkToCeramicApi'
-import ErrorMessage from 'app-shared/client/components/ErrorMessage'
-import ButtonRow from 'app-shared/client/components/ButtonRow'
+import ErrorMessage from '../components/ErrorMessage'
+import ButtonRow from '../components/ButtonRow'
 import LinkToDid from '../components/LinkToDid'
 
 const useAgreement = id => useRemoteQuery(id ? 'agreements.get' : null, {id})

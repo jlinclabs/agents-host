@@ -5,7 +5,7 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import SupportAgentIcon from '@mui/icons-material/SupportAgent'
 
-import Link from 'app-shared/client/components/Link'
+import Link from '../components/Link'
 import backgroundVideo from 'raw:../media/pexels-ehab-el-gapry-6238188.mp4'
 
 export default function HomePage() {

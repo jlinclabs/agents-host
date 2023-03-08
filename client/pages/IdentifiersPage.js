@@ -26,14 +26,14 @@ import {
   useIdentifier,
 } from '../resources/identifiers'
 
-import Link from 'app-shared/client/components/Link'
-import ErrorMessage from 'app-shared/client/components/ErrorMessage'
-import Timestamp from 'app-shared/client/components/Timestamp'
+import Link from '../components/Link'
+import ErrorMessage from '../components/ErrorMessage'
+import Timestamp from '../components/Timestamp'
 import LinkToDid from '../components/LinkToDid'
 import LinkToCeramicApi from '../components/LinkToCeramicApi'
 import Profile from '../components/Profile'
 
-import InspectObject from 'app-shared/client/components/InspectObject'
+import InspectObject from '../components/InspectObject'
 
 export default function IdenitifiersPage() {
   return <Container p={4}>

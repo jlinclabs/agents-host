@@ -11,16 +11,16 @@ import Box from '@mui/material/Box'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile'
 
-import { useQuery, useCommand } from 'app-shared/client/hooks/cqrpc'
-import useToggle from 'app-shared/client/hooks/useToggle'
+import { useQuery, useCommand } from '../hooks/cqrpc'
+import useToggle from '../hooks/useToggle'
 
-import Link from 'app-shared/client/components/Link'
-import ButtonRow from 'app-shared/client/components/ButtonRow'
-import ErrorMessage from 'app-shared/client/components/ErrorMessage'
-import Timestamp from 'app-shared/client/components/Timestamp'
-import LoadingList from 'app-shared/client/components/LoadingList'
+import Link from '../components/Link'
+import ButtonRow from '../components/ButtonRow'
+import ErrorMessage from '../components/ErrorMessage'
+import Timestamp from '../components/Timestamp'
+import LoadingList from '../components/LoadingList'
 
-import InspectObject from 'app-shared/client/components/InspectObject'
+import InspectObject from '../components/InspectObject'
 
 
 export default function DocsPage(props) {

@@ -8,13 +8,13 @@ import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import Button from '@mui/material/Button'
 
-import { useQuery, useCommand } from 'app-shared/client/hooks/cqrpc'
-import useCountdown from 'app-shared/client/hooks/useCountdown'
+import { useQuery, useCommand } from '../hooks/cqrpc'
+import useCountdown from '../hooks/useCountdown'
 
-import Link from 'app-shared/client/components/Link'
-import ButtonRow from 'app-shared/client/components/ButtonRow'
-import ErrorMessage from 'app-shared/client/components/ErrorMessage'
-import Timestamp from 'app-shared/client/components/Timestamp'
+import Link from '../components/Link'
+import ButtonRow from '../components/ButtonRow'
+import ErrorMessage from '../components/ErrorMessage'
+import Timestamp from '../components/Timestamp'
 
 export default function LoginAttemptPage() {
   const { id } = useParams()

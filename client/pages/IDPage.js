@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography'
 import { useCurrentAgent } from '../resources/auth'
 import LinkToDid from '../components/LinkToDid'
 import CopyButton from '../components/CopyButton'
-import InspectObject from 'app-shared/client/components/InspectObject'
+import InspectObject from '../components/InspectObject'
 
 export default function IDPage({ currentUser }) {
   return <Box p={2}>

@@ -8,12 +8,12 @@ import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import CircularProgress from '@mui/material/CircularProgress'
 
-import { useQuery } from 'app-shared/client/hooks/cqrpc'
-import Link from 'app-shared/client/components/Link'
-import ErrorMessage from 'app-shared/client/components/ErrorMessage'
-import CopyButton from 'app-shared/client/components/CopyButton'
+import { useQuery } from '../hooks/cqrpc'
+import Link from '../components/Link'
+import ErrorMessage from '../components/ErrorMessage'
+import CopyButton from '../components/CopyButton'
 import LinkToCerscan from '../components/LinkToCerscan'
-import InspectObject from 'app-shared/client/components/InspectObject'
+import InspectObject from '../components/InspectObject'
 
 function useDidDocument(did){
   const { result: didDocument, ...state } = useQuery('dids.getDidDocument', { did })

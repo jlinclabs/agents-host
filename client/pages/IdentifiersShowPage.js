@@ -6,8 +6,8 @@ import Typography from '@mui/material/Typography'
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { useIdentifier } from '../resources/identifiers'
-import ErrorMessage from 'app-shared/client/components/ErrorMessage'
-import Timestamp from 'app-shared/client/components/Timestamp'
+import ErrorMessage from '../components/ErrorMessage'
+import Timestamp from '../components/Timestamp'
 
 export default function IdenitifiersShowPage() {
   const { did } = useParams()

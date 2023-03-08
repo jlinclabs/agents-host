@@ -6,8 +6,8 @@ import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
 import createStore from 'zustand'
 
-import { fetchQuery, useQuery } from 'app-shared/client/hooks/cqrpc'
-import AppError from 'app-shared/client/components/AppError'
+import { fetchQuery, useQuery } from './hooks/cqrpc'
+import AppError from './components/AppError'
 import SideNav from './components/SideNav'
 
 export default function Layout(props) {

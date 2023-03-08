@@ -4,10 +4,10 @@ import Typography from '@mui/material/Typography'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import CopyAllIcon from '@mui/icons-material/CopyAll'
 
-import Link from 'app-shared/client/components/Link'
-import InspectObject from 'app-shared/client/components/InspectObject'
-import CopyBox from 'app-shared/client/components/CopyBox'
-import CopyButton from 'app-shared/client/components/CopyButton'
+import Link from '../components/Link'
+import InspectObject from '../components/InspectObject'
+import CopyBox from '../components/CopyBox'
+import CopyButton from '../components/CopyButton'
 
 export default function DashboardPage({ currentUser }) {
   const didWeb = `did:web:${global.location.hostname}:agents:${currentUser.publicKey}`

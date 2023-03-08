@@ -13,12 +13,12 @@ import RotateLeftIcon from '@mui/icons-material/RotateLeft'
 import RotateRightIcon from '@mui/icons-material/RotateRight'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 
-import { useUploadFile } from 'app-shared/client/hooks/useUploadFile.js'
-import { dataURItoFile } from 'app-shared/client/lib/imageHelpers.js'
-import useToggle from 'app-shared/client/hooks/useToggle.js'
-import ModalWindow from 'app-shared/client/components/ModalWindow'
-import ErrorMessage from 'app-shared/client/components/ErrorMessage'
-import ButtonRow from 'app-shared/client/components/ButtonRow'
+import { useUploadFile } from '../hooks/useUploadFile.js'
+import { dataURItoFile } from '../lib/imageHelpers.js'
+import useToggle from '../hooks/useToggle.js'
+import ModalWindow from '../components/ModalWindow'
+import ErrorMessage from '../components/ErrorMessage'
+import ButtonRow from '../components/ButtonRow'
 
 const width = 250
 const height = 250

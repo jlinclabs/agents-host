@@ -7,7 +7,7 @@ import Button from '@mui/material/Button'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 
 import { useCurrentAgent } from '../resources/auth'
-import ButtonRow from 'app-shared/client/components/ButtonRow'
+import ButtonRow from '../components/ButtonRow'
 
 
 export default function AgreementPartiesInput({

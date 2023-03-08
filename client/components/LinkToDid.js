@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Typography from '@mui/material/Typography'
-import Link from 'app-shared/client/components/Link'
+import Link from '../components/Link'
 
 export default function LinkToDid({
   did,

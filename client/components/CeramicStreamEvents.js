@@ -1,8 +1,8 @@
 import * as React from 'react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
-import ErrorMessage from 'app-shared/client/components/ErrorMessage'
-import InspectObject from 'app-shared/client/components/InspectObject'
+import ErrorMessage from '../components/ErrorMessage'
+import InspectObject from '../components/InspectObject'
 
 import { useCeramicStreamEvents } from '../resources/ceramic'
 export default function CeramicStreamEvents({ id, ...props }){

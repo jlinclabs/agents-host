@@ -10,7 +10,7 @@ export default createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: process.env.APP_COLOR,
+      main: process.env.APP_COLOR || '#33cc22',
     },
     secondary: {
       main: colors.blue[400],

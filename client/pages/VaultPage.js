@@ -4,9 +4,9 @@ import Typography from '@mui/material/Typography'
 import Alert from '@mui/material/Alert'
 import CircularProgress from '@mui/material/CircularProgress'
 
-import { useQuery } from 'app-shared/client/hooks/cqrpc'
-import ErrorMessage from 'app-shared/client/components/ErrorMessage'
-import InspectObject from 'app-shared/client/components/InspectObject'
+import { useQuery } from '../hooks/cqrpc'
+import ErrorMessage from '../components/ErrorMessage'
+import InspectObject from '../components/InspectObject'
 
 export default function VaultPage() {
   const { result: vaultDump, loading, error } = useQuery(`vault.getDump`)

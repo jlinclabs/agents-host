@@ -8,7 +8,7 @@ import Box from '@mui/material/Box'
 // import Typography from '@mui/material/Typography'
 import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
-import ErrorMessage from 'app-shared/client/components/ErrorMessage'
+import ErrorMessage from '../components/ErrorMessage'
 
 async function createAuthProvider() {
   // The following assumes there is an injected `window.ethereum` provider

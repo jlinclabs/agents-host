@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import Container from '@mui/material/Container'
 import Layout from '../Layout'
-import ErrorMessage from 'app-shared/client/components/ErrorMessage'
+import ErrorMessage from '../components/ErrorMessage'
 import { useCurrentAgent, useLogout } from '../resources/auth'
 
 
