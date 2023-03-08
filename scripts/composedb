@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-DID=$(dotenv -p COMPOSEDB_PRIVATE_KEY) exec npx composedb $@ --ceramic-url=$(dotenv -p CERAMIC_API_URL)
