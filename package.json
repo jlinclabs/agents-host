@@ -30,6 +30,7 @@
     "prisma": "^4.11.0"
   },
   "devDependencies": {
-    "concurrently": "^7.6.0"
+    "concurrently": "^7.6.0",
+    "find-open-port": "^2.0.3"
   }
 }

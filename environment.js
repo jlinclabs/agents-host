@@ -7,6 +7,8 @@ const __dirname = Path.dirname(__filename)
 
 dotenv.config()
 
+process.env.NODE_ENV ??= "development"
+
 for (const prop of [
   'NODE_ENV',
   'PORT',
@@ -17,8 +19,8 @@ for (const prop of [
   'VAULTS_PATH',
   'DATABASE_URL',
   'IPFS_API_URL',
-  'CERAMIC_API_URL',
-  'CERAMIC_NODE_SECRET',
+  // 'CERAMIC_API_URL',
+  // 'CERAMIC_NODE_SECRET',
 ]){
   if (!process.env[prop]) {
     console.error(`process.env.${prop} is missing!`)
@@ -39,10 +41,10 @@ const env = {
   VAULTS_PATH: process.env.VAULTS_PATH,
   DATABASE_URL: process.env.DATABASE_URL,
   IPFS_API_URL: process.env.IPFS_API_URL,
-  CERAMIC_API_URL: process.env.CERAMIC_API_URL,
-  CERAMIC_NODE_SECRET: process.env.CERAMIC_NODE_SECRET,
-  COMPOSEDB_ADMIN_DID: process.env.COMPOSEDB_ADMIN_DID,
-  COMPOSEDB_PRIVATE_KEY: process.env.COMPOSEDB_PRIVATE_KEY,
+  // CERAMIC_API_URL: process.env.CERAMIC_API_URL,
+  // CERAMIC_NODE_SECRET: process.env.CERAMIC_NODE_SECRET,
+  // COMPOSEDB_ADMIN_DID: process.env.COMPOSEDB_ADMIN_DID,
+  // COMPOSEDB_PRIVATE_KEY: process.env.COMPOSEDB_PRIVATE_KEY,
 }
 
 console.log({ env })

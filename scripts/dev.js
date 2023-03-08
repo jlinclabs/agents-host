@@ -1,40 +1,83 @@
 #!/usr/bin/env node
+import { fileURLToPath } from 'url'
+import Path from 'path'
+import findPort from 'find-open-port'
+import concurrently from 'concurrently'
 
-process.env.NODE_ENV = "development"
-import '../environment.js'
+const APP_PATH = Path.resolve(Path.dirname(fileURLToPath(import.meta.url)), '..')
+console.log({ APP_PATH })
 
-const {default: findPort} = await import('find-open-port')
-const {default: concurrently} = await import('concurrently')
+const { default: servers } = await import("../dev/servers.json", { assert: { type: "json" } })
 
-const serverPort = await findPort()
-const apiServerUrl = `http://localhost:${serverPort}`
+const processes = []
 
-await concurrently(
-  [
-    {
-      name: 'server',
-      command: `./scripts/dev-server.js`,
-      env: {
-        PORT: serverPort
-      },
+for (const server of servers){
+  console.log(server)
+
+  const apiServerPort = await findPort()
+  const prismaStudioPort = await findPort()
+  const apiServerUrl = `http://localhost:${apiServerPort}`
+
+  processes.push({
+    name: `${server.HOST} server`,
+    command: `./scripts/dev-server.js`,
+    env: {
+      ...server,
+      PORT: apiServerPort
     },
-    {
-      name: 'client',
-      command: `./scripts/dev-client.js`,
-      env: {
-        API_SERVER: apiServerUrl,
-      },
+  })
+  processes.push({
+    name: `${server.HOST} client`,
+    command: `./scripts/dev-client.js`,
+    env: {
+      ...server,
+      API_SERVER: apiServerUrl,
     },
-    {
-      name: 'prisma',
-      command: `./scripts/prisma studio -p 5001`,
-      env: {
-        BROWSER: 'none',
-      },
+  })
+  processes.push({
+    name: `${server.HOST} prisma`,
+    command: `./scripts/prisma studio -p 5001`,
+    env: {
+      ...server,
+      BROWSER: 'none',
+      PORT: prismaStudioPort,
     },
-  ],
-  {
-    killOthers: ['failure', 'success'],
-    cwd: process.env.APP_PATH,
-  }
-)
+  })
+}
+
+await concurrently(processes, {
+  killOthers: ['failure', 'success'],
+  cwd: APP_PATH,
+})
+
+
+
+// await concurrently(
+//   [
+//     {
+//       name: 'server',
+//       command: `./scripts/dev-server.js`,
+//       env: {
+//         PORT: serverPort
+//       },
+//     },
+//     {
+//       name: 'client',
+//       command: `./scripts/dev-client.js`,
+//       env: {
+//         API_SERVER: apiServerUrl,
+//       },
+//     },
+//     {
+//       name: 'prisma',
+//       command: `./scripts/prisma studio -p 5001`,
+//       env: {
+//         BROWSER: 'none',
+//       },
+//     },
+//   ],
+//   {
+//     killOthers: ['failure', 'success'],
+//     cwd: process.env.APP_PATH,
+//   }
+// )
