@@ -12,14 +12,12 @@ const { default: servers } = await import("../dev/servers.json", { assert: { typ
 const processes = []
 
 for (const server of servers){
-  console.log(server)
-
   const apiServerPort = await findPort()
   const prismaStudioPort = await findPort()
   const apiServerUrl = `http://localhost:${apiServerPort}`
 
   processes.push({
-    name: `${server.HOST} server`,
+    name: `${server.APP_NAME} server`,
     command: `./scripts/dev-server.js`,
     env: {
       ...server,
@@ -27,7 +25,7 @@ for (const server of servers){
     },
   })
   processes.push({
-    name: `${server.HOST} client`,
+    name: `${server.APP_NAME} client`,
     command: `./scripts/dev-client.js`,
     env: {
       ...server,
@@ -35,7 +33,7 @@ for (const server of servers){
     },
   })
   processes.push({
-    name: `${server.HOST} prisma`,
+    name: `${server.APP_NAME} prisma`,
     command: `./scripts/prisma studio -p 5001`,
     env: {
       ...server,

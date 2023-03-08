@@ -1,4 +1,4 @@
-import { fileURLToPath } from 'url'
+import { fileURLToPath, URL } from 'url'
 import Path from 'path'
 import dotenv from 'dotenv'
 
@@ -12,8 +12,7 @@ process.env.NODE_ENV ??= "development"
 for (const prop of [
   'NODE_ENV',
   'PORT',
-  'HOST',
-  'APP_ORIGIN',
+  'ORIGIN',
   'APP_COLOR',
   'SESSION_SECRET',
   'VAULTS_PATH',
@@ -30,12 +29,15 @@ for (const prop of [
 
 if (!process.env.NODE_ENV) process.env.NODE_ENV = 'development'
 
+const origin = new URL(process.env.ORIGIN)
+console.log({ origin })
 const env = {
   APP_ROOT: __dirname,
   BUILD_PATH: Path.join(__dirname, 'client', 'build'),
   NODE_ENV: process.env.NODE_ENV,
+  HOST: `${origin.host}`,
   PORT: process.env.PORT,
-  APP_ORIGIN: process.env.APP_ORIGIN,
+  APP_ORIGIN: `${origin}`,
   APP_COLOR: process.env.APP_COLOR,
   SESSION_SECRET: process.env.SESSION_SECRET,
   VAULTS_PATH: process.env.VAULTS_PATH,
