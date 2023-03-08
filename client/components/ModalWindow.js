@@ -1,14 +1,7 @@
-import { useState, useRef } from 'react'
-import AvatarEditor from 'react-avatar-editor'
-import Dropzone from 'react-dropzone'
-import IconButton from '@mui/material/IconButton';
-import Avatar from '@mui/material/Avatar'
 import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
 import Fade from '@mui/material/Fade'
 import Backdrop from '@mui/material/Backdrop'
-
-import useToggle from 'app-shared/client/hooks/useToggle.js'
 
 export default function Modal({
   open, onClose, children, ...props

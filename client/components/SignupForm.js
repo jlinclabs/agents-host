@@ -6,16 +6,10 @@ import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
-import Divider from '@mui/material/Divider'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
-import AutorenewIcon from '@mui/icons-material/Autorenew'
-import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 
-import Link from 'app-shared/client/components/Link'
-import ErrorMessage from 'app-shared/client/components/ErrorMessage'
-import PassphraseInput from './PassphraseInput'
-import { useSignup } from '../resources/auth'
+import Link from './Link'
+import ErrorMessage from './ErrorMessage'
+import { useSignup } from '../hooks/auth'
 
 export default function SignupForm({
   onSuccess,

@@ -1,23 +1,27 @@
 import { useState } from 'react'
+import { useSearchParams, useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 
-import ErrorMessage from 'app-shared/client/components/ErrorMessage'
-import Link from 'app-shared/client/components/Link'
-import PassphraseInput from './PassphraseInput'
-import { useLogin } from '../resources/auth'
+import Link from './Link'
+import ErrorMessage from './ErrorMessage'
+import { useLogin } from '../hooks/auth'
 
 export default function LoginForm(props){
+  // const navigate = useNavigate()
+  // const [searchParams] = useSearchParams()
+  // const destination = searchParams.get('d')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
 
   const login = useLogin({
     onSuccess(){
-      setError(null)
+      // setError(null)
+      // navigate(destination || '/')
     },
     onFailure(error){
       if (`${error}`.includes('email or password is invalid')){

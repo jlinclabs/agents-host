@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Box from '@mui/material/Box'
 
-import Link from 'app-shared/client/components/Link'
+import Link from '../components/Link'
 
 export default function LinkToCerscan({ id, children, ...props }){
   const to = `https://cerscan.com/testnet-clay/stream/${id}`
