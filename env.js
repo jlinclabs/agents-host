@@ -15,6 +15,7 @@ for (const prop of [
   'ORIGIN',
   'APP_COLOR',
   'SESSION_SECRET',
+  'UPLOADS_PATH',
   'VAULTS_PATH',
   'DATABASE_URL',
   'IPFS_API_URL',
@@ -30,16 +31,17 @@ for (const prop of [
 if (!process.env.NODE_ENV) process.env.NODE_ENV = 'development'
 
 const origin = new URL(process.env.ORIGIN)
-console.log({ origin })
+
 const env = {
   APP_ROOT: __dirname,
-  BUILD_PATH: Path.join(__dirname, 'client', 'build'),
+  BUILD_PATH: Path.join(__dirname, 'client-build'),
   NODE_ENV: process.env.NODE_ENV,
   HOST: `${origin.host}`,
   PORT: process.env.PORT,
-  APP_ORIGIN: `${origin}`,
+  ORIGIN: `${origin}`,
   APP_COLOR: process.env.APP_COLOR,
   SESSION_SECRET: process.env.SESSION_SECRET,
+  UPLOADS_PATH: process.env.UPLOADS_PATH,
   VAULTS_PATH: process.env.VAULTS_PATH,
   DATABASE_URL: process.env.DATABASE_URL,
   IPFS_API_URL: process.env.IPFS_API_URL,

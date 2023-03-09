@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -e
+set -x
+
+exec npx parcel watch --dist-dir ./client-build ./client/index.html $@
