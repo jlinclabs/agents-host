@@ -10,27 +10,16 @@ let assetsRoutes, indexHtmlFallback
 // proxy requests to `parcel serve` process
 if (process.env.CLIENT_SERVER_PORT){
   const parcelUrl = `http://localhost:${process.env.CLIENT_SERVER_PORT}/`
-  const parcelHTTPProxy = createProxyMiddleware('/assets', {
-    target: parcelUrl,
-    changeOrigin: true,
-    onProxyRes: responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
-      const response = responseBuffer.toString('utf8'); // convert buffer to string
-      return response.replace('Hello', 'Goodbye'); // manipulate response and return the result
-    }),
-  })
-  const parcelWSProxy = createProxyMiddleware({
+
+  const parcelProxy = createProxyMiddleware({
     target: parcelUrl,
     changeOrigin: true, // ?
     pathFilter: '/socket',
     ws: true,
   })
   assetsRoutes = new Router
-  assetsRoutes.use(parcelHTTPProxy)
-  assetsRoutes.use(parcelWSProxy)
-  // assetsRoutes.on('upgrade', parcelWSProxy.upgrade) // <-- subscribe to http 'upgrade'
-
-  indexHtmlFallback = new Router
-  indexHtmlFallback.get('*', function (req, res, next) {
+  assetsRoutes.use('/assets', parcelProxy)
+  assetsRoutes.get('*', function (req, res, next) {
     if (req.xhr || !req.accepts('html')) return next()
     res.set('Cache-Control', 'no-cache')
     req.originalUrl = req.url = '/assets/index.html'

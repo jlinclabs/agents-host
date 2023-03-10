@@ -102,6 +102,6 @@ app.use(uploadsRoutes)
 
 
 routes.use(assetsRoutes)
-routes.use(indexHtmlFallback)
+// routes.use(indexHtmlFallback)
 routes.use(expressErrorHandler)
 
