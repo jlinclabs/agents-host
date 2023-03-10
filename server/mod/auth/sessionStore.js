@@ -1,6 +1,6 @@
 import { callbackify } from 'node:util'
 import { Store } from 'express-session'
-import prisma from '../../prisma.js'
+// import prisma from '../../prisma.js'
 
 class SessionStore extends Store {}
 Object.assign(SessionStore.prototype, {
