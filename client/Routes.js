@@ -6,7 +6,9 @@ import { useCurrentUser } from '~/hooks/auth'
 import AppError from '~/components/AppError'
 import FullPageLoading from './components/FullPageLoading'
 
-import routeFiles from '~/routes/**/{Error,NotFound,Layout,Page}.js'
+import routeFiles from './routes/**/{Error,NotFound,Layout,Page}.js'
+
+console.log({ routeFiles })
 
 const routes = []
 
@@ -42,6 +44,7 @@ const processRoutes = (files, subRoutes, paths) => {
 }
 
 processRoutes(routeFiles, routes, [''])
+console.log({ routeFiles, routes })
 
 
 export default function Routes() {

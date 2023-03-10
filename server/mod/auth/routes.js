@@ -6,4 +6,4 @@ import sessionMiddleware from './sessionMiddleware.js'
 const routes = new Router()
 export default routes
 
-routes.use('/api/', sessionMiddleware)
+// routes.use('/api/', sessionMiddleware)

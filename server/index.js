@@ -11,9 +11,9 @@ import env from '../env.js'
 import { renderErrorAsJSON } from './render.js'
 import { assetsRoutes } from './assets.js'
 import expressErrorHandler from './http/express-error-handler.js'
-import didRoutes from './modules/dids/routes.js'
-import authRoutes from './modules/auth/routes.js'
-import uploadsRoutes from './modules/uploads/routes.js'
+import didRoutes from './mod/dids/routes.js'
+import authRoutes from './mod/auth/routes.js'
+import uploadsRoutes from './mod/uploads/routes.js'
 
 const app = express()
 const routes = new Router
@@ -55,27 +55,26 @@ routes.use((req, res, next) => {
   next()
 })
 
+
 routes.get('/api/status', (req, res, next) => {
   res.json({ ok: true })
 })
 
-routes.use(didRoutes)
-
-
-// app.use('/api/', express.urlencoded({
+// routes.use('/api/', express.urlencoded({
 //   extended: true,
 // }))
 
-// app.use('/api/', bodyParser.json({
+// routes.use('/api/', bodyParser.json({
 //   limit: 102400 * 10,
 // }))
+// routes.use(didRoutes)
+// app.use(authRoutes)
+// app.use(uploadsRoutes)
 
-
-
-
-app.use(authRoutes)
-app.use(uploadsRoutes)
-
+routes.use('/api', (req, res, next) => {
+  console.log(' 404 catchall for /api/* ')
+  res.status(404).send({})
+})
 // app.use('/api', passport.authenticate('session'))
 
 // app.use('/api', (req, res, next) => {
