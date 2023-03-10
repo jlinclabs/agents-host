@@ -4,7 +4,6 @@ import { glob } from 'glob'
 import concurrently from 'concurrently'
 
 const servers = await glob('dev/servers/*/env')
-console.log({ servers })
 
 const processes = []
 
