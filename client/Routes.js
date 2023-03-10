@@ -1,91 +1,71 @@
 import * as React from 'react'
-import { Routes as _Routes, Route } from 'react-router-dom'
-import { useCurrentUser } from './hooks/auth'
-import AppError from './components/AppError'
-import AuthPage from './pages/AuthPage'
-import DebugPage from './pages/DebugPage'
-// import RedirectPage from './pages/RedirectPage'
-import NotFoundPage from './pages/NotFoundPage'
+import { createBrowserRouter, RouterProvider, Navigate, useLocation } from 'react-router-dom'
+
+import { getLoginUrl } from '~/lib/urls'
+import { useCurrentUser } from '~/hooks/auth'
+import AppError from '~/components/AppError'
 import FullPageLoading from './components/FullPageLoading'
 
-import Layout from './Layout'
-import HomePage from './pages/HomePage'
-import DashboardPage from './pages/DashboardPage'
-import SettingsPage from './pages/SettingsPage'
-import NotificationsPage from './pages/NotificationsPage'
-import VaultPage from './pages/VaultPage'
-import DidsPage from './pages/DidsPage'
-import ProfilePage from './pages/ProfilePage'
-import LoginAttemptPage from './pages/LoginAttemptPage'
-import DocsPage from './pages/DocsPage'
-// import IDPage from './pages/IDPage'
-// import ContactsPage from './pages/ContactsPage'
-// import AgreementsPage from './pages/AgreementsPage'
-// import DataSharingPage from './pages/DataSharingPage'
-// import DevCeramicPage from './pages/DevCeramicPage'
-// import ProfilesPage from './pages/ProfilesPage'
-// import IdentifiersPage from './pages/IdentifiersPage'
-// import ContractsPage from './pages/ContractsPage'
+import routeFiles from '~/routes/**/{Error,NotFound,Layout,Page}.js'
+
+const routes = []
+
+const processRoutes = (files, subRoutes, paths) => {
+  const fullPath = [...paths].reverse().join('/')
+  const { Error, NotFound, Layout, Page, ...directories } = files
+  let children = []
+  if (Page) {
+    let element = safeRender(Page, fullPath, 'Page.js')
+    if (Page.routeOptions?.topLevel){
+      routes.push({
+        path: fullPath,
+        element,
+        errorElement: Error && safeRender(Error, fullPath, 'Layout.js'),
+      })
+    }else{
+      children.push({ path: '', element })
+    }
+  }
+
+  for (const name in directories)
+    processRoutes(directories[name], children, [name, ...paths])
+
+  if (NotFound) children.push({path: '*', element: <NotFound.default />})
+
+  // TODO maybe support Layout.routeOptions.topLevel ?
+  subRoutes.push({
+    path: paths[0],
+    element: Layout && safeRender(Layout, fullPath, 'Layout.js'),
+    errorElement: Error && safeRender(Error, fullPath, 'Layout.js'),
+    children,
+  })
+}
+
+processRoutes(routeFiles, routes, [''])
+
 
 export default function Routes() {
   const {currentUser, loading, error} = useCurrentUser()
+  console.log('currentUser -> ', loading ? 'LOADING' : JSON.stringify(currentUser, null, 2))
   if (loading) return <FullPageLoading/>
   if (error) return <AppError {...{error}}/>
-  if (currentUser) return <LoggedInRoutes {...{currentUser}}/>
-  return <LoggedOutRoutes />
+  const router = createBrowserRouter(routes)
+  global.router = router
+  return <RouterProvider {...{router}} />
 }
 
-function LoggedOutRoutes() {
-  return <_Routes>
-    {defaultRoutes({})}
-  </_Routes>
+function safeRender(mod, path, filename){
+  if (!mod.default)
+    return <div>Route Error: page has no default export! {path}/{filename}</div>
+  return mod.routeOptions?.mustBeUser
+    ? <MustBeUser><mod.default/></MustBeUser>
+    : <mod.default/>
 }
 
-function LoggedInRoutes(props) {
-  return <Layout {...props}>
-    <_Routes>
-      <Route path="/" element={<DashboardPage {...props} />} />
-      {/*<Route path="/id" element={<IDPage {...props} />} />*/}
-      <Route path="/profile" element={<ProfilePage {...props} />} />
-      <Route path="/settings" element={<SettingsPage {...props} />} />
-      <Route path="/notifications" element={<NotificationsPage {...props} />} />
-      <Route path="/login-attempts/:id" element={<LoginAttemptPage {...props} />} />
-      <Route path="/vault" element={<VaultPage {...props} />} />
-      <Route path="/dids/*" element={<DidsPage {...props} />} />
-      <Route path="/docs/*" element={<DocsPage {...props} />} />
-      {/*<Route path="/contacts/*" element={<ContactsPage {...props} />} />*/}
-      {/*<Route path="/agreements/*" element={<AgreementsPage {...props} />} />*/}
-      {/*<Route path="/data-sharing/*" element={<DataSharingPage {...props} />} />*/}
-      {/*<Route path="/dev/ceramic/*" element={<DevCeramicPage {...props} />} />*/}
-      {/*<Route path="/profiles/*" element={<ProfilesPage {...props} />} />*/}
-      {/*<Route path="/identifiers/*" element={<IdentifiersPage {...props} />} />*/}
-      {/*<Route path="/contracts/*" element={<ContractsPage {...props} />} />*/}
-      {defaultRoutes(props)}
-    </_Routes>
-  </Layout>
-}
 
-function defaultRoutes({ currentUser }) { // not a react component
-  return <>
-    {/*<Route path="*" element={<AuthPage {...props}/>} />*/}
-    <Route path="/" element={<HomePage />} />
-    {AuthPage.routes({ currentUser })}
-    <Route path="/debug/*" element={<DebugPage appName="Agents"/>}/>}/>
-    <Route path="*" element={<NotFoundPage/>}/>
-  </>
+function MustBeUser({ children }){
+  const { currentUser } = useCurrentUser()
+  const location = useLocation()
+  const loginUrl = getLoginUrl(location)
+  return currentUser ? children : <Navigate to={loginUrl}/>
 }
-  // if (loading) return <CircularProgress/>
-  // if (error) return <AppError {...{error}}/>
-  // if (!currentUser) return <AuthPage {...{loading, error}} />
-  // const props = { currentUser }
-  // return <Layout {...{ currentUser }}>
-  //   <_Routes>
-  //     <Route path="/debug/*" element={<DebugPage {...{...props, appName: 'Agents'}}/>}/>
-  //     <Route path="*" element={<AuthPage {...props}/>} />
-  //     {/*{currentUser && <>*/}
-
-  //     {/*</>}*/}
-  //     <Route path="*" element={<NotFoundPage {...props} />} />
-  //   </_Routes>
-  // </Layout>
-// }

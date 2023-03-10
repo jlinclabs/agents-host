@@ -11,6 +11,7 @@ specifiers:
   '@parcel/optimizer-data-url': ^2.8.3
   '@parcel/packager-raw-url': ^2.8.3
   '@parcel/reporter-dev-server': ^2.8.3
+  '@parcel/resolver-glob': ^2.8.3
   '@parcel/transformer-inline-string': ^2.8.3
   '@parcel/transformer-raw': ^2.8.3
   '@parcel/transformer-webmanifest': ^2.8.3
@@ -40,6 +41,7 @@ dependencies:
   '@parcel/optimizer-data-url': 2.8.3_@parcel+core@2.8.3
   '@parcel/packager-raw-url': 2.8.3_@parcel+core@2.8.3
   '@parcel/reporter-dev-server': 2.8.3_@parcel+core@2.8.3
+  '@parcel/resolver-glob': 2.8.3_@parcel+core@2.8.3
   '@parcel/transformer-inline-string': 2.8.3_@parcel+core@2.8.3
   '@parcel/transformer-raw': 2.8.3_@parcel+core@2.8.3
   '@parcel/transformer-webmanifest': 2.8.3_@parcel+core@2.8.3
@@ -1171,6 +1173,19 @@ packages:
       - '@parcel/core'
     dev: false
 
+  /@parcel/resolver-glob/2.8.3_@parcel+core@2.8.3:
+    resolution: {integrity: sha512-vr3rWYmWUQV6xDrzo0ABdB15+DaZ1hcpwId/6/kgLRVv20T4oUDkRN1xgZIlYztzCDInHe+l2KWtmhd4FGQIaQ==}
+    engines: {node: '>= 12.0.0', parcel: ^2.8.3}
+    dependencies:
+      '@parcel/diagnostic': 2.8.3
+      '@parcel/node-resolver-core': 2.8.3
+      '@parcel/plugin': 2.8.3_@parcel+core@2.8.3
+      '@parcel/utils': 2.8.3
+      nullthrows: 1.1.1
+    transitivePeerDependencies:
+      - '@parcel/core'
+    dev: false
+
   /@parcel/runtime-browser-hmr/2.8.3_@parcel+core@2.8.3:
     resolution: {integrity: sha512-2O1PYi2j/Q0lTyGNV3JdBYwg4rKo6TEVFlYGdd5wCYU9ZIN9RRuoCnWWH2qCPj3pjIVtBeppYxzfVjPEHINWVg==}
     engines: {node: '>= 12.0.0', parcel: ^2.8.3}
@@ -1401,6 +1416,18 @@ packages:
       - '@parcel/core'
     dev: false
 
+  /@parcel/types/2.8.3:
+    resolution: {integrity: sha512-FECA1FB7+0UpITKU0D6TgGBpGxYpVSMNEENZbSJxFSajNy3wrko+zwBKQmFOLOiPcEtnGikxNs+jkFWbPlUAtw==}
+    dependencies:
+      '@parcel/cache': 2.8.3_@parcel+core@2.8.3
+      '@parcel/diagnostic': 2.8.3
+      '@parcel/fs': 2.8.3_@parcel+core@2.8.3
+      '@parcel/package-manager': 2.8.3_@parcel+core@2.8.3
+      '@parcel/source-map': 2.1.1
+      '@parcel/workers': 2.8.3_@parcel+core@2.8.3
+      utility-types: 3.10.0
+    dev: false
+
   /@parcel/types/2.8.3_@parcel+core@2.8.3:
     resolution: {integrity: sha512-FECA1FB7+0UpITKU0D6TgGBpGxYpVSMNEENZbSJxFSajNy3wrko+zwBKQmFOLOiPcEtnGikxNs+jkFWbPlUAtw==}
     dependencies:
@@ -1448,7 +1475,7 @@ packages:
       '@parcel/core': 2.8.3
       '@parcel/diagnostic': 2.8.3
       '@parcel/logger': 2.8.3
-      '@parcel/types': 2.8.3_@parcel+core@2.8.3
+      '@parcel/types': 2.8.3
       '@parcel/utils': 2.8.3
       chrome-trace-event: 1.0.3
       nullthrows: 1.1.1

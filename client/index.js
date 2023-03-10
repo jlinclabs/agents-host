@@ -18,10 +18,9 @@ root.render(
       <CssBaseline enableColorScheme />
       <ToastContainer/>
       <ErrorBoundary onError={error => <AppError {...{error}}/>}>
-        <div> hello 6 </div>
-        {/* <BrowserRouter>
+        <BrowserRouter>
           <Routes/>
-        </BrowserRouter> */}
+        </BrowserRouter>
       </ErrorBoundary>
     </ThemeProvider>
   </React.StrictMode>
