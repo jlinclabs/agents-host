@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev-db-migrate": "./scripts/dev-db-migrate.js",
+    "dev-servers": "./scripts/dev-servers.js",
     "dev": "./scripts/dev.js",
     "build": "./scripts/build.js",
     "start": "./scripts/start.js",

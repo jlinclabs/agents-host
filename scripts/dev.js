@@ -4,44 +4,40 @@ import { fileURLToPath } from 'url'
 import Path from 'path'
 import findPort from 'find-open-port'
 import concurrently from 'concurrently'
+import env from '../env.js'
 
-const APP_ROOT = Path.resolve(Path.dirname(fileURLToPath(import.meta.url)), '..')
-process.cwd(APP_ROOT)
+// const APP_ROOT = Path.resolve(Path.dirname(fileURLToPath(import.meta.url)), '..')
+// process.cwd(APP_ROOT)
 
-const { default: servers } = await import("../dev/servers.json", { assert: { type: "json" } })
+const clientServerPort = await findPort()
 
-const processes = []
-
-for (const server of servers){
-  const clientServerPort = await findPort()
-  processes.push({
-    name: `${server.APP_NAME} client`,
-    command: `./scripts/dev-client.js`,
-    env: {
-      ...server,
-      PORT: clientServerPort,
+await concurrently(
+  [
+    {
+      name: `${process.env.APP_NAME} client`,
+      command: `./scripts/dev-client.js`,
+      env: {
+        PORT: clientServerPort,
+      },
     },
-  })
-  processes.push({
-    name: `${server.APP_NAME} server`,
-    command: `./scripts/dev-server.js`,
-    env: {
-      ...server,
-      CLIENT_SERVER_PORT: clientServerPort,
+    {
+      name: `${process.env.APP_NAME} server`,
+      command: `./scripts/dev-server.js`,
+      env: {
+        CLIENT_SERVER_PORT: clientServerPort,
+      },
     },
-  })
-  processes.push({
-    name: `${server.APP_NAME} prisma`,
-    command: `./scripts/prisma studio`,
-    env: {
-      ...server,
-      BROWSER: 'none',
-      PORT: await findPort(),
+    {
+      name: `${process.env.APP_NAME} prisma`,
+      command: `./scripts/prisma studio`,
+      env: {
+        BROWSER: 'none',
+        PORT: await findPort(),
+      },
     },
-  })
-}
-
-await concurrently(processes, {
-  // killOthers: ['failure', 'success'],
-  cwd: APP_ROOT,
-})
+  ],
+  {
+    // killOthers: ['failure', 'success'],
+    cwd: process.env.APP_ROOT,
+  }
+)

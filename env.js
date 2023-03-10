@@ -17,7 +17,7 @@ for (const prop of [
   'SESSION_SECRET',
   'UPLOADS_PATH',
   'VAULTS_PATH',
-  'DATABASE_URL',
+  // 'DATABASE_URL',
   'IPFS_API_URL',
   // 'CERAMIC_API_URL',
   // 'CERAMIC_NODE_SECRET',
