@@ -1,4 +1,5 @@
 
+
 import { promisify } from 'node:util'
 import Path from 'path'
 import express from 'express'
@@ -9,6 +10,7 @@ import bodyParser from 'body-parser'
 
 import env from '../env.js'
 import { renderErrorAsJSON } from './render.js'
+import { routes as cqprcRoutes } from './cqrpc.js'
 import { assetsRoutes } from './assets.js'
 import expressErrorHandler from './http/express-error-handler.js'
 import didRoutes from './mod/dids/routes.js'
@@ -27,7 +29,6 @@ app.start = function(){
     console.log(`Listening on port ${env.ORIGIN}`)
   })
 }
-
 
 let requestIdSequence = 0
 routes.use((req, res, next) => {
@@ -55,10 +56,28 @@ routes.use((req, res, next) => {
   next()
 })
 
-
 routes.get('/api/status', (req, res, next) => {
   res.json({ ok: true })
 })
+
+routes.use('/api/cqrpc', cqprcRoutes)
+
+// `
+// /api/get/session
+// /api/sub/session
+// /api/sub/notifications
+// /api/call/session.signOut
+// /api/call/notifications.clear
+// /api/get/notifications.byId?o={id:'xyz'}
+// /api/sub/documents.byId?o={id:'xyz'}
+
+// -- OR --
+
+// GET /api/session
+// POST /api/session.signIn {"email":"x@example.com"}
+// GET /api/things.byId?o={"id":"asdsdadsadasdsa"}
+// GET /api/things.byId?o={"id":"asdsdadsadasdsa"}&sub=1 // subscribe via SSE
+// `
 
 // routes.use('/api/', express.urlencoded({
 //   extended: true,
@@ -72,7 +91,6 @@ routes.get('/api/status', (req, res, next) => {
 // app.use(uploadsRoutes)
 
 routes.use('/api', (req, res, next) => {
-  console.log(' 404 catchall for /api/* ')
   res.status(404).send({})
 })
 // app.use('/api', passport.authenticate('session'))

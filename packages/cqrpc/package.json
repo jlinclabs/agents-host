@@ -1,0 +1,18 @@
+{
+  "name": "cqrpc",
+  "version": "0.1.0",
+  "description": "Command Query Separation",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Jared Grippe",
+  "license": "ISC",
+  "dependencies": {
+    "express-promise-router": "^4.1.1",
+    "glob": "^9.2.1",
+    "pkg-dir": "^7.0.0"
+  }
+}
