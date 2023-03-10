@@ -8,7 +8,7 @@ import env from '../../../env.js'
 
 const urlPathPrefix = '/api/uploads'
 const storagePath = env.UPLOADS_PATH
-console.log({ storagePath })
+console.log('storing uploads at', storagePath)
 
 const upload = multer({
   storage: multer.diskStorage({

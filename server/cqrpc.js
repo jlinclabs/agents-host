@@ -9,8 +9,41 @@ const cqrpc = new CQRPC({
   }),
 })
 
+console.log('Actions:')
+for (const modName in cqrpc.actions){
+  console.log(`  ${modName}:`)
+  for (const actionName in cqrpc.actions[modName])
+    console.log(`    ${actionName}`)
+}
 const routes = cqrpc.routes
 export { routes }
+
+
+
+
+
+
+/*
+
+CQRPC - ideas
+
+
+- how commands can report views as stale?
+- if a user subscribes to say `/posts.popular` and
+a command changes a popular post how will the command
+know to emit a change event to the view? they would
+have to have code like
+this.makeViewsAsStale(`posts.all`)
+this.makeViewsAsStale(`posts.${id}`)
+
+every view has a uniq key (no options)
+every command has a unique name (yes options)
+
+*/
+
+
+
+
 // import Router from 'express-promise-router'
 
 // import env from '../env.js'

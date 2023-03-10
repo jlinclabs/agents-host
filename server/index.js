@@ -91,7 +91,10 @@ routes.use('/api/cqrpc', cqprcRoutes)
 // app.use(uploadsRoutes)
 
 routes.use('/api', (req, res, next) => {
-  res.status(404).send({})
+  res.status(404).send({
+    error: 'resource not found',
+    success: false,
+  })
 })
 // app.use('/api', passport.authenticate('session'))
 
