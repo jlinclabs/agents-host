@@ -5,7 +5,7 @@ import { createProxyMiddleware, responseInterceptor } from 'http-proxy-middlewar
 
 import env from '../env.js'
 
-let assetsRoutes, indexHtmlFallback
+const assetsRoutes = new Router
 
 // proxy requests to `parcel serve` process
 if (process.env.CLIENT_SERVER_PORT){
@@ -17,7 +17,6 @@ if (process.env.CLIENT_SERVER_PORT){
     pathFilter: '/socket',
     ws: true,
   })
-  assetsRoutes = new Router
   assetsRoutes.use('/assets', parcelProxy)
   assetsRoutes.get('*', function (req, res, next) {
     if (req.xhr || !req.accepts('html')) return next()
@@ -28,20 +27,21 @@ if (process.env.CLIENT_SERVER_PORT){
 
 // serve static files
 }else{
-  assetsRoutes = express.static(env.BUILD_PATH, {
-    setHeaders(res, path, stat){
-      console.log('GET ASSET', path)
-      // res.setHeader("Cache-Control", "public, max-age=604800, immutable")
-      res.set('Cache-Control', 'no-cache')
-    }
-  })
+  assetsRoutes.use(
+    express.static(env.BUILD_PATH, {
+      setHeaders(res, path, stat){
+        console.log('GET ASSET', path)
+        // res.setHeader("Cache-Control", "public, max-age=604800, immutable")
+        res.set('Cache-Control', 'no-cache')
+      }
+    })
+  )
   const indexPath = Path.join(env.BUILD_PATH, 'index.html')
-  const indexHtmlFallback = new Router()
-  indexHtmlFallback.get('*', function (req, res, next) {
+  assetsRoutes.get('*', function (req, res, next) {
     if (req.xhr || !req.accepts('html')) return next()
     res.set('Cache-Control', 'no-cache')
     res.sendFile(indexPath)
   })
 }
 
-export { assetsRoutes, indexHtmlFallback }
+export { assetsRoutes }

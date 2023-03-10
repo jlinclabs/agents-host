@@ -9,7 +9,7 @@ import bodyParser from 'body-parser'
 
 import env from '../env.js'
 import { renderErrorAsJSON } from './render.js'
-import { assetsRoutes, indexHtmlFallback } from './assets.js'
+import { assetsRoutes } from './assets.js'
 import expressErrorHandler from './http/express-error-handler.js'
 import didRoutes from './modules/dids/routes.js'
 import authRoutes from './modules/auth/routes.js'
@@ -102,6 +102,5 @@ app.use(uploadsRoutes)
 
 
 routes.use(assetsRoutes)
-// routes.use(indexHtmlFallback)
 routes.use(expressErrorHandler)
 
