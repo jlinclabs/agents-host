@@ -28,29 +28,9 @@ app.start = function(){
   })
 }
 
-// app.use(pinoHTTP())
-routes.use((req, res, next) => {
-  res.set('Cache-Control', 'no-cache')
-  next()
-})
-
-routes.use(didRoutes)
-routes.use(assetsRoutes)
-
-routes.get('/api/status', (req, res, next) => {
-  res.json({ ok: true })
-})
-// app.use('/api/', express.urlencoded({
-//   extended: true,
-// }))
-
-// app.use('/api/', bodyParser.json({
-//   limit: 102400 * 10,
-// }))
-
 
 let requestIdSequence = 0
-app.use((req, res, next) => {
+routes.use((req, res, next) => {
   req.uuid = requestIdSequence++
   req.log = (...args) => {
     console.log(`http.req(${req.uuid})`, ...args)
@@ -68,6 +48,30 @@ app.use((req, res, next) => {
   })
   next()
 })
+
+// app.use(pinoHTTP())
+routes.use((req, res, next) => {
+  res.set('Cache-Control', 'no-cache')
+  next()
+})
+
+routes.get('/api/status', (req, res, next) => {
+  res.json({ ok: true })
+})
+
+routes.use(didRoutes)
+
+
+// app.use('/api/', express.urlencoded({
+//   extended: true,
+// }))
+
+// app.use('/api/', bodyParser.json({
+//   limit: 102400 * 10,
+// }))
+
+
+
 
 app.use(authRoutes)
 app.use(uploadsRoutes)
@@ -96,6 +100,8 @@ app.use(uploadsRoutes)
 // // app.use(oidcProviderRoutes)
 // app.use(CQRPCRoutes)
 
-app.use(indexHtmlFallback)
-app.use(expressErrorHandler)
+
+routes.use(assetsRoutes)
+routes.use(indexHtmlFallback)
+routes.use(expressErrorHandler)
 

@@ -1,7 +1,7 @@
 import Path from 'path'
 import express from 'express'
 import Router from 'express-promise-router'
-import { createProxyMiddleware } from 'http-proxy-middleware'
+import { createProxyMiddleware, responseInterceptor } from 'http-proxy-middleware'
 
 import env from '../env.js'
 
@@ -13,6 +13,10 @@ if (process.env.CLIENT_SERVER_PORT){
   const parcelHTTPProxy = createProxyMiddleware('/assets', {
     target: parcelUrl,
     changeOrigin: true,
+    onProxyRes: responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
+      const response = responseBuffer.toString('utf8'); // convert buffer to string
+      return response.replace('Hello', 'Goodbye'); // manipulate response and return the result
+    }),
   })
   const parcelWSProxy = createProxyMiddleware({
     target: parcelUrl,
