@@ -1,7 +1,12 @@
-import CQRPC, { globActions } from 'cqrpc'
+import CQRPC, { importActions } from 'cqrpc'
 
 const cqrpc = new CQRPC({
-  actions: await globActions('server/mod/*/actions/*.js'),
+  actions: await importActions({
+    // 'actions/*/*.js'
+    // 'actions/:namepsace/:action.js")
+    glob: 'server/mod/*/actions/*.js',
+    match: 'server/mod/:namespace/actions/:name.js',
+  }),
 })
 
 const routes = cqrpc.routes
