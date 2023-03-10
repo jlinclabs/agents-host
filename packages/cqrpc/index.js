@@ -11,6 +11,9 @@ export default class CQRPC {
     this.routes = new Router()
   }
 
+  createSession(){
+
+  }
 }
 
 export async function importActions(opts){
@@ -44,4 +47,8 @@ export async function importActions(opts){
   }
   console.log({ actions })
   return actions
+}
+
+class Session {
+
 }
