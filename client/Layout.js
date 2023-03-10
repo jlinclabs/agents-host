@@ -61,7 +61,7 @@ function useNewNotificationToast(){
       let timeoutId;
       let requestCount = 0
       const refresh = async () => {
-        const { notifications } = await fetchQuery('notifications.getAll')
+        const { notifications } = await fetchQuery(['notifications.getAll'])
         requestCount++
         const newNotifications = notifications.filter(n => !seen.has(n.id))
         if (requestCount > 1){
